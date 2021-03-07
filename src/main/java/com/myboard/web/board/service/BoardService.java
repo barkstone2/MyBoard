@@ -9,13 +9,13 @@ public interface BoardService {
 	//게시글 상세 조회
 	BoardDto getView(int no);
 	//게시글 등록
-	void insert(BoardDto dto);
+	int insert(BoardDto dto);
 	//게시글 삭제
-	void delete(int no);
+	int delete(int no);
 	//게시글 수정
-	void update(BoardDto dto);
+	int update(BoardDto dto);
 	//좋아요 표시
-	void updateLike(int no);
+	int updateLike(int no);
 	//게시글 목록
 	List<BoardDto> getList();
 	

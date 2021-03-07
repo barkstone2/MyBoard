@@ -7,5 +7,13 @@
 		select * from board
 		where no=#{no}
 	</select>
+	<insert id="insert" parameterType="com.myboard.web.board.entity.BoardDto">
+		insert into board (title, content, writer, pwd)
+		values (#{title}, #{content}, #{writer}, #{pwd})
+	</insert>
+	<select id="getList" resultType="com.myboard.web.board.entity.BoardDto">
+		select * from board
+		order by regdate desc
+	</select>
 </mapper>
 

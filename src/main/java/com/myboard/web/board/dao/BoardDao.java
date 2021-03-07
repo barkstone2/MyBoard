@@ -11,13 +11,13 @@ public interface BoardDao {
 
 	BoardDto getView(int no);
 
-	void insert(BoardDto dto);
+	int insert(BoardDto dto);
 
-	void delete(int no);
+	int delete(int no);
 
-	void update(BoardDto dto);
+	int update(BoardDto dto);
 
-	void updateLike(int no);
+	int updateLike(int no);
 
 	List<BoardDto> getList();
 	
