@@ -34,7 +34,7 @@
 	margin-right: 30px;
 }
 </style>
-<form style="width:900px; border: 1px solid black;" method="post" name="chugaForm">
+<form style="width:900px; border: 1px solid black;" method="post" name="chugaForm" enctype="multipart/form-data">
 	<div id="formTitle">
 		<h2>게시글 작성</h2>
 	</div>
@@ -67,6 +67,14 @@
 	<div class="row" style="display:flex; justify-content: center;">	
 		<div>
 			<textarea name="content" id="bContent" style="width:850px; height:500px; resize: none;"></textarea>
+		</div>
+	</div>
+	<div class="row">
+		<div style='width:150px; text-align: center;'>
+			이미지 업로드
+		</div>
+		<div>
+			<input type="file" name="imgFile" accept="image/*">
 		</div>
 	</div>
 	<div class="row">	

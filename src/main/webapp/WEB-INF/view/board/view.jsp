@@ -74,6 +74,14 @@
 				background-color: transparent; color: black; border: 1px solid black;" disabled="disabled">${dto.content}</textarea>
 			</div>
 		</div>
+		<div class="row">
+			<div style='width:150px; text-align: center;'>
+				첨부파일
+			</div>
+			<div>
+				<a href="download/${fileDto.no}">${fileDto.origFileName}</a>
+			</div>
+		</div>
 		<div id="replyDiv"></div>
 		<div class="row">	
 			<div class="btn">
