@@ -62,4 +62,57 @@ public class BoardController {
 		
 		return "board/view";
 	}
+	
+	@PostMapping("modify")
+	public String modify(int no, String title, String content, String writer, String pwd, Model model) {
+		
+		BoardDto dto = new BoardDto(no, title, content, writer, pwd);
+		int result = service.update(dto);
+		String msg = "";
+		String reUrl = "/board/list";
+		
+		if(result>0) {
+			msg = "수정 성공";
+		}else {
+			msg = "수정 실패";
+		}
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("reUrl", reUrl);
+		
+		return "/util/message";
+	}
+	
+	@GetMapping("delete")
+	public String delete(int no, Model model) {
+		model.addAttribute("no", no);
+		
+		return "board/delete";
+	}
+	
+	@PostMapping("delete")
+	public String delete(int no, String pwd, Model model) {
+		String msg = "";
+		String reUrl = "/board/list";
+		BoardDto dto = service.getView(no);
+		if(dto==null) {
+			msg = "존재하지 않는 게시물입니다.";
+		}else if(dto.getPwd().equals(pwd)) {
+			int result = service.delete(no);
+			if(result>0) {
+				msg = "삭제 성공";
+			}else {
+				msg = "삭제 실패";
+			}
+		}else {
+			msg = "비밀번호가 일치하지 않습니다.";
+			reUrl = "/board/delete?no="+no;
+		}
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("reUrl", reUrl);
+		
+		return "/util/message";
+	}
+	
 }
