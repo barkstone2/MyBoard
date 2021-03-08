@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -54,13 +55,13 @@ public class BoardController {
 		return "board/list";
 	}
 	
-	@GetMapping("view")
-	public String view(int no, Model model) {
+	@GetMapping(value = "{reqUrl}") // get view, modify
+	public String view(int no, Model model, @PathVariable String reqUrl) {
 		
 		BoardDto dto = service.getView(no);
 		model.addAttribute("dto", dto);
 		
-		return "board/view";
+		return "board/"+reqUrl;
 	}
 	
 	@PostMapping("modify")
