@@ -19,7 +19,6 @@ public class BoardDto {
 
 	public BoardDto(int no, String title, String content, String writer, String pwd, int hit, int like,
 			Timestamp regDate, int memberNo) {
-		super();
 		this.no = no;
 		this.title = title;
 		this.content = content;
@@ -32,6 +31,14 @@ public class BoardDto {
 	}
 	
 	public BoardDto(String title, String content, String writer, String pwd) {
+		this.title = title;
+		this.content = content;
+		this.writer = writer;
+		this.pwd = pwd;
+	}
+	
+	public BoardDto(int no, String title, String content, String writer, String pwd) {
+		this.no = no;
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
