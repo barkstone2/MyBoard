@@ -50,7 +50,7 @@ public class BoardController {
 	@GetMapping("list")
 	public String list(Model model) {
 		
-		List<BoardDto> list = service.getList();
+		List<BoardDto> list = boardService.getList();
 		model.addAttribute("list", list);
 		return "board/list";
 	}
@@ -58,7 +58,7 @@ public class BoardController {
 	@GetMapping(value = "{reqUrl}") // get view, modify
 	public String view(int no, Model model, @PathVariable String reqUrl) {
 		
-		BoardDto dto = service.getView(no);
+		BoardDto dto = boardService.getView(no);
 		model.addAttribute("dto", dto);
 		
 		return "board/"+reqUrl;
@@ -68,7 +68,7 @@ public class BoardController {
 	public String modify(int no, String title, String content, String writer, String pwd, Model model) {
 		
 		BoardDto dto = new BoardDto(no, title, content, writer, pwd);
-		int result = service.update(dto);
+		int result = boardService.update(dto);
 		String msg = "";
 		String reUrl = "/board/list";
 		
@@ -95,11 +95,11 @@ public class BoardController {
 	public String delete(int no, String pwd, Model model) {
 		String msg = "";
 		String reUrl = "/board/list";
-		BoardDto dto = service.getView(no);
+		BoardDto dto = boardService.getView(no);
 		if(dto==null) {
 			msg = "존재하지 않는 게시물입니다.";
 		}else if(dto.getPwd().equals(pwd)) {
-			int result = service.delete(no);
+			int result = boardService.delete(no);
 			if(result>0) {
 				msg = "삭제 성공";
 			}else {
