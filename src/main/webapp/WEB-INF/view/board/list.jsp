@@ -121,8 +121,9 @@
 	</main>
 </body>
 <script>
-function move(v_location){
-	location.href=v_location;
+function move(v_location, v_pageNumber, v_no){
+	var queryString = "?pageNumber="+v_pageNumber+"&no="+v_no;
+	location.href=v_location+queryString;
 }
 </script>
 </html>

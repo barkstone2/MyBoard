@@ -79,10 +79,7 @@
 			<div class="btn">
 				<div style="width:400px; display:flex; justify-content: space-around;">
 					<div>
-						<input type="button" value="글쓰기" onclick="move('chuga','${pageNumber}');" id="btnSave">
-					</div>
-					<div>
-						<input type="button" value="답변쓰기" onclick="move('answer','${pageNumber}','${dto.no}');" id="btnSave">
+						<input type="button" value="글쓰기" onclick="move('reg','${pageNumber}');" id="btnSave">
 					</div>
 					<div>
 						<input type="button" value="수정하기" onclick="move('modify','${pageNumber}','${dto.no}');" id="btnSave">
@@ -99,4 +96,8 @@
 	</form>
 </div>
 <script>
+function move(v_location, v_pageNumber, v_no){
+	var queryString = "?pageNumber="+v_pageNumber+"&no="+v_no;
+	location.href=v_location+queryString;
+}
 </script>
