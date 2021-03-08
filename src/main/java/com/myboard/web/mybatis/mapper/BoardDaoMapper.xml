@@ -15,5 +15,16 @@
 		select * from board
 		order by regdate desc
 	</select>
+	<update id="update">
+		update board set title=#{title}, 
+						content=#{content}, 
+						writer=#{writer}, 
+						pwd=#{pwd} 
+		where no=#{no}
+	</update>
+	<delete id="delete">
+		delete from board 
+		where no=#{no}
+	</delete>
 </mapper>
 
