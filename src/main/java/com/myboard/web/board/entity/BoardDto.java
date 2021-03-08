@@ -1,6 +1,7 @@
 package com.myboard.web.board.entity;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class BoardDto {
 	private int no;
@@ -10,7 +11,7 @@ public class BoardDto {
 	private String pwd;
 	private int hit;
 	private int like;
-	private Timestamp regDate;
+	private Date regDate;
 	private int memberNo;
 	
 	public BoardDto() {
@@ -18,7 +19,6 @@ public class BoardDto {
 
 	public BoardDto(int no, String title, String content, String writer, String pwd, int hit, int like,
 			Timestamp regDate, int memberNo) {
-		super();
 		this.no = no;
 		this.title = title;
 		this.content = content;
@@ -28,6 +28,21 @@ public class BoardDto {
 		this.like = like;
 		this.regDate = regDate;
 		this.memberNo = memberNo;
+	}
+	
+	public BoardDto(String title, String content, String writer, String pwd) {
+		this.title = title;
+		this.content = content;
+		this.writer = writer;
+		this.pwd = pwd;
+	}
+	
+	public BoardDto(int no, String title, String content, String writer, String pwd) {
+		this.no = no;
+		this.title = title;
+		this.content = content;
+		this.writer = writer;
+		this.pwd = pwd;
 	}
 
 	public int getNo() {
@@ -86,11 +101,11 @@ public class BoardDto {
 		this.like = like;
 	}
 
-	public Timestamp getRegDate() {
+	public Date getRegDate() {
 		return regDate;
 	}
 
-	public void setRegDate(Timestamp regDate) {
+	public void setRegDate(Date regDate) {
 		this.regDate = regDate;
 	}
 
