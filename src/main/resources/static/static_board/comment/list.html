@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<style>
+.replRow{
+	display:flex;
+	min-width:850px;
+	align-items: center;
+	max-width:850px;
+}
+#btn{
+	display:flex;
+	justify-content: center;
+}
+#radioInput{
+	width:180px;
+	display:flex;
+	justify-content: space-around;
+}
+#formTitle{
+	text-align: center;
+}
+.postcode{
+	margin-bottom: 5px;
+}
+#postcode{
+	width:120px;
+}
+#bAddr, #sAddr{
+	width:350px;
+}
+#listLabel{
+	display:flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+#mList{
+	width:900px;
+	display:flex;
+	justify-content: center;
+}
+.replyListCon{
+	width:850px;
+	border-bottom: 1px solid black;
+}
+.replyListCon, #listLabel {
+	min-height:45px;
+	text-align: center;
+}
+#memcount{
+	width:850px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid black;
+}
+
+#pager {
+	--display:flex;
+	justify-content: center;
+	padding: 10px;
+}
+#pager > div{
+	padding: 5px;
+}
+#search_data{
+	width: 400px;
+}
+#searchForm{
+	display:flex;
+	justify-content: center;
+}
+#searchForm > div {
+	padding: 10px;
+}
+.replyShortInput{
+	height: 30px;
+	width: 140px;
+	padding : 2px 7px 0px;
+}
+#replyForm{
+	width:850px;
+	
+}
+#replyCon{
+	width: 667px;
+	height:71px;
+	padding : 2px 7px 0px;
+}
+</style>
+
+<div style="max-width:900px; width:900px;">
+	<div style="width:900px;">
+		<div id="mList">
+			<div style="width:850px;">
+				<div id="memcount">
+					* 1개의 댓글이 존재합니다.
+				</div>
+				<div class="replyListCon">
+					<input type="hidden" value="" id="rGroupNo">
+					<input type="hidden" value="0" class="toggleChk" id="toggle">
+					<div class="replRow" >
+						<div style="width:158px;">
+							 댓글작성자
+						</div>
+						<div style="width:500px; display:flex; 
+						justify-content: flex-start; cursor: pointer;">
+							댓글 내용 ㅋㅋㅋ
+						</div>
+						<div style="width:158px; display:flex;">
+							댓글 작성일
+							<div style="width:18px; display:flex; align-items: center;">
+								<img src="#" style="cursor: pointer;">
+							</div>
+						</div>
+					</div>
+					<div id="reComment1" class="reCommentDiv"></div>
+				</div>
+		</div>
+		</div>
+		<div id="pager" style="display:flex;">
+			<div><a href="#">[첫페이지]</a></div>
+				<div><a href="#">[이전 5개]</a></div>
+					<div>[1]</div>
+					<div><a href="#">2</a></div>
+					<div><a href="#">3</a></div>
+					<div><a href="#">4</a></div>
+					<div><a href="#">5</a></div>
+				<div><a href="#">[다음 5개]</a></div>
+			<div><a href="#">[끝페이지]</a></div>
+		</div>
+		<div style="width: 900px; display:flex; padding:5px; justify-content: center;">
+			<form id="replyForm" name="replyForm" method="post" action="">
+				<input type="hidden" name="rePageNumber" value="">
+				<input type="hidden" name="bNo" value="">
+				<input type="hidden" name="rGroupNo" value="0">
+				<input type="hidden" name="rStepNo" value="0">
+				<div style="display:flex;">
+					<div style="margin-right: 10px;">
+						<div style="margin-bottom: 5px;">
+							<input type="text" class="replyShortInput" name="rWriter" placeholder="닉네임">
+						</div>
+						<div>
+							<input type="text" class="replyShortInput" name="rPasswd" placeholder="비밀번호">
+						</div>
+					</div>
+					<div>
+						<input type="text" id="replyCon" name="rContent" placeholder="운영 정책에 위배되는 댓글은 삭제될 수 있습니다.">
+					</div>
+				</div>
+				<div style="display:flex; justify-content: flex-end; margin-top: 5px;">
+					<input style="width:70px; height:35px;" type="button" value="댓글등록" id="btnReplyReg">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="reCommentHtml" style="display:none;">
+	<div style="width: 850px; margin-bottom:5px;">
+	<form id="replyForm" name="replyForm" method="post" action="">
+		<input type="hidden" name="rePageNumber" value="">
+		<input type="hidden" name="bNo" value="${bNo}">
+		<input type="hidden" name="rGroupNo" value="0">
+		<input type="hidden" name="rStepNo" value="1">
+		<div style="display:flex;">
+			<div style="margin-right: 10px;">
+				<div style="margin-bottom: 5px;">
+					<input type="text" class="replyShortInput" name="rWriter" placeholder="닉네임">
+				</div>
+				<div>
+					<input type="text" class="replyShortInput" name="rPasswd" placeholder="비밀번호">
+				</div>
+			</div>
+			<div>
+				<input type="text" id="replyCon" name="rContent" placeholder="운영 정책에 위배되는 댓글은 삭제될 수 있습니다.">
+			</div>
+		</div>
+		<div style="display:flex; justify-content: flex-end; margin-top: 5px;">
+			<input style="width:70px; height:35px;" type="button" value="댓글등록">
+		</div>
+	</form>
+	</div>
+</div>
