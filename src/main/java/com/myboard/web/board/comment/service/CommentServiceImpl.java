@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.myboard.web.board.comment.dao.CommentDAO;
+import com.myboard.web.board.comment.entity.CommentDTO;
+
 @Service
 public class CommentServiceImpl implements CommentService{
 	
