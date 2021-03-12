@@ -36,7 +36,7 @@
 }
 </style>
 <div>
-	<form style="width:900px; border: 1px solid black;" method="post" name="chugaForm">
+	<form style="width:900px; border: 1px solid black;" name="chugaForm">
 		<div id="formTitle">
 			<h2>게시글 보기</h2>
 		</div>
@@ -106,13 +106,13 @@ $(document).ready(function(){
 
 function loadComment(no, c_pageNumber, initChk){
 	var param = {
-			"no" : no,
+			"boardNo" : no,
 			"commentPageNumber" : c_pageNumber		
 	};
 	$.ajax({
-			type: "post",
+			type: "get",
 			data: param,
-			url: "commentList",
+			url: "/comment/list",
 			success: function(data){
 				$("#commentDiv").html(data);
 				if(initChk!='init'){
@@ -127,7 +127,7 @@ function regComment(){
 	$.ajax({
 			type: "post",
 			data: $('form').serialize(),
-			url: "regComment",
+			url: "/comment/reg",
 			success: function(data){
 				$("#commentDiv").html(data);
 			}
@@ -138,7 +138,7 @@ function regReComment(){
 	$.ajax({
 			type: "post",
 			data: $('form').serialize(),
-			url: "regReComment",
+			url: "/comment/reg",
 			success: function(data){
 				$("#commentDiv").html(data);
 			}
