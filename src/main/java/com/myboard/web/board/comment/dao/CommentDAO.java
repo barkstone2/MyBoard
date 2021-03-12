@@ -15,4 +15,8 @@ public interface CommentDAO {
 
 	int insert(CommentDTO dto);
 
+	int getMaxGroupNo(int boardNo);
+
+	String pwdChk(int no);
+
 }

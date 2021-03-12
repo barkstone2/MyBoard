@@ -10,18 +10,30 @@ public class CommentDTO {
 	private int groupNo;
 	private int memberNo;
 	private int boardNo;
+	private int stepNo;
 	private Timestamp regDate;
 	
 	public CommentDTO() {
 	}
 
-	public CommentDTO(String content, String writer, String pwd, int groupNo, int memberNo, int boardNo) {
+	public CommentDTO(String content, String writer, String pwd, int groupNo, int memberNo, int stepNo, int boardNo) {
 		this.content = content;
 		this.writer = writer;
 		this.pwd = pwd;
 		this.groupNo = groupNo;
 		this.memberNo = memberNo;
 		this.boardNo = boardNo;
+		this.stepNo = stepNo;
+	}
+
+	
+	
+	public int getStepNo() {
+		return stepNo;
+	}
+
+	public void setStepNo(int stepNo) {
+		this.stepNo = stepNo;
 	}
 
 	public int getNo() {

@@ -32,6 +32,18 @@ public class CommentServiceImpl implements CommentService{
 		return commentDAO.delete(no);
 	}
 
+	@Override
+	public int getMaxGroupNo(int boardNo) {
+		
+		return commentDAO.getMaxGroupNo(boardNo);
+	}
+
+	@Override
+	public String pwdChk(int no) {
+		
+		return commentDAO.pwdChk(no);
+	}
+
 	
 
 }

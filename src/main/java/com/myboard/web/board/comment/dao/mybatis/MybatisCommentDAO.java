@@ -37,4 +37,16 @@ public class MybatisCommentDAO implements CommentDAO{
 		return mapper.insert(dto);
 	}
 
+	@Override
+	public int getMaxGroupNo(int boardNo) {
+		
+		return mapper.getMaxGroupNo(boardNo);
+	}
+
+	@Override
+	public String pwdChk(int no) {
+		
+		return mapper.pwdChk(no);
+	}
+
 }
