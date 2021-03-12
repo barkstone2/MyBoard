@@ -2,6 +2,8 @@ package com.myboard.web.board.comment.service;
 
 import java.util.List;
 
+import com.myboard.web.board.comment.entity.CommentDTO;
+
 public interface CommentService {
 	
 	List<CommentDTO> getList(int boardNo);
