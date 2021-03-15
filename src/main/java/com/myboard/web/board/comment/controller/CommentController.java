@@ -67,7 +67,9 @@ public class CommentController {
 		String msg = "삭제 실패";
 		if(pwd.equals(validPwd)) {
 			result = commentService.delete(no);
-		}else {
+		}else if(pwd.equals("")||pwd==null){
+			msg = "비밀번호를 입력하세요";
+		}else{
 			msg = "비밀번호가 일치하지 않습니다.";
 		}
 		

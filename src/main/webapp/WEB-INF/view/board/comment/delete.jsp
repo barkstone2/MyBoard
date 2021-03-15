@@ -5,17 +5,17 @@
     /** 팝업 **/
 .alert_wrap{
     position:absolute;
-    top:0px;
+    top:25%;
     left:0px;
     box-sizing: border-box;
     max-width: 300px;
     width:100%;
-    max-height: 100px;
     border: 1px solid rgb(0, 0, 0);
     border-radius:12px;
     font-size: 14px;
     z-index: 2000;
     background-color:white;
+    text-align: center;
 }
 .alert_sub{
     box-sizing: border-box;
@@ -33,12 +33,12 @@
     border-top-right-radius:10px;
 }
 .mesaage{
-    text-align: left;
+    text-align: center;
     position: relative;
     padding:20px;
 }
 .alert_close_btn{
-    position: absolute;
+    --position: absolute;
     bottom: 10px;
     right: 10px;
     background-color:#3498db;
@@ -50,14 +50,31 @@
     padding-left: 10px;
     border-radius:5px;
     cursor:pointer;
+    margin-bottom: 20px;
+}
+button{
+	width:80px;
+	height:30px;
+	border-radius:5px;
+	background-color:#3498db;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+body{
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 </style>
 <!DOCTYPE html>
 <form method="post" name="deleteForm">
 	<input type="hidden" name="no" value="${no}">
 	비밀번호 : <input type="password" name="pwd"><br><br>
-	<button type="button" onclick="deleteProc();">확인</button>
-	<button type="button" onclick="window.close();">취소</button>
+	<div style="display:flex; justify-content:space-around;">
+		<button type="button" onclick="deleteProc();">확인</button>
+		<button type="button" onclick="window.close();">취소</button>
+	</div>
 </form>
 
 <script>
@@ -78,7 +95,7 @@ $(function(){
 
 function alertClose(){
 	opener.parent.loadComment('${boardNo}','','init');
-	close();
+	jQuery('#alert_div').css("display", "none");
 }
 
 window.alert=function(msg){

@@ -126,7 +126,7 @@ function loadComment(no, c_pageNumber, initChk){
 function regComment(){
 	$.ajax({
 			type: "post",
-			data: $('form').serialize(),
+			data: $('#replyForm').serialize(),
 			url: "/comment/reg",
 			success: function(data){
 				$("#commentDiv").html(data);
