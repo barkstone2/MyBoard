@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@include file="../inc/inc_header.jsp" %>
+<%@include file="/WEB-INF/view/inc/inc_header.jsp"%>
 <style>
 .row{
 	display:flex;
@@ -36,7 +36,7 @@
 }
 </style>
 <div>
-	<form style="width:900px; border: 1px solid black;" method="post" name="chugaForm">
+	<form style="width:900px; border: 1px solid black;" name="chugaForm">
 		<div id="formTitle">
 			<h2>게시글 보기</h2>
 		</div>
@@ -74,7 +74,7 @@
 				background-color: transparent; color: black; border: 1px solid black;" disabled="disabled">${dto.content}</textarea>
 			</div>
 		</div>
-		<div id="replyDiv"></div>
+		<div id="commentDiv"></div>
 		<div class="row">	
 			<div class="btn">
 				<div style="width:400px; display:flex; justify-content: space-around;">
@@ -99,5 +99,49 @@
 function move(v_location, v_pageNumber, v_no){
 	var queryString = "?pageNumber="+v_pageNumber+"&no="+v_no;
 	location.href=v_location+queryString;
+}
+$(document).ready(function(){
+	loadComment('${dto.no}','${commentPageNumber}', 'init');
+});
+
+function loadComment(no, c_pageNumber, initChk){
+	var param = {
+			"boardNo" : no,
+			"commentPageNumber" : c_pageNumber		
+	};
+	$.ajax({
+			type: "get",
+			data: param,
+			url: "/comment/list",
+			success: function(data){
+				$("#commentDiv").html(data);
+				if(initChk!='init'){
+					var offset = $("#commentDiv").offset();
+				    $('html, body').animate({scrollTop : offset.top}, 0);
+				}
+			}
+		});
+}
+
+function regComment(){
+	$.ajax({
+			type: "post",
+			data: $('#replyForm').serialize(),
+			url: "/comment/reg",
+			success: function(data){
+				$("#commentDiv").html(data);
+			}
+		});
+}
+
+function regReComment(){
+	$.ajax({
+			type: "post",
+			data: $('form').serialize(),
+			url: "/comment/reg",
+			success: function(data){
+				$("#commentDiv").html(data);
+			}
+		});
 }
 </script>
