@@ -4,6 +4,7 @@
 .row{
 	display:flex;
 	padding:5px;
+	align-items: center;
 }
 .label{
 	width:100px;
@@ -33,6 +34,9 @@
 	display:flex;
 	margin-right: 30px;
 }
+#img-attach-icon{
+	cursor: pointer;
+}
 </style>
 <form style="width:900px; border: 1px solid black;" method="post" name="chugaForm" enctype="multipart/form-data">
 	<div id="formTitle">
@@ -61,6 +65,13 @@
 			</div>
 			<div>
 				<input type="text" name="pwd" id="bPasswd" class="shortInput">
+			</div>
+		</div>
+		<div class="shotLine">
+			<div id="img-attach-icon">
+				<a href="#" onclick="attachImg();">
+					<img src="/icon/icon_img_attach.png">
+				</a>
 			</div>
 		</div>
 	</div>
@@ -97,5 +108,11 @@
 <script>
 function move(v_location){
 	location.href=v_location;
+}
+function attachImg(){
+	var url = '/attach_img_test.html';
+	var windowName = '이미지 추가';
+	var option = 'width=800, height=800';
+	window.open(url,windowName, option);
 }
 </script>
