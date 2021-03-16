@@ -15,5 +15,8 @@
 		select no, fileName, origFileName, filePath, regDate from file
 		where no=#{no}
 	</select>
+	<update id="setBoardNo">
+		update file set boardNo=#{boardNo}
+		where no=#{fileNo}
+	</update>
 </mapper>
-

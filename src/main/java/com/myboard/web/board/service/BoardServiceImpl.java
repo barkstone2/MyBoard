@@ -50,4 +50,10 @@ public class BoardServiceImpl implements BoardService {
 		return boardDao.getList();
 	}
 
+	@Override
+	public int getBoardNo(int fileNo) {
+		
+		return boardDao.getBoardNo(fileNo);
+	}
+
 }

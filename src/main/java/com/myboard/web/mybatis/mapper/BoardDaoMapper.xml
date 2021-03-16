@@ -26,5 +26,9 @@
 		delete from board 
 		where no=#{no}
 	</delete>
+	<select id="getBoardNo" resultType="int">
+		select no from board
+		where fileNo=#{fileNo}
+	</select>
 </mapper>
 

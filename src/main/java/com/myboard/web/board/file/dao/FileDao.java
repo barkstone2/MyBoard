@@ -13,4 +13,6 @@ public interface FileDao {
 
 	FileDto getFile(int fileNo);
 
+	void setBoardNo(int boardNo, int fileNo);
+
 }

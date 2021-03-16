@@ -6,4 +6,5 @@ public interface FileService {
 	int saveFile(FileDto dto);
 	int getFileNo(String fileName);
 	FileDto getFile(int fileNo);
+	void setBoardNo(int boardNo, int fileNo);
 }

@@ -18,6 +18,7 @@ public interface BoardService {
 	int updateLike(int no);
 	//게시글 목록
 	List<BoardDto> getList();
+	int getBoardNo(int fileNo);
 	
 	
 	

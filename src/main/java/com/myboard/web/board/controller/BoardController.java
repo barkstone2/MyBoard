@@ -69,7 +69,8 @@ public class BoardController {
 		//파일 세이브
 		imgFile.transferTo(new File(filePath));
 		FileDto fileDto = new FileDto(filePath, origFileName, fileName);
-		int fileNo = fileService.saveFile(fileDto);
+		int fileNo = fileService.saveFile(fileDto); // Service에서 fileNo 반환 처리
+		
 		
 		BoardDto dto = new BoardDto(title, content, writer, pwd, fileNo);
 		int result = boardService.insert(dto);
@@ -79,6 +80,8 @@ public class BoardController {
 		
 		if(result>0) {
 			msg = "작성 성공";
+			int boardNo = boardService.getBoardNo(fileNo);
+			fileService.setBoardNo(boardNo, fileNo);
 		}else {
 			msg = "작성 실패";
 		}
@@ -189,28 +192,31 @@ public class BoardController {
 	@PostMapping("imgPopup")
 	public void imgPopup(MultipartFile attachedImg, Model model, HttpServletResponse response) throws IllegalStateException, IOException {
 		String origFileName = attachedImg.getOriginalFilename();
+		String contentType = attachedImg.getContentType();
+		String fileType = contentType.substring(contentType.indexOf("/")+1);
 		String fileName = UUID.randomUUID().toString();
-		String basicPath = "images/";
-		System.out.println(System.getProperty("user.dir") + File.separator + basicPath);
-//		String savePath = System.getProperty("user.dir") + File.separator +"/images"; 
-//		
-//		// 업로드 경로가 없을 경우 확인 후 폴더 생성
-//		if(!new File(savePath).exists()) {
-//			try {
-//				new File(savePath).mkdirs();
-//			}catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		
-//		// 파일 경로 + 구분자 + 파일이름
-//		String filePath = savePath + File.separator + fileName;
-//		
-//		//파일 세이브
-//		attachedImg.transferTo(new File(filePath));
-//		FileDto fileDto = new FileDto(filePath, origFileName, fileName);
-//		int fileNo = fileService.saveFile(fileDto);
-//		
+		String savePath = "C:/images/image/";
+		
+		if(!contentType.contains("image")) {
+			return;
+		}
+		
+		System.out.println(fileName+"."+fileType);
+		// 업로드 경로가 없을 경우 확인 후 폴더 생성
+		if(!new File(savePath).exists()) {
+			try {
+				new File(savePath).mkdirs();
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// 파일 경로 + 구분자 + 파일이름
+		String filePath = savePath + fileName;
+		
+		//파일 세이브
+		attachedImg.transferTo(new File(filePath));
+		
 		response.getWriter().write(fileName);
 	}
 	

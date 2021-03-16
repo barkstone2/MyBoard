@@ -29,6 +29,11 @@ public class FileServiceImpl implements FileService {
 		
 		return fileDao.getFile(fileNo);
 	}
+
+	@Override
+	public void setBoardNo(int boardNo, int fileNo) {
+		fileDao.setBoardNo(boardNo, fileNo);
+	}
 	
 	
 }

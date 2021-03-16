@@ -20,5 +20,7 @@ public interface BoardDao {
 	int updateLike(int no);
 
 	List<BoardDto> getList();
+
+	int getBoardNo(int fileNo);
 	
 }
