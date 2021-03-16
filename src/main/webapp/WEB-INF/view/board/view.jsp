@@ -70,8 +70,9 @@
 		</div>
 		<div class="row" style="display:flex; justify-content: center;">	
 			<div>
-				<textarea name="bContent" style="padding:10px; width:850px; height:500px; resize: none; 
-				background-color: transparent; color: black; border: 1px solid black;" disabled="disabled">${dto.content}</textarea>
+				<div id="contentDiv" style="padding:10px; width:850px; height:500px; overflow:auto; resize: none; border:1px solid black;">
+					${dto.content}
+				</div>
 			</div>
 		</div>
 		<div class="row">

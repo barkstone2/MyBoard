@@ -64,17 +64,27 @@
 				<input type="text" name="pwd" value="${dto.pwd}" id="bPasswd" class="shortInput">
 			</div>
 		</div>
+		<div class="shotLine">
+			<div id="img-attach-icon">
+				<a href="#" onclick="attachImg();">
+					<img src="/icon/icon_img_attach.png">
+				</a>
+			</div>
+		</div>
 	</div>
 	<div class="row" style="display:flex; justify-content: center;">	
 		<div>
-			<textarea name="content" id="bContent" style="width:850px; height:500px; resize: none;">${dto.content}</textarea>
+			<div contentEditable="true" id="contentDiv" style="padding:5px; width:850px; height:500px; overflow:auto; border:1px solid black;">
+				${dto.content}
+			</div>
+			<textarea name="content" id="content" hidden="hidden"></textarea>
 		</div>
 	</div>
 	<div class="row">	
 		<div class="btn">
 			<div style="width:300px; display:flex; justify-content: space-around;">
 				<div>
-					<button type="submit">수정하기</button>
+					<button type="button" onclick="move('modify');">수정하기</button>
 				</div>
 				<div>
 					<button type="button" onclick="move('view','${pageNumber}','${dto.no}')">돌아가기</button>
@@ -86,9 +96,21 @@
 		</div>
 	</div>
 </form>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
+function attachImg(){
+	var url = 'imgUploader';
+	var windowName = '이미지 업로더';
+	var option = 'width=650, height=800, top=200, left=600';
+	window.open(url,windowName, option);
+}
 function move(v_location, v_pageNumber, v_no){
 	var queryString = "?pageNumber="+v_pageNumber+"&no="+v_no;
+	if(v_location=='modify'){
+		$('#content').val($("#contentDiv").html());
+		$('form').submit();
+		return;
+	}
 	location.href=v_location+queryString;
 }
 </script>

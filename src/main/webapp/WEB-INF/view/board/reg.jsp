@@ -38,6 +38,9 @@
 #img-attach-icon{
 	cursor: pointer;
 }
+.hidden{
+	display: none;
+}
 </style>
 <form style="width:900px; border: 1px solid black;" method="post" name="chugaForm" enctype="multipart/form-data">
 	<div id="formTitle">
@@ -78,7 +81,9 @@
 	</div>
 	<div class="row" style="display:flex; justify-content: center;">	
 		<div>
-			<textarea name="content" id="bContent" style="width:850px; height:500px; resize: none;"></textarea>
+			<div contentEditable="true" id="contentDiv" style="padding:5px; width:850px; height:500px; overflow:auto; border:1px solid black;">
+			</div>
+			<textarea name="content" id="content" hidden="hidden"></textarea>
 		</div>
 	</div>
 	<div class="row">
@@ -93,7 +98,7 @@
 		<div class="btn">
 			<div style="width:300px; display:flex; justify-content: space-around;">
 				<div>
-					<button type="submit">작성하기</button>
+					<button type="button" onclick="move('reg');">작성하기</button>
 				</div>
 				<div>
 					<button type="button" onclick="move('list')">목록으로</button>
@@ -106,8 +111,14 @@
 		<input type="hidden" name="bMemberNo" id="bMemberNo" value="">
 	</div>
 </form>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 function move(v_location){
+	if(v_location=='reg'){
+		$('#content').val($("#contentDiv").html());
+		$('form').submit();
+		return;
+	}
 	location.href=v_location;
 }
 function attachImg(){

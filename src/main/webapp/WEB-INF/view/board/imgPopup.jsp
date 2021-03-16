@@ -73,12 +73,11 @@ function saveFile(){
         contentType: false,
 		success: function(data){
 			for(var i=1; i<10; i++){
-				var targetId = "imgName"+i;
-				var target = opener.document.getElementById(targetId);
-				var imgView = opener.documetn.getElementById("imgView"+i);
-				if(target.value==''){
-					target.value = data;
-					imgView.src = "";
+				var imgName = opener.document.getElementById("imgName"+i);
+				var imgView = opener.document.getElementById("imgView"+i);
+				if(imgName.value==''){
+					$(imgName).val(data);
+					$(imgView).attr("src","/image/"+data);
 					break;
 				}else{
 					continue;
