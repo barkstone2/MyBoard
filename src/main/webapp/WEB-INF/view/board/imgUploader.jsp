@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ include file="/WEB-INF/view/inc/inc_header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,51 +61,28 @@
 		<div class="text-center btn-frame">
 			<button class="imgbox-btn" onclick="selectAll();">전체 선택</button>
 			<button class="imgbox-btn">선택 삭제</button>
-			<button class="imgbox-btn" onclick="imgPopUp();">사진 추가</button>
+			<a href="#" onclick="imgPopUp();"><button class="imgbox-btn"> 사진 추가</button></a>
 			<button class="imgbox-btn" onclick="selectImgTest();">완료</button>
 		</div>
+	<c:forEach begin="1" end="3" varStatus="j">
 		<div class="flex">
-			<div class="imgbox" id="imgbox1" onclick="selectImg('1');">
-				1<input type="hidden" id="imginput1" name="" value="">
+		<c:forEach begin="${(j.count-1)*3}" end="${(j.count)*3-1}" step="1" varStatus="i">
+			<div class="imgbox" id="imgbox${i.count+(j.count-1)*3}" onclick="selectImg('${i.count+(j.count-1)*3}');">
+				<div id="boxNo${i.count+(j.count-1)*3}">${i.count+(j.count-1)*3}</div>
+				<img src="" id="imgView${i.count+(j.count-1)*3}">
+				<input type="hidden" id="imginput${i.count+(j.count-1)*3}" name="" value="">
+				<input type="hidden" id="imgName${i.count+(j.count-1)*3}" name="" value="">
 			</div>
-			<div class="imgbox" id="imgbox2" onclick="selectImg('2');">
-				2<input type="hidden" id="imginput2" name="" value="">
-			</div>
-			<div class="imgbox" id="imgbox3" onclick="selectImg('3');">
-				3<input type="hidden" id="imginput3" name="" value="">
-			</div>
+		</c:forEach>
 		</div>
-		
-		<div class="flex">
-			<div class="imgbox" id="imgbox4" onclick="selectImg('4');">
-				4<input type="hidden" id="imginput4" name="" value="">
-			</div>
-			<div class="imgbox" id="imgbox5" onclick="selectImg('5');">
-				5<input type="hidden" id="imginput5" name="" value="">
-			</div>
-			<div class="imgbox" id="imgbox6" onclick="selectImg('6');">
-				6<input type="hidden" id="imginput6" name="" value="">
-			</div>
-		</div>
-		
-		<div class="flex">
-			<div class="imgbox" id="imgbox7" onclick="selectImg('7');">
-				7<input type="hidden" id="imginput7" name="" value="">
-			</div>
-			<div class="imgbox" id="imgbox8" onclick="selectImg('8');">
-				8<input type="hidden" id="imginput8" name="" value="">
-			</div>
-			<div class="imgbox" id="imgbox9" onclick="selectImg('9');">
-				9<input type="hidden" id="imginput9" name="" value="">
-			</div>
-		</div>
+	</c:forEach>
 	</div>
 	<input type="hidden" id="toggleChk">
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 function imgPopUp(){
-	var url = './img_popup.html';
+	var url = 'imgPopup';
 	var windowName = '이미지 추가';
 	var option = 'width=400, height=80, top=300, left=600';
 	window.open(url,windowName, option);
@@ -113,23 +90,35 @@ function imgPopUp(){
 function selectImg(value1){
 	var id = 'imgbox'+value1;
 	var inputId = 'imginput'+value1;
+	var inputId2 = 'imgName'+value1;
+	if($('#'+inputId2).val()==''){
+		alert('등록된 이미지가 없습니다.');
+		return;
+	}
 	if($('#'+id).css('background-color')=='rgb(220, 220, 220)'){
 		$('#'+id).css('background-color', '	#FFFFFF');
 		$('#'+inputId).attr('name','');
-		$('#'+inputId).val('');
+		$('#'+inputId).val('0');
+		$('#'+inputId2).attr('name','');
 	}else{
 		$('#'+id).css('background-color', '#DCDCDC');
 		$('#'+inputId).attr('name','img');
 		$('#'+inputId).val(value1);
+		$('#'+inputId2).attr('name','imgName');
 	}
 }
 function selectImgTest(){
 	var arrLength = $("input[name=img]").length;
 	var imgArr = new Array(arrLength);
-	for(var i=0; i<arrLength; i++){                          
+	var imgNameArr = new Array(arrLength);
+	for(var i=0; i<arrLength; i++){             
+		if($("input[name=img]").eq(i).val()!=''){
+			imgNameArr[i] = $("input[name=imgName]").eq(i).val();
+		}
 		imgArr[i] = $("input[name=img]").eq(i).val();
 	}
 	alert(imgArr);
+	alert(imgNameArr);
 }
 function selectAll(){
 	var toggleChk = $('#toggleChk').val();
