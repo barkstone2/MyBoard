@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/view/inc/inc_header.jsp" %>
 <style>
 .row{
 	display:flex;
@@ -110,9 +111,9 @@ function move(v_location){
 	location.href=v_location;
 }
 function attachImg(){
-	var url = 'img_uploader.html';
-	var windowName = '이미지 추가';
-	var option = 'width=800, height=800, top=300, left=600';
+	var url = 'imgUploader';
+	var windowName = '이미지 업로더';
+	var option = 'width=650, height=800, top=200, left=600';
 	window.open(url,windowName, option);
 }
 </script>

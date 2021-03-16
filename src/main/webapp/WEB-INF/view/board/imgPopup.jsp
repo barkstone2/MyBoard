@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/view/inc/inc_header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,9 +36,11 @@
 	<input type="text" readonly="readonly" id="imgName">
 	<button class="imgbtn" onclick="selectFile();">파일선택</button>
 	<div style="display:none;">
-		<input type="file" name="attachedImg" id="attachedImg"><br>
+		<form name="attachImgForm" id="attachImgForm" enctype="multipart/form-data">
+			<input type="file" name="attachedImg" id="attachedImg" accept="image/*"><br>
+		</form>
 	</div>
-	<button class="imgbtn">완료</button>
+	<a href="#" onclick="saveFile();"><button class="imgbtn">완료</button></a>
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
@@ -58,6 +61,34 @@ $(document).ready(function(){
 		$('#imgName').val(filename);
 		});
 	});
+function saveFile(){
+	var form = $('#attachImgForm')[0];
+    var param = new FormData(form);
+	$.ajax({
+		type: "POST",
+        enctype: 'multipart/form-data',
+        url: "imgPopup",
+        data: param,
+        processData: false,
+        contentType: false,
+		success: function(data){
+			for(var i=1; i<10; i++){
+				var targetId = "imgName"+i;
+				var target = opener.document.getElementById(targetId);
+				var imgView = opener.documetn.getElementById("imgView"+i);
+				if(target.value==''){
+					target.value = data;
+					imgView.src = "";
+					break;
+				}else{
+					continue;
+				}
+			} 
+			window.close();
+		}
+	});
+}
+
 
 </script>
 </html>
