@@ -118,7 +118,7 @@
 	    <div class="btn_block align-right">
 	        <button type="button" onclick="move('reg')">글쓰기</button>
 	    </div>
-	    <img src="/image/icon_file_attach.png">
+	    <img src="/image/1.png">
 	</main>
 </body>
 <script>
