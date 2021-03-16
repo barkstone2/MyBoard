@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>사진 추가</title>
+<title>이미지 업로더</title>
 <style>
 .flex{
 	display:flex;
@@ -20,21 +20,47 @@
 .text-center{
 	text-align: center;
 }
-.width-800{
-	width:800px;
+.imgbox-frame{
+	width:620px;
+}
+.imgbox-btn{
+	border: 1px solid #337ab7; 
+	border-radius: .25em;
+	padding: .5em .75em; 
+	color: #FFF;
+	background-color: #337ab7;
+	font-size: inherit; 
+	line-height: normal; 
+	vertical-align: middle; 
+	margin-right:20px;
+	cursor: pointer;
+	box-shadow: 1px 4px 0 rgb(0,0,0,0.5);
+}
+.imgbox-btn:focus { 
+ 	outline:none;
+}
+.imgbox-btn:hover{
+ 	background-color: #A5AFFA;
+}
+.imgbox-btn:active{
+	box-shadow: 1px 1px 0 rgb(0,0,0,0.5);
+	position: relative;
+ 	top:2px;
+}
+.btn-frame{
+	padding:10px;
 }
 </style>
 </head>
 <body>
 	
-	<div class="width-800">
-		<div class="text-center">
-			<button onclick="selectAll();">전체 선택</button>
-			<button>선택 삭제</button>
-			<button>사진 추가</button>
-			<button onclick="selectImgTest();">완료</button>
+	<div class="imgbox-frame">
+		<div class="text-center btn-frame">
+			<button class="imgbox-btn" onclick="selectAll();">전체 선택</button>
+			<button class="imgbox-btn">선택 삭제</button>
+			<button class="imgbox-btn" onclick="imgPopUp();">사진 추가</button>
+			<button class="imgbox-btn" onclick="selectImgTest();">완료</button>
 		</div>
-		
 		<div class="flex">
 			<div class="imgbox" id="imgbox1" onclick="selectImg('1');">
 				1<input type="hidden" id="imginput1" name="" value="">
@@ -75,6 +101,12 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
+function imgPopUp(){
+	var url = './img_popup.html';
+	var windowName = '이미지 추가';
+	var option = 'width=400, height=80, top=300, left=600';
+	window.open(url,windowName, option);
+}
 function selectImg(value1){
 	var id = 'imgbox'+value1;
 	var inputId = 'imginput'+value1;

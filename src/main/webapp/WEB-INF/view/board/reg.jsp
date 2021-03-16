@@ -110,9 +110,9 @@ function move(v_location){
 	location.href=v_location;
 }
 function attachImg(){
-	var url = '/attach_img_test.html';
+	var url = 'img_uploader.html';
 	var windowName = '이미지 추가';
-	var option = 'width=800, height=800';
+	var option = 'width=800, height=800, top=300, left=600';
 	window.open(url,windowName, option);
 }
 </script>
