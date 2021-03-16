@@ -8,6 +8,9 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -170,5 +173,46 @@ public class BoardController {
 	            .body(resource);
 	    
 	}
+	
+	@GetMapping("imgUploader")
+	public String imgUploader() {
+		
+		return "board/imgUploader";
+	}
+	
+	@GetMapping("imgPopup")
+	public String imgPopup() {
+		
+		return "board/imgPopup";
+	}
+	
+	@PostMapping("imgPopup")
+	public void imgPopup(MultipartFile attachedImg, Model model, HttpServletResponse response) throws IllegalStateException, IOException {
+		String origFileName = attachedImg.getOriginalFilename();
+		String fileName = UUID.randomUUID().toString();
+		String basicPath = "images/";
+		System.out.println(System.getProperty("user.dir") + File.separator + basicPath);
+//		String savePath = System.getProperty("user.dir") + File.separator +"/images"; 
+//		
+//		// 업로드 경로가 없을 경우 확인 후 폴더 생성
+//		if(!new File(savePath).exists()) {
+//			try {
+//				new File(savePath).mkdirs();
+//			}catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		// 파일 경로 + 구분자 + 파일이름
+//		String filePath = savePath + File.separator + fileName;
+//		
+//		//파일 세이브
+//		attachedImg.transferTo(new File(filePath));
+//		FileDto fileDto = new FileDto(filePath, origFileName, fileName);
+//		int fileNo = fileService.saveFile(fileDto);
+//		
+		response.getWriter().write(fileName);
+	}
+	
 	
 }
