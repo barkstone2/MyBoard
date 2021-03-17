@@ -50,27 +50,31 @@ public class BoardController {
 	@PostMapping("reg")
 	public String reg(String title, String content, String writer, String pwd, MultipartFile imgFile, Model model) throws IOException {
 		
-		String origFileName = imgFile.getOriginalFilename();
-		String fileName = UUID.randomUUID().toString();
-		String savePath = System.getProperty("user.dir") + File.separator +"files"; 
+		int fileNo = 0;
 		
-		// 업로드 경로가 없을 경우 확인 후 폴더 생성
-		if(!new File(savePath).exists()) {
-			try {
-				new File(savePath).mkdirs();
-			}catch (Exception e) {
-				e.printStackTrace();
+		if(!imgFile.isEmpty()) {
+			String origFileName = imgFile.getOriginalFilename();
+			String fileName = UUID.randomUUID().toString();
+			String savePath = System.getProperty("user.dir") + File.separator +"files"; 
+			
+			// 업로드 경로가 없을 경우 확인 후 폴더 생성
+			if(!new File(savePath).exists()) {
+				try {
+					new File(savePath).mkdirs();
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+			
+			// 파일 경로 + 구분자 + 파일이름
+			String filePath = savePath + File.separator + fileName;
+			
+			//파일 세이브
+			imgFile.transferTo(new File(filePath));
+			FileDto fileDto = new FileDto(filePath, origFileName, fileName);
+			fileNo = fileService.saveFile(fileDto); // Service에서 fileNo 반환 처리
+			
 		}
-		
-		// 파일 경로 + 구분자 + 파일이름
-		String filePath = savePath + File.separator + fileName;
-		
-		//파일 세이브
-		imgFile.transferTo(new File(filePath));
-		FileDto fileDto = new FileDto(filePath, origFileName, fileName);
-		int fileNo = fileService.saveFile(fileDto); // Service에서 fileNo 반환 처리
-		
 		
 		BoardDto dto = new BoardDto(title, content, writer, pwd, fileNo);
 		int result = boardService.insert(dto);
@@ -80,8 +84,10 @@ public class BoardController {
 		
 		if(result>0) {
 			msg = "작성 성공";
-			int boardNo = boardService.getBoardNo(fileNo);
-			fileService.setBoardNo(boardNo, fileNo);
+			if(fileNo>0) {
+				int boardNo = boardService.getBoardNo(fileNo);
+				fileService.setBoardNo(boardNo, fileNo);
+			}
 		}else {
 			msg = "작성 실패";
 		}

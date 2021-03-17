@@ -8,8 +8,14 @@
 		where no=#{no}
 	</select>
 	<insert id="insert" parameterType="com.myboard.web.board.entity.BoardDto">
-		insert into board (title, content, writer, pwd, fileNo)
-		values (#{title}, #{content}, #{writer}, #{pwd}, #{fileNo})
+		<if test="fileNo==0">
+			insert into board (title, content, writer, pwd)
+			values (#{title}, #{content}, #{writer}, #{pwd})
+		</if>
+		<if test="fileNo>0">
+			insert into board (title, content, writer, pwd, fileNo)
+			values (#{title}, #{content}, #{writer}, #{pwd}, #{fileNo})
+		</if>
 	</insert>
 	<select id="getList" resultType="com.myboard.web.board.entity.BoardDto">
 		select * from board
