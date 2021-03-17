@@ -25,7 +25,10 @@
 		update board set title=#{title}, 
 						content=#{content}, 
 						writer=#{writer}, 
-						pwd=#{pwd} 
+						pwd=#{pwd}
+					<if test="fileNo>0">
+						,fileNo=#{fileNo}
+					</if>
 		where no=#{no}
 	</update>
 	<delete id="delete">

@@ -80,6 +80,9 @@
 				첨부파일
 			</div>
 			<div>
+				<c:if test="${fileDto.no==0||fileDto.no==null}">
+					파일없음
+				</c:if>
 				<a href="download/${fileDto.no}">${fileDto.origFileName}</a>
 			</div>
 		</div>
