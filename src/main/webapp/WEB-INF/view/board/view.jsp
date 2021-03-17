@@ -83,7 +83,12 @@
 				<c:if test="${fileDto.no==0||fileDto.no==null}">
 					파일없음
 				</c:if>
-				<a href="download/${fileDto.no}">${fileDto.origFileName}</a>
+				<a href="download/${fileDto.no}" onmouseover="imgPreView('show');" onmouseout="imgPreView('hide');">
+					<img src="/file/${fileDto.fileName}" id="uploadedImg" style="display:none;">
+					<span id="uploadedImgName">
+						${fileDto.origFileName}
+					</span>
+				</a>
 			</div>
 		</div>
 		<div id="replyDiv"></div>
@@ -107,7 +112,18 @@
 		</div>
 	</form>
 </div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
+function imgPreView(proc){
+	if(proc=='show') {
+		$('#uploadedImg').show();
+		$('#uploadedImgName').hide();
+	}
+	if(proc=='hide') {
+		$('#uploadedImg').hide();
+		$('#uploadedImgName').show();
+	}
+}
 function move(v_location, v_pageNumber, v_no){
 	var queryString = "?pageNumber="+v_pageNumber+"&no="+v_no;
 	location.href=v_location+queryString;

@@ -53,7 +53,7 @@ public class BoardController {
 		if(!imgFile.isEmpty()) {
 			String origFileName = imgFile.getOriginalFilename();
 			String fileName = UUID.randomUUID().toString();
-			String savePath = System.getProperty("user.dir") + File.separator +"files"; 
+			String savePath = "C:/images/file/";
 			
 			// 업로드 경로가 없을 경우 확인 후 폴더 생성
 			if(!new File(savePath).exists()) {
@@ -64,8 +64,8 @@ public class BoardController {
 				}
 			}
 			
-			// 파일 경로 + 구분자 + 파일이름
-			String filePath = savePath + File.separator + fileName;
+			// 파일 경로 + 파일이름
+			String filePath = savePath + fileName;
 			
 			//파일 세이브
 			imgFile.transferTo(new File(filePath));
@@ -126,7 +126,7 @@ public class BoardController {
 		if(!imgFile.isEmpty()) {
 			String origFileName = imgFile.getOriginalFilename();
 			String fileName = UUID.randomUUID().toString();
-			String savePath = System.getProperty("user.dir") + File.separator +"files"; 
+			String savePath = "C:/images/file/";
 			
 			// 업로드 경로가 없을 경우 확인 후 폴더 생성
 			if(!new File(savePath).exists()) {
@@ -137,8 +137,8 @@ public class BoardController {
 				}
 			}
 			
-			// 파일 경로 + 구분자 + 파일이름
-			String filePath = savePath + File.separator + fileName;
+			// 파일 경로 + 파일이름
+			String filePath = savePath + fileName;
 			
 			//파일 세이브
 			imgFile.transferTo(new File(filePath));
