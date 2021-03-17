@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.myboard.web.board.comment.service.CommentService;
 import com.myboard.web.board.entity.BoardDto;
 import com.myboard.web.board.file.entity.FileDto;
 import com.myboard.web.board.file.service.FileService;
