@@ -34,6 +34,11 @@ public class FileServiceImpl implements FileService {
 	public void setBoardNo(int boardNo, int fileNo) {
 		fileDao.setBoardNo(boardNo, fileNo);
 	}
+
+	@Override
+	public void delete(int boardNo) {
+		fileDao.delete(boardNo);
+	}
 	
 	
 }

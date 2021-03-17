@@ -15,4 +15,6 @@ public interface FileDao {
 
 	void setBoardNo(int boardNo, int fileNo);
 
+	void delete(int boardNo);
+
 }

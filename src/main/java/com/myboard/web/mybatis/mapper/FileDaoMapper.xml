@@ -19,4 +19,8 @@
 		update file set boardNo=#{boardNo}
 		where no=#{fileNo}
 	</update>
+	<delete id="delete">
+		delete from file 
+		where boardNo=#{boardNo}
+	</delete>
 </mapper>

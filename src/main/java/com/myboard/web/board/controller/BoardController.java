@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.myboard.web.board.entity.BoardDto;
-import com.myboard.web.board.file.dao.FileDao;
 import com.myboard.web.board.file.entity.FileDto;
 import com.myboard.web.board.file.service.FileService;
 import com.myboard.web.board.service.BoardService;
@@ -119,15 +117,60 @@ public class BoardController {
 	}
 	
 	@PostMapping("modify")
-	public String modify(int no, String title, String content, String writer, String pwd, Model model) {
+	public String modify(int no, String title, String content, String writer, String pwd, 
+			MultipartFile imgFile, int fileDelChk, Model model) throws IllegalStateException, IOException {
 		
-		BoardDto dto = new BoardDto(no, title, content, writer, pwd);
+		
+		int fileNo = 0;
+		
+		if(!imgFile.isEmpty()) {
+			String origFileName = imgFile.getOriginalFilename();
+			String fileName = UUID.randomUUID().toString();
+			String savePath = System.getProperty("user.dir") + File.separator +"files"; 
+			
+			// 업로드 경로가 없을 경우 확인 후 폴더 생성
+			if(!new File(savePath).exists()) {
+				try {
+					new File(savePath).mkdirs();
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			// 파일 경로 + 구분자 + 파일이름
+			String filePath = savePath + File.separator + fileName;
+			
+			//파일 세이브
+			imgFile.transferTo(new File(filePath));
+			FileDto fileDto = new FileDto(filePath, origFileName, fileName);
+			fileNo = fileService.saveFile(fileDto); // Service에서 fileNo 반환 처리
+			
+			int curFileNo = boardService.getView(no).getFileNo();
+			if(curFileNo>0) {
+				String curFilePath = fileService.getFile(curFileNo).getFilePath();
+				new File(curFilePath).delete();
+				fileService.delete(no);
+			}
+		}else if(fileDelChk==1) {
+			int curFileNo = boardService.getView(no).getFileNo();
+			if(curFileNo>0) {
+				String curFilePath = fileService.getFile(curFileNo).getFilePath();
+				new File(curFilePath).delete();
+				fileService.delete(no);
+			}
+		}
+		
+		BoardDto dto = new BoardDto(no, title, content, writer, pwd, fileNo);
 		int result = boardService.update(dto);
+		
 		String msg = "";
 		String reUrl = "/board/list";
 		
 		if(result>0) {
 			msg = "수정 성공";
+			if(fileNo>0) {
+				fileService.setBoardNo(no, fileNo);
+			}
 		}else {
 			msg = "수정 실패";
 		}
@@ -153,6 +196,11 @@ public class BoardController {
 		if(dto==null) {
 			msg = "존재하지 않는 게시물입니다.";
 		}else if(dto.getPwd().equals(pwd)) {
+			int fileNo = dto.getFileNo();
+			if(fileNo>0) {
+				FileDto file = fileService.getFile(fileNo);
+				new File(file.getFilePath()).delete();
+			}
 			int result = boardService.delete(no);
 			if(result>0) {
 				msg = "삭제 성공";

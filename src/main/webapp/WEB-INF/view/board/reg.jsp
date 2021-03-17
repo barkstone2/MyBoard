@@ -88,7 +88,7 @@
 	</div>
 	<div class="row">
 		<div style='width:150px; text-align: center;'>
-			이미지 업로드
+			첨부파일
 		</div>
 		<div>
 			<input type="file" name="imgFile" accept="image/*">

@@ -7,4 +7,5 @@ public interface FileService {
 	int getFileNo(String fileName);
 	FileDto getFile(int fileNo);
 	void setBoardNo(int boardNo, int fileNo);
+	void delete(int boardNo);
 }
