@@ -70,8 +70,25 @@
 		</div>
 		<div class="row" style="display:flex; justify-content: center;">	
 			<div>
-				<textarea name="bContent" style="padding:10px; width:850px; height:500px; resize: none; 
-				background-color: transparent; color: black; border: 1px solid black;" disabled="disabled">${dto.content}</textarea>
+				<div id="contentDiv" style="padding:10px; width:850px; height:500px; overflow:auto; resize: none; border:1px solid black;">
+					${dto.content}
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div style='width:150px; text-align: center;'>
+				첨부파일
+			</div>
+			<div>
+				<c:if test="${fileDto.no==0||fileDto.no==null}">
+					파일없음
+				</c:if>
+				<a href="download/${fileDto.no}" onmouseover="imgPreView('show');" onmouseout="imgPreView('hide');">
+					<img src="/file/${fileDto.fileName}" id="uploadedImg" style="display:none;">
+					<span id="uploadedImgName">
+						${fileDto.origFileName}
+					</span>
+				</a>
 			</div>
 		</div>
 		<div id="commentDiv"></div>
@@ -95,7 +112,18 @@
 		</div>
 	</form>
 </div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
+function imgPreView(proc){
+	if(proc=='show') {
+		$('#uploadedImg').show();
+		$('#uploadedImgName').hide();
+	}
+	if(proc=='hide') {
+		$('#uploadedImg').hide();
+		$('#uploadedImgName').show();
+	}
+}
 function move(v_location, v_pageNumber, v_no){
 	var queryString = "?pageNumber="+v_pageNumber+"&no="+v_no;
 	location.href=v_location+queryString;

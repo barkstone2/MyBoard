@@ -8,23 +8,36 @@
 		where no=#{no}
 	</select>
 	<insert id="insert" parameterType="com.myboard.web.board.entity.BoardDto">
-		insert into board (title, content, writer, pwd)
-		values (#{title}, #{content}, #{writer}, #{pwd})
+		<if test="fileNo==0">
+			insert into board (title, content, writer, pwd)
+			values (#{title}, #{content}, #{writer}, #{pwd})
+		</if>
+		<if test="fileNo>0">
+			insert into board (title, content, writer, pwd, fileNo)
+			values (#{title}, #{content}, #{writer}, #{pwd}, #{fileNo})
+		</if>
 	</insert>
 	<select id="getList" resultType="com.myboard.web.board.entity.BoardDto">
 		select * from board
 		order by regdate desc
 	</select>
-	<update id="update">
+	<update id="update"  parameterType="com.myboard.web.board.entity.BoardDto">
 		update board set title=#{title}, 
 						content=#{content}, 
 						writer=#{writer}, 
-						pwd=#{pwd} 
+						pwd=#{pwd}
+					<if test="fileNo>0">
+						,fileNo=#{fileNo}
+					</if>
 		where no=#{no}
 	</update>
 	<delete id="delete">
 		delete from board 
 		where no=#{no}
 	</delete>
+	<select id="getBoardNo" resultType="int">
+		select no from board
+		where fileNo=#{fileNo}
+	</select>
 </mapper>
 

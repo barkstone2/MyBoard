@@ -9,6 +9,7 @@ public class BoardDto {
 	private String content;
 	private String writer;
 	private String pwd;
+	private int fileNo;
 	private int hit;
 	private int like;
 	private Date regDate;
@@ -17,32 +18,51 @@ public class BoardDto {
 	public BoardDto() {
 	}
 
-	public BoardDto(int no, String title, String content, String writer, String pwd, int hit, int like,
+	public BoardDto(int no, String title, String content, String writer, String pwd, int fileNo, int hit, int like,
 			Timestamp regDate, int memberNo) {
 		this.no = no;
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
 		this.pwd = pwd;
+		this.fileNo = fileNo;
 		this.hit = hit;
 		this.like = like;
 		this.regDate = regDate;
 		this.memberNo = memberNo;
 	}
 	
-	public BoardDto(String title, String content, String writer, String pwd) {
+	public BoardDto(String title, String content, String writer, String pwd, int fileNo) {
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
 		this.pwd = pwd;
+		this.fileNo = fileNo;
 	}
 	
+	public BoardDto(int no, String title, String content, String writer, String pwd, int fileNo) {
+		this.no = no;
+		this.title = title;
+		this.content = content;
+		this.writer = writer;
+		this.pwd = pwd;
+		this.fileNo = fileNo;
+	}
+
 	public BoardDto(int no, String title, String content, String writer, String pwd) {
 		this.no = no;
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
 		this.pwd = pwd;
+	}
+
+	public int getFileNo() {
+		return fileNo;
+	}
+
+	public void setFileNo(int fileNo) {
+		this.fileNo = fileNo;
 	}
 
 	public int getNo() {
