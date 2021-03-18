@@ -24,6 +24,21 @@
 	<select id="getViewList" resultType="com.myboard.web.board.entity.BoardViewDTO">
 		select no, title, content, writer, pwd, fileNo, hit, boardView.like, regDate, memberNo, commentCount 
 		from boardView
+		<if test="searchOption != '' and searchData != ''">
+		<where>
+			<choose>
+				<when test="searchOption=='title_content'">
+					and (title like '%${searchData}%' or content like '%${searchData}%')
+				</when>
+				<when test="searchOption=='all'">
+					and (title like '%${searchData}%' or content like '%${searchData}%' or writer like '%${searchData}%')
+				</when>
+				<otherwise>
+					and ${searchOption} like '%${searchData}%'
+				</otherwise>
+			</choose>
+		</where>
+		</if>
 		order by regdate desc
 		limit #{offSet}, #{conPerPage}
 	</select>

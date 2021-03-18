@@ -22,7 +22,7 @@ public interface BoardService {
 	int getTotalConCount();
 	List<BoardDTO> getList(int startRecord, int endRecord);
 	
-	List<BoardViewDTO> getViewList(int offSet, int conPerPage);
+	List<BoardViewDTO> getViewList(int offSet, int conPerPage, String searchOption, String searchData);
 	
 	
 	
