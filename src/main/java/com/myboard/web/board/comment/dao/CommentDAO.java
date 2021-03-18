@@ -9,7 +9,7 @@ import com.myboard.web.board.comment.entity.CommentDTO;
 @Mapper
 public interface CommentDAO {
 
-	List<CommentDTO> getList(int boardNo);
+	List<CommentDTO> getList(int offSet, int conPerPage, int boardNo);
 
 	int delete(int no);
 
@@ -18,5 +18,7 @@ public interface CommentDAO {
 	int getMaxGroupNo(int boardNo);
 
 	String pwdChk(int no);
+
+	int getTotalConCount(int boardNo);
 
 }

@@ -99,12 +99,12 @@ public class BoardController {
 	}
 	
 	@GetMapping("list")
-	public String list(@RequestParam(defaultValue = "1") int pageNumber, 
-			@RequestParam(required = false, name = "search_option", defaultValue = "") String searchOption,
-			@RequestParam(required = false, name = "search_data", defaultValue = "") String searchData, Model model) {
+	public String list(@RequestParam(defaultValue = "1", name="p") int page, 
+			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
+			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, Model model) {
 		
 		int conPerPage = 10; // 페이지 당 개시글 수(limit)
-		int offSet = (pageNumber-1) * conPerPage;
+		int offSet = (page-1) * conPerPage;
 		
 		int pageNavLength = 5; // 페이징 번호 범위
 		int totalConCount = boardService.getTotalConCount(); // 컨텐츠의 총 개수
@@ -116,7 +116,7 @@ public class BoardController {
 		// 페이징 번호 출력 범위 ex) 1~5 6~10
 		int startPage = 1;
 		int lastPage = 1;
-		startPage = (pageNumber / pageNavLength - (pageNumber % pageNavLength!=0 ? 0:1)) * pageNavLength +1; 
+		startPage = (page / pageNavLength - (page % pageNavLength!=0 ? 0:1)) * pageNavLength +1; 
 		lastPage = startPage + pageNavLength -1;
 		if(lastPage>totalPage)lastPage=totalPage;
 		
@@ -125,7 +125,7 @@ public class BoardController {
 		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("lastPage", lastPage);
-		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("page", page);
 		model.addAttribute("searchData", searchData);
 		model.addAttribute("searchOption", searchOption);
 		
