@@ -75,6 +75,15 @@ a{
 #pager > div{
 	padding: 5px;
 }
+.flex{
+	display: flex;
+}
+.f-center{
+	justify-content: center;
+}
+#searchForm > div{
+	padding: 5px;
+}
 </style>
 </head>
 <body>
@@ -150,16 +159,43 @@ a{
 				<div><a href="#" onclick="move('list','${totalPage}');">[끝페이지]</a></div>
 			</div>
 	    </div>
-	    
+	    <div class="flex f-center">
+		    <form class="flex f-center" name="searchForm" id="searchForm" method="post">
+				<div>
+					<select name="search_option" id="search_option">
+						<option value="">-선택-</option>
+						<option value="title" id="op_title">제목</option>
+						<option value="content" id="op_content">내용</option>
+						<option value="title_content" id="op_title_content">제목+내용</option>
+						<option value="writer" id="op_writer">작성자</option>
+						<option value="all" id="op_all">전체</option>
+					</select>
+				</div>
+				<div>
+					<input type="text" name="search_data" id="search_data" value="${searchData}">
+				</div>
+				<div>
+					<input type="button" value="검색" id="btnSearch" onclick="move('search')">
+				</div>
+			</form>
+	    </div>
 	    <div class="btn_block align-right">
 	        <button type="button" onclick="move('reg')">글쓰기</button>
 	    </div>
 	</main>
 </body>
 <script>
-function move(v_location, v_pageNumber, v_no){
-	var queryString = "?pageNumber="+v_pageNumber+"&no="+v_no;
-	location.href=v_location+queryString;
+function move(proc, v_pageNumber, v_no){
+	if(proc=='search'){
+		proc = 'list';
+		v_pageNumber = '1';
+	}
+	var queryString = "?pageNumber="+v_pageNumber+"&no="+v_no
+					+"&search_option=" + $('#search_option').val()
+					+"&search_data=" + $('#search_data').val();
+	location.href = proc + queryString;
 }
+$('#op_${searchOption}').prop('selected', true);
+
 </script>
 </html>

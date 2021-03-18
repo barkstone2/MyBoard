@@ -99,7 +99,9 @@ public class BoardController {
 	}
 	
 	@GetMapping("list")
-	public String list(@RequestParam(defaultValue = "1") int pageNumber, Model model) {
+	public String list(@RequestParam(defaultValue = "1") int pageNumber, 
+			@RequestParam(required = false, name = "search_option", defaultValue = "") String searchOption,
+			@RequestParam(required = false, name = "search_data", defaultValue = "") String searchData, Model model) {
 		
 		int conPerPage = 10; // 페이지 당 개시글 수(limit)
 		int offSet = (pageNumber-1) * conPerPage;
@@ -123,8 +125,11 @@ public class BoardController {
 		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("pageNumber", pageNumber);
+		model.addAttribute("searchData", searchData);
+		model.addAttribute("searchOption", searchOption);
 		
-		List<BoardViewDTO> list = boardService.getViewList(offSet, conPerPage);
+		List<BoardViewDTO> list = boardService.getViewList(offSet, conPerPage, searchOption, searchData);
 		model.addAttribute("list", list);
 		return "board/list";
 	}

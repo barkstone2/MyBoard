@@ -63,8 +63,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardViewDTO> getViewList(int offSet, int conPerPage) {
-		return boardDao.getViewList(offSet, conPerPage);
+	public List<BoardViewDTO> getViewList(int offSet, int conPerPage, String searchOption, String searchData) {
+		return boardDao.getViewList(offSet, conPerPage, searchOption, searchData);
 	}
 
 }
