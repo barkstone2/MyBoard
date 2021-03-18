@@ -4,23 +4,28 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.myboard.web.board.entity.BoardDto;
+import com.myboard.web.board.entity.BoardDTO;
+import com.myboard.web.board.entity.BoardViewDTO;
 
 @Mapper
-public interface BoardDao {
+public interface BoardDAO {
 
-	BoardDto getView(int no);
+	BoardDTO getView(int no);
 
-	int insert(BoardDto dto);
+	int insert(BoardDTO dto);
 
 	int delete(int no);
 
-	int update(BoardDto dto);
+	int update(BoardDTO dto);
 
 	int updateLike(int no);
 
-	List<BoardDto> getList();
-
 	int getBoardNo(int fileNo);
+
+	int getTotalConCount();
+
+	List<BoardDTO> getList(int startRecord, int endRecord);
+
+	List<BoardViewDTO> getViewList(int offSet, int conPerPage);
 	
 }

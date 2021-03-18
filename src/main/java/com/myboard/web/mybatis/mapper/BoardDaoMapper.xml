@@ -2,12 +2,12 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.myboard.web.board.dao.BoardDao">
-	<select id="getView" resultType="com.myboard.web.board.entity.BoardDto">
+<mapper namespace="com.myboard.web.board.dao.BoardDAO">
+	<select id="getView" resultType="com.myboard.web.board.entity.BoardDTO">
 		select * from board
 		where no=#{no}
 	</select>
-	<insert id="insert" parameterType="com.myboard.web.board.entity.BoardDto">
+	<insert id="insert" parameterType="com.myboard.web.board.entity.BoardDTO">
 		<if test="fileNo==0">
 			insert into board (title, content, writer, pwd)
 			values (#{title}, #{content}, #{writer}, #{pwd})
@@ -17,11 +17,18 @@
 			values (#{title}, #{content}, #{writer}, #{pwd}, #{fileNo})
 		</if>
 	</insert>
-	<select id="getList" resultType="com.myboard.web.board.entity.BoardDto">
+	<select id="getList" resultType="com.myboard.web.board.entity.BoardDTO">
 		select * from board
 		order by regdate desc
 	</select>
-	<update id="update"  parameterType="com.myboard.web.board.entity.BoardDto">
+	<select id="getViewList" resultType="com.myboard.web.board.entity.BoardViewDTO">
+		select no, title, content, writer, pwd, fileNo, hit, boardView.like, regDate, memberNo, commentCount 
+		from boardView
+		order by regdate desc
+		limit #{offSet}, #{conPerPage}
+	</select>
+	
+	<update id="update"  parameterType="com.myboard.web.board.entity.BoardDTO">
 		update board set title=#{title}, 
 						content=#{content}, 
 						writer=#{writer}, 
@@ -39,5 +46,9 @@
 		select no from board
 		where fileNo=#{fileNo}
 	</select>
+	<select id="getTotalConCount" resultType="int">
+		select count(*) from board
+	</select>
+	
 </mapper>
 

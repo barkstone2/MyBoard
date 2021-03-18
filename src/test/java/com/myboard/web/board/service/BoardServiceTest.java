@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.myboard.web.board.entity.BoardDto;
+import com.myboard.web.board.entity.BoardDTO;
 
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @SpringBootTest
@@ -25,7 +25,7 @@ class BoardServiceTest {
 		String content = "testContent";
 		String writer = "testWriter";
 		String pwd = "1234";
-		BoardDto dto = new BoardDto();
+		BoardDTO dto = new BoardDTO();
 		dto.setTitle(title);
 		dto.setContent(content);
 		dto.setWriter(writer);
@@ -38,7 +38,7 @@ class BoardServiceTest {
 	@Test
 	void testGetView() {
 		int no = 2; // AutoIncrement
-		BoardDto dto = service.getView(no);
+		BoardDTO dto = service.getView(no);
 		assertNotNull(dto);
 		assertEquals(dto.getNo(), no);
 		assertEquals(dto.getTitle(), "testTitle");

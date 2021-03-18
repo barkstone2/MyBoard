@@ -5,23 +5,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.myboard.web.board.dao.BoardDao;
-import com.myboard.web.board.entity.BoardDto;
+import com.myboard.web.board.dao.BoardDAO;
+import com.myboard.web.board.entity.BoardDTO;
+import com.myboard.web.board.entity.BoardViewDTO;
 
 @Service
 public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
-	private BoardDao boardDao;
+	private BoardDAO boardDao;
 	
 	@Override
-	public BoardDto getView(int no) {
+	public BoardDTO getView(int no) {
 		
 		return boardDao.getView(no);
 	}
 
 	@Override
-	public int insert(BoardDto dto) {
+	public int insert(BoardDTO dto) {
 		
 		return boardDao.insert(dto);
 	}
@@ -33,7 +34,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int update(BoardDto dto) {
+	public int update(BoardDTO dto) {
 		
 		return boardDao.update(dto);
 	}
@@ -45,15 +46,25 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardDto> getList() {
-		
-		return boardDao.getList();
-	}
-
-	@Override
 	public int getBoardNo(int fileNo) {
 		
 		return boardDao.getBoardNo(fileNo);
+	}
+
+	@Override
+	public int getTotalConCount() {
+		
+		return boardDao.getTotalConCount();
+	}
+
+	@Override
+	public List<BoardDTO> getList(int startRecord, int endRecord) {
+		return boardDao.getList(startRecord, endRecord);
+	}
+
+	@Override
+	public List<BoardViewDTO> getViewList(int offSet, int conPerPage) {
+		return boardDao.getViewList(offSet, conPerPage);
 	}
 
 }
