@@ -143,10 +143,10 @@ a{
 					<div>[이전 ${pageNavLength}개]</div>
 				</c:if>
 				<c:forEach var="i" begin="${startPage}" end="${lastPage}" step="1">
-					<c:if test="${i==pageNumber}">
+					<c:if test="${i==page}">
 						<div>[${i}]</div>
 					</c:if>
-					<c:if test="${i!=pageNumber}">
+					<c:if test="${i!=page}">
 						<div><a href="#" onclick="move('list','${i}');">${i}</a></div>
 					</c:if>
 				</c:forEach>
@@ -185,14 +185,14 @@ a{
 	</main>
 </body>
 <script>
-function move(proc, v_pageNumber, v_no){
+function move(proc, v_page, v_no){
 	if(proc=='search'){
 		proc = 'list';
-		v_pageNumber = '1';
+		v_page = '1';
 	}
-	var queryString = "?pageNumber="+v_pageNumber+"&no="+v_no
-					+"&search_option=" + $('#search_option').val()
-					+"&search_data=" + $('#search_data').val();
+	var queryString = "?p="+v_page+"&no="+v_no
+					+"&s_op=" + $('#search_option').val()
+					+"&s_d=" + $('#search_data').val();
 	location.href = proc + queryString;
 }
 $('#op_${searchOption}').prop('selected', true);

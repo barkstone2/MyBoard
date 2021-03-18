@@ -86,7 +86,7 @@
 		</div>
 		<div class="row" style="display:flex; justify-content: center;">	
 			<div>
-				<div id="contentDiv" style="padding:10px; width:850px; height:500px; overflow:auto; resize: none; border:1px solid black;">
+				<div id="contentDiv" style="padding:10px; width:850px; min-height:500px; resize: none; border:1px solid black;">
 					${dto.content}
 				</div>
 			</div>
@@ -112,7 +112,6 @@
 		</div>
 	</form>
 </div>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 function imgPreView(proc){
 	if(proc=='show') {
@@ -129,24 +128,27 @@ function move(v_location, v_pageNumber, v_no){
 	location.href=v_location+queryString;
 }
 $(document).ready(function(){
-	loadComment('${dto.no}','${commentPageNumber}', 'init');
+	loadComment('${dto.no}','', 'init');
 });
 
 function loadComment(no, c_pageNumber, initChk){
 	var param = {
 			"boardNo" : no,
-			"commentPageNumber" : c_pageNumber		
+			"cp" : c_pageNumber,
+			"initChk" : initChk
 	};
 	$.ajax({
 			type: "get",
 			data: param,
+			dataType: "html", 
+			async:true,
 			url: "/comment/list",
 			success: function(data){
 				$("#commentDiv").html(data);
-				if(initChk!='init'){
+				/* if(initChk!='init'){
 					var offset = $("#commentDiv").offset();
 				    $('html, body').animate({scrollTop : offset.top}, 0);
-				}
+				} */
 			}
 		});
 }

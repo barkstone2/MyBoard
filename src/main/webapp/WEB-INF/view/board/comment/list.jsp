@@ -119,34 +119,34 @@
 		</div>
 		</div>
 		<div id="pager" style="${totalConCount>0?'display:flex;':'display:none;'}">
-			<div><a href="#" onclick="loadComment('${bNo}','1');">[첫페이지]</a></div>
+			<div><a href="#commentDiv" onclick="loadComment('${boardNo}','1');">[첫페이지]</a></div>
 			<c:if test="${startPage>pageNavLength}">
-				<div><a href="#" onclick="loadComment('${bNo}','${startPage-pageNavLength}');">[이전${pageNavLength}개]</a></div>
+				<div><a href="#commentDiv" onclick="loadComment('${boardNo}','${startPage-pageNavLength}');">[이전${pageNavLength}개]</a></div>
 			</c:if>
 			<c:if test="${startPage<=pageNavLength}">
 				<div>[이전${pageNavLength}개]</div>
 			</c:if>
 			<c:forEach var="i" begin="${startPage}" end="${lastPage}" step="1">
-				<c:if test="${i==rePageNumber}">
+				<c:if test="${i==commentPage}">
 					<div>[${i}]</div>
 				</c:if>
-				<c:if test="${i!=rePageNumber}">
-					<div><a href="#" onclick="loadComment('${bNo}','${i}');">${i}</a></div>
+				<c:if test="${i!=commentPage}">
+					<div><a href="#commentDiv" onclick="loadComment('${boardNo}','${i}');">${i}</a></div>
 				</c:if>
 			</c:forEach>
 			<c:if test="${lastPage<totalPage}">
-				<div><a href="#" onclick="loadComment('${bNo}','${startPage+pageNavLength}');">[다음${pageNavLength}개]</a></div>
+				<div><a href="#commentDiv" onclick="loadComment('${boardNo}','${startPage+pageNavLength}');">[다음${pageNavLength}개]</a></div>
 			</c:if>
 			<c:if test="${lastPage>=totalPage}">
 				<div>[다음${pageNavLength}개]</div>
 			</c:if>
-			<div><a href="#" onclick="loadComment('${bNo}','${totalPage}');">[끝페이지]</a></div>
+			<div><a href="#commentDiv" onclick="loadComment('${boardNo}','${totalPage}');">[끝페이지]</a></div>
 			<div style="display:none;" id="pagerInfo">
 			</div>
 		</div>
 		<div style="width: 900px; display:flex; padding:5px; justify-content: center;">
 			<form id="replyForm" name="replyForm" method="post" action="">
-				<input type="hidden" name="rePageNumber" value="${rePageNumber}">
+				<input type="hidden" name="cp" value="${totalPage}">
 				<input type="hidden" name="boardNo" value="${boardNo}">
 				<input type="hidden" name="groupNo" value="0">
 				<input type="hidden" name="stepNo" value="0">
@@ -174,7 +174,7 @@
 <div id="reCommentHtml" style="display:none;">
 	<div style="width: 850px; margin-bottom:5px;">
 	<form id="replyForm" name="reCommentForm" method="post" action="">
-		<input type="hidden" name="rePageNumber" value="${rePageNumber}">
+		<input type="hidden" name="cp" value="${totalPage}">
 		<input type="hidden" name="boardNo" value="${boardNo}">
 		<input type="hidden" name="groupNo" value="0">
 		<input type="hidden" name="stepNo" value="1">
