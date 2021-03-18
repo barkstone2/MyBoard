@@ -76,7 +76,6 @@ body{
 		<button type="button" onclick="window.close();">취소</button>
 	</div>
 </form>
-
 <script>
 
 $(function(){
