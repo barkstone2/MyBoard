@@ -5,7 +5,7 @@
     /** 팝업 **/
 .alert_wrap{
     position:absolute;
-    top:25%;
+    top:0px;
     left:0px;
     box-sizing: border-box;
     max-width: 300px;

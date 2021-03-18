@@ -90,7 +90,7 @@
 		<c:forEach begin="${(j.count-1)*3}" end="${(j.count)*3-1}" step="1" varStatus="i">
 			<div class="imgbox" id="imgbox${i.count+(j.count-1)*3}" onclick="selectImg('${i.count+(j.count-1)*3}');">
 				<input type="checkbox" class="imgChkBox" id="imgChkBox${i.count+(j.count-1)*3}" 
-						onclick="selectImg('${i.count+(j.count-1)*3}');">
+						onclick="selectImg('${i.count+(j.count-1)*3}');" disabled="disabled">
 				<p class="boxNo" id="boxNo${i.count+(j.count-1)*3}">${i.count+(j.count-1)*3}</p>
 				<img src="" class="img-view" id="imgView${i.count+(j.count-1)*3}">
 				<input type="hidden" id="imginput${i.count+(j.count-1)*3}" name="" value="">

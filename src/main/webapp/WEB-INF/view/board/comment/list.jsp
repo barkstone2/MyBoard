@@ -229,7 +229,7 @@ function openDeleteWindow(boardNo, commentNo){
 	var queryString = "?boardNo="+boardNo+"&no="+commentNo;
 	var url = '/comment/delete'+queryString;
 	var title = 'delete comment';
-	var option = 'width=300, height=100, top=300, left=600, location=no, resizable=no';
+	var option = 'width=300, height=150, top=300, left=600, location=no, resizable=no';
 	window.open(url, title, option);
 }
 
