@@ -3,7 +3,7 @@ package com.myboard.web.board.entity;
 import java.sql.Timestamp;
 import java.util.Date;
 
-public class BoardDto {
+public class BoardDTO {
 	private int no;
 	private String title;
 	private String content;
@@ -15,10 +15,10 @@ public class BoardDto {
 	private Date regDate;
 	private int memberNo;
 	
-	public BoardDto() {
+	public BoardDTO() {
 	}
 
-	public BoardDto(int no, String title, String content, String writer, String pwd, int fileNo, int hit, int like,
+	public BoardDTO(int no, String title, String content, String writer, String pwd, int fileNo, int hit, int like,
 			Timestamp regDate, int memberNo) {
 		this.no = no;
 		this.title = title;
@@ -32,7 +32,7 @@ public class BoardDto {
 		this.memberNo = memberNo;
 	}
 	
-	public BoardDto(String title, String content, String writer, String pwd, int fileNo) {
+	public BoardDTO(String title, String content, String writer, String pwd, int fileNo) {
 		this.title = title;
 		this.content = content;
 		this.writer = writer;
@@ -40,7 +40,7 @@ public class BoardDto {
 		this.fileNo = fileNo;
 	}
 	
-	public BoardDto(int no, String title, String content, String writer, String pwd, int fileNo) {
+	public BoardDTO(int no, String title, String content, String writer, String pwd, int fileNo) {
 		this.no = no;
 		this.title = title;
 		this.content = content;
@@ -49,7 +49,7 @@ public class BoardDto {
 		this.fileNo = fileNo;
 	}
 
-	public BoardDto(int no, String title, String content, String writer, String pwd) {
+	public BoardDTO(int no, String title, String content, String writer, String pwd) {
 		this.no = no;
 		this.title = title;
 		this.content = content;

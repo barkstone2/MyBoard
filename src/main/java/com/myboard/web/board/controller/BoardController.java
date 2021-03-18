@@ -22,10 +22,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.myboard.web.board.comment.service.CommentService;
-import com.myboard.web.board.entity.BoardDto;
+import com.myboard.web.board.entity.BoardDTO;
+import com.myboard.web.board.entity.BoardViewDTO;
 import com.myboard.web.board.file.entity.FileDto;
 import com.myboard.web.board.file.service.FileService;
 import com.myboard.web.board.service.BoardService;
@@ -75,7 +76,7 @@ public class BoardController {
 			
 		}
 		
-		BoardDto dto = new BoardDto(title, content, writer, pwd, fileNo);
+		BoardDTO dto = new BoardDTO(title, content, writer, pwd, fileNo);
 		int result = boardService.insert(dto);
 		
 		String msg = "";
@@ -98,9 +99,32 @@ public class BoardController {
 	}
 	
 	@GetMapping("list")
-	public String list(Model model) {
+	public String list(@RequestParam(defaultValue = "1") int pageNumber, Model model) {
 		
-		List<BoardDto> list = boardService.getList();
+		int conPerPage = 10; // 페이지 당 개시글 수(limit)
+		int offSet = (pageNumber-1) * conPerPage;
+		
+		int pageNavLength = 5; // 페이징 번호 범위
+		int totalConCount = boardService.getTotalConCount(); // 컨텐츠의 총 개수
+		
+//		int indexNo = totalConCount - conPerPage * (pageNumber -1); // 게시글 순번
+		
+		int totalPage = (int)Math.ceil((totalConCount / (double)conPerPage)); // 총 페이지 수
+		
+		// 페이징 번호 출력 범위 ex) 1~5 6~10
+		int startPage = 1;
+		int lastPage = 1;
+		startPage = (pageNumber / pageNavLength - (pageNumber % pageNavLength!=0 ? 0:1)) * pageNavLength +1; 
+		lastPage = startPage + pageNavLength -1;
+		if(lastPage>totalPage)lastPage=totalPage;
+		
+		model.addAttribute("pageNavLength", pageNavLength);
+		model.addAttribute("totalConCount", totalConCount);
+		model.addAttribute("totalPage", totalPage);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("lastPage", lastPage);
+		
+		List<BoardViewDTO> list = boardService.getViewList(offSet, conPerPage);
 		model.addAttribute("list", list);
 		return "board/list";
 	}
@@ -108,7 +132,7 @@ public class BoardController {
 	@GetMapping(value = "{reqUrl}") // get view, modify
 	public String view(int no, Model model, @PathVariable String reqUrl) {
 		
-		BoardDto dto = boardService.getView(no);
+		BoardDTO dto = boardService.getView(no);
 		model.addAttribute("dto", dto);
 		
 		FileDto fileDto = fileService.getFile(dto.getFileNo());
@@ -161,7 +185,7 @@ public class BoardController {
 			}
 		}
 		
-		BoardDto dto = new BoardDto(no, title, content, writer, pwd, fileNo);
+		BoardDTO dto = new BoardDTO(no, title, content, writer, pwd, fileNo);
 		int result = boardService.update(dto);
 		
 		String msg = "";
@@ -193,7 +217,7 @@ public class BoardController {
 	public String delete(int no, String pwd, Model model) {
 		String msg = "";
 		String reUrl = "/board/list";
-		BoardDto dto = boardService.getView(no);
+		BoardDTO dto = boardService.getView(no);
 		if(dto==null) {
 			msg = "존재하지 않는 게시물입니다.";
 		}else if(dto.getPwd().equals(pwd)) {
@@ -256,7 +280,6 @@ public class BoardController {
 			return;
 		}
 		
-		System.out.println(fileName+"."+fileType);
 		// 업로드 경로가 없을 경우 확인 후 폴더 생성
 		if(!new File(savePath).exists()) {
 			try {
