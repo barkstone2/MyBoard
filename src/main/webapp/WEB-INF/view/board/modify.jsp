@@ -36,6 +36,9 @@
 *:focus { 
  	outline:none;
 }
+.f-vert-center{
+	align-items: center;
+}
 </style>
 <form style="width:900px; border: 1px solid black;" method="post" name="chugaForm" enctype="multipart/form-data">
 	<div id="formTitle">
@@ -50,7 +53,7 @@
 			<input type="text" name="title" value="${dto.title}" id="subject" class="longInput">
 		</div>
 	</div>
-	<div class="row">
+	<div class="row f-vert-center">
 		<div class="shotLine">
 			<div class="label">
 				작성자
@@ -75,16 +78,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="row" style="display:flex; justify-content: center;">	
-		<div>
-			<div contentEditable="true" id="contentDiv" style="padding:5px; width:850px; height:500px; overflow:auto; border:1px solid black;">
-				${dto.content}
-			</div>
-			<textarea name="content" id="content" hidden="hidden"></textarea>
-		</div>
-	</div>
 	<div class="row">
-		<div style='width:150px; text-align: center;'>
+		<div class="label">
 			첨부파일
 		</div>
 		<div>
@@ -95,6 +90,14 @@
 				<input type="hidden" name="fileDelChk" id="fileDelChk" value="0">
 				<input type="file" name="imgFile" id="attachedImg" accept="image/*"><br>
 			</div>
+		</div>
+	</div>
+	<div class="row" style="display:flex; justify-content: center;">	
+		<div>
+			<div contentEditable="true" id="contentDiv" style="padding:5px; width:850px; height:500px; overflow:auto; border:1px solid black;">
+				${dto.content}
+			</div>
+			<textarea name="content" id="content" hidden="hidden"></textarea>
 		</div>
 	</div>
 	<div class="row">	

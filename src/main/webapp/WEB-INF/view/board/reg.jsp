@@ -79,19 +79,19 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="label">
+			첨부파일
+		</div>
+		<div>
+			<input type="file" name="imgFile" accept="image/*">
+		</div>
+	</div>
 	<div class="row" style="display:flex; justify-content: center;">	
 		<div>
 			<div contentEditable="true" id="contentDiv" style="padding:5px; width:850px; height:500px; overflow:auto; border:1px solid black;">
 			</div>
 			<textarea name="content" id="content" hidden="hidden"></textarea>
-		</div>
-	</div>
-	<div class="row">
-		<div style='width:150px; text-align: center;'>
-			첨부파일
-		</div>
-		<div>
-			<input type="file" name="imgFile" accept="image/*">
 		</div>
 	</div>
 	<div class="row">	

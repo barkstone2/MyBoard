@@ -68,15 +68,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="row" style="display:flex; justify-content: center;">	
-			<div>
-				<div id="contentDiv" style="padding:10px; width:850px; height:500px; overflow:auto; resize: none; border:1px solid black;">
-					${dto.content}
-				</div>
-			</div>
-		</div>
 		<div class="row">
-			<div style='width:150px; text-align: center;'>
+			<div class="label">
 				첨부파일
 			</div>
 			<div>
@@ -89,6 +82,13 @@
 						${fileDto.origFileName}
 					</span>
 				</a>
+			</div>
+		</div>
+		<div class="row" style="display:flex; justify-content: center;">	
+			<div>
+				<div id="contentDiv" style="padding:10px; width:850px; height:500px; overflow:auto; resize: none; border:1px solid black;">
+					${dto.content}
+				</div>
 			</div>
 		</div>
 		<div id="commentDiv"></div>
