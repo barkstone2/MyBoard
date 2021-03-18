@@ -20,9 +20,9 @@ public class MybatisCommentDAO implements CommentDAO{
 	}
 	
 	@Override
-	public List<CommentDTO> getList(int boardNo) {
+	public List<CommentDTO> getList(int offSet, int conPerPage, int boardNo) {
 		
-		return mapper.getList(boardNo);
+		return mapper.getList(offSet, conPerPage, boardNo);
 	}
 
 	@Override
@@ -47,6 +47,12 @@ public class MybatisCommentDAO implements CommentDAO{
 	public String pwdChk(int no) {
 		
 		return mapper.pwdChk(no);
+	}
+
+	@Override
+	public int getTotalConCount(int boardNo) {
+		
+		return mapper.getTotalConCount(boardNo);
 	}
 
 }

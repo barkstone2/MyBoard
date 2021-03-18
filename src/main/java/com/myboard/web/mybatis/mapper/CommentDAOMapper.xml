@@ -7,6 +7,7 @@
 		select * from comment
 		where boardNo=#{boardNo}
 		order by groupNo, regdate
+		limit #{offSet}, #{conPerPage}
 	</select>
 	<insert id="insert" parameterType="com.myboard.web.board.comment.entity.CommentDTO">
 		insert into comment 
@@ -24,6 +25,10 @@
 	<select id="pwdChk" resultType="String">
 		select pwd from comment
 		where no=#{no}
+	</select>
+	<select id="getTotalConCount" resultType="int">
+		select count(*) from comment
+		where boardNo=#{boardNo}
 	</select>
 </mapper>
 

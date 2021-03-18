@@ -15,9 +15,9 @@ public class CommentServiceImpl implements CommentService{
 	private CommentDAO commentDAO;
 	
 	@Override
-	public List<CommentDTO> getList(int boardNo) {
+	public List<CommentDTO> getList(int offSet, int conPerPage, int boardNo) {
 		
-		return commentDAO.getList(boardNo);
+		return commentDAO.getList(offSet, conPerPage, boardNo);
 	}
 	
 	@Override
@@ -42,6 +42,11 @@ public class CommentServiceImpl implements CommentService{
 	public String pwdChk(int no) {
 		
 		return commentDAO.pwdChk(no);
+	}
+
+	@Override
+	public int getTotalConCount(int boardNo) {
+		return commentDAO.getTotalConCount(boardNo);
 	}
 
 	
