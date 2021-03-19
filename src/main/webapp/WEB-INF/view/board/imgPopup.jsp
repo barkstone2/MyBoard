@@ -87,7 +87,5 @@ function saveFile(){
 		}
 	});
 }
-
-
 </script>
 </html>

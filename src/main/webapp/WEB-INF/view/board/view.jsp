@@ -96,16 +96,16 @@
 			<div class="btn">
 				<div style="width:400px; display:flex; justify-content: space-around;">
 					<div>
-						<input type="button" value="글쓰기" onclick="move('reg','${pageNumber}');" id="btnSave">
+						<input type="button" value="글쓰기" onclick="move('reg','${page}','');">
 					</div>
 					<div>
-						<input type="button" value="수정하기" onclick="move('modify','${pageNumber}','${dto.no}');" id="btnSave">
+						<input type="button" value="수정하기" onclick="move('modify','${page}','${dto.no}');">
 					</div>
 					<div>
-						<input type="button" value="삭제하기" onclick="move('delete','${pageNumber}','${dto.no}');" id="btnSave">
+						<input type="button" value="삭제하기" onclick="move('delete','${page}','${dto.no}');">
 					</div>
 					<div>
-						<input type="button" value="목록으로" onclick="move('list','${pageNumber}');" id="btnList">
+						<input type="button" value="목록으로" onclick="move('list','${page}','');">
 					</div>
 				</div>
 			</div>
@@ -123,10 +123,13 @@ function imgPreView(proc){
 		$('#uploadedImgName').show();
 	}
 }
-function move(v_location, v_pageNumber, v_no){
-	var queryString = "?pageNumber="+v_pageNumber+"&no="+v_no;
-	location.href=v_location+queryString;
+function move(proc, v_page, v_no){
+	var queryString = "?p="+v_page+"&no="+v_no
+	+"&s_op=" + '${searchOption}'
+	+"&s_d=" + '${searchData}';
+	location.href = proc + queryString;
 }
+
 $(document).ready(function(){
 	loadComment('${dto.no}','', 'init');
 });
@@ -156,7 +159,7 @@ function loadComment(no, c_pageNumber, initChk){
 function regComment(){
 	$.ajax({
 			type: "post",
-			data: $('#replyForm').serialize(),
+			data: $('#commentForm').serialize(),
 			url: "/comment/reg",
 			success: function(data){
 				$("#commentDiv").html(data);
@@ -167,7 +170,7 @@ function regComment(){
 function regReComment(){
 	$.ajax({
 			type: "post",
-			data: $('form').serialize(),
+			data: $('form[name=reCommentForm]').serialize(),
 			url: "/comment/reg",
 			success: function(data){
 				$("#commentDiv").html(data);
