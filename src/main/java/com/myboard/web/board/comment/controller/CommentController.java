@@ -2,6 +2,7 @@ package com.myboard.web.board.comment.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,40 +25,23 @@ public class CommentController {
 	private CommentService commentService;
 	
 	@GetMapping("list")
-	public String list(@RequestParam(defaultValue = "1", name="cp") int commentPage, 
-						@RequestParam(defaultValue = "", required = false) String initChk,
+	public String list(
+			@RequestParam(defaultValue = "1", name="cp") int commentPage, 
+			@RequestParam(defaultValue = "", required = false) String initChk,
 						int boardNo, Model model) {
-		
-		
 		
 		int conPerPage = 10; // 페이지 당 개시글 수(limit)
 		int pageNavLength = 5; // 페이징 번호 범위
-		int totalConCount = commentService.getTotalConCount(boardNo); // 컨텐츠의 총 개수
-//		int indexNo = totalConCount - conPerPage * (pageNumber -1); // 게시글 순번
-		int totalPage = (int)Math.ceil((totalConCount / (double)conPerPage)); // 총 페이지 수
 		
+		// 댓글 최초 로드시 getPager 처리를 위해 cp = -1
 		if(initChk.equals("init")) {
-			commentPage = totalPage;
+			commentPage = -1;
 		}
 		
-		int offSet = (commentPage-1) * conPerPage;
+		Map<String, Integer> pager = commentService.getPager(conPerPage, pageNavLength, commentPage, boardNo);
+		model.addAttribute("pager", pager);
 		
-		// 페이징 번호 출력 범위 ex) 1~5 6~10
-		int startPage = 1;
-		int lastPage = 1;
-		startPage = (commentPage / pageNavLength - (commentPage % pageNavLength!=0 ? 0:1)) * pageNavLength +1; 
-		lastPage = startPage + pageNavLength -1;
-		if(lastPage>totalPage)lastPage=totalPage;
-		
-		model.addAttribute("pageNavLength", pageNavLength);
-		model.addAttribute("totalConCount", totalConCount);
-		model.addAttribute("totalPage", totalPage);
-		model.addAttribute("startPage", startPage);
-		model.addAttribute("lastPage", lastPage);
-		model.addAttribute("commentPage", commentPage);
-		
-		List<CommentDTO> list = commentService.getList(offSet, conPerPage, boardNo);
-		
+		List<CommentDTO> list = commentService.getList(pager.get("offSet"), conPerPage, boardNo);
 		model.addAttribute("commentList", list);
 		model.addAttribute("boardNo", boardNo);
 		
@@ -67,17 +51,13 @@ public class CommentController {
 	@PostMapping("reg")
 	public String reg(@RequestParam(defaultValue = "1", name="cp") int commentPage, String content, String writer, String pwd, int groupNo, int stepNo, int boardNo, Model model) {
 		
-		content = content.replace(",", "");
-		writer = writer.replace(",", "");
-		pwd = pwd.replace(",", "");
-		
 		int memberNo = 0;
 		if(groupNo==0) groupNo = commentService.getMaxGroupNo(boardNo)+1;
 		
 		CommentDTO dto = new CommentDTO(content, writer, pwd, groupNo, memberNo, stepNo, boardNo);
 		int result = commentService.insert(dto);
 		
-		return list(commentPage, "", boardNo, model);
+		return list(commentPage, "init", boardNo, model);
 	}
 	
 	@GetMapping("delete")
@@ -91,7 +71,6 @@ public class CommentController {
 	
 	@PostMapping("delete")
 	public void delete(String pwd, int no, Model model, HttpServletResponse response) throws IOException {
-		pwd = pwd.replace(",", "");
 		
 		String validPwd = commentService.pwdChk(no);
 		int result = 0;

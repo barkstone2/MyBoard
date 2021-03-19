@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -51,36 +51,25 @@ public class BoardController {
 	public String reg(String title, String content, String writer, String pwd, MultipartFile imgFile, Model model) throws IOException {
 		
 		int fileNo = 0;
+		String msg = "";
+		String reUrl = "/board/list";
 		
 		if(!imgFile.isEmpty()) {
-			String origFileName = imgFile.getOriginalFilename();
-			String fileName = UUID.randomUUID().toString();
 			String savePath = "C:/images/file/";
-			
-			// 업로드 경로가 없을 경우 확인 후 폴더 생성
-			if(!new File(savePath).exists()) {
-				try {
-					new File(savePath).mkdirs();
-				}catch (Exception e) {
-					e.printStackTrace();
-				}
+
+			// 파일 타입 체크
+			String contentType = imgFile.getContentType();
+			if(!contentType.contains("image")) {
+				msg = "이미지 파일만 업로드 가능합니다.";
+				reUrl = "/board/list";
+				return "/util/message";
 			}
 			
-			// 파일 경로 + 파일이름
-			String filePath = savePath + fileName;
-			
-			//파일 세이브
-			imgFile.transferTo(new File(filePath));
-			FileDto fileDto = new FileDto(filePath, origFileName, fileName);
-			fileNo = fileService.saveFile(fileDto); // Service에서 fileNo 반환 처리
-			
+			fileNo = fileService.saveFile(boardService.uploadImg(imgFile, savePath)); // Service에서 fileNo 반환 처리
 		}
 		
 		BoardDTO dto = new BoardDTO(title, content, writer, pwd, fileNo);
 		int result = boardService.insert(dto);
-		
-		String msg = "";
-		String reUrl = "/board/list";
 		
 		if(result>0) {
 			msg = "작성 성공";
@@ -99,49 +88,43 @@ public class BoardController {
 	}
 	
 	@GetMapping("list")
-	public String list(@RequestParam(defaultValue = "1", name="p") int page, 
+	public String list(
+			@RequestParam(defaultValue = "1", name="p") int page, 
 			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
-			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, Model model) {
+			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
+						Model model) {
 		
 		int conPerPage = 10; // 페이지 당 개시글 수(limit)
-		int offSet = (page-1) * conPerPage;
-		
 		int pageNavLength = 5; // 페이징 번호 범위
-		int totalConCount = boardService.getTotalConCount(); // 컨텐츠의 총 개수
 		
-//		int indexNo = totalConCount - conPerPage * (pageNumber -1); // 게시글 순번
-		
-		int totalPage = (int)Math.ceil((totalConCount / (double)conPerPage)); // 총 페이지 수
-		
-		// 페이징 번호 출력 범위 ex) 1~5 6~10
-		int startPage = 1;
-		int lastPage = 1;
-		startPage = (page / pageNavLength - (page % pageNavLength!=0 ? 0:1)) * pageNavLength +1; 
-		lastPage = startPage + pageNavLength -1;
-		if(lastPage>totalPage)lastPage=totalPage;
-		
-		model.addAttribute("pageNavLength", pageNavLength);
-		model.addAttribute("totalConCount", totalConCount);
-		model.addAttribute("totalPage", totalPage);
-		model.addAttribute("startPage", startPage);
-		model.addAttribute("lastPage", lastPage);
-		model.addAttribute("page", page);
-		model.addAttribute("searchData", searchData);
+		Map<String, Integer> pager = boardService.getPager(conPerPage, pageNavLength, page);
+		model.addAttribute("pager", pager);
 		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("searchData", searchData);
 		
-		List<BoardViewDTO> list = boardService.getViewList(offSet, conPerPage, searchOption, searchData);
+		List<BoardViewDTO> list = boardService.getViewList(pager.get("offSet"), conPerPage, searchOption, searchData);
 		model.addAttribute("list", list);
 		return "board/list";
 	}
 	
 	@GetMapping(value = "{reqUrl}") // get view, modify
-	public String view(int no, Model model, @PathVariable String reqUrl) {
+	public String view(
+			@PathVariable String reqUrl,
+			@RequestParam(defaultValue = "1", name="p") int page, 
+			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
+			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
+			int no, Model model) {
+		
 		
 		BoardDTO dto = boardService.getView(no);
 		model.addAttribute("dto", dto);
 		
 		FileDto fileDto = fileService.getFile(dto.getFileNo());
 		model.addAttribute("fileDto", fileDto);
+		
+		model.addAttribute("page", page);
+		model.addAttribute("searchOption", searchOption);
+		model.addAttribute("searchData", searchData);
 		
 		return "board/"+reqUrl;
 	}
@@ -150,37 +133,33 @@ public class BoardController {
 	public String modify(int no, String title, String content, String writer, String pwd, 
 			MultipartFile imgFile, int fileDelChk, Model model) throws IllegalStateException, IOException {
 		
-		
 		int fileNo = 0;
+		String msg = "";
+		String reUrl = "/board/list";
 		
 		if(!imgFile.isEmpty()) {
-			String origFileName = imgFile.getOriginalFilename();
-			String fileName = UUID.randomUUID().toString();
 			String savePath = "C:/images/file/";
-			
-			// 업로드 경로가 없을 경우 확인 후 폴더 생성
-			if(!new File(savePath).exists()) {
-				try {
-					new File(savePath).mkdirs();
-				}catch (Exception e) {
-					e.printStackTrace();
-				}
+
+			// 파일 타입 체크
+			String contentType = imgFile.getContentType();
+			if(!contentType.contains("image")) {
+				msg = "이미지 파일만 업로드 가능합니다.";
+				reUrl = "/board/list";
+				return "/util/message";
 			}
+			fileNo = fileService.saveFile(boardService.uploadImg(imgFile, savePath)); // Service에서 fileNo 반환 처리
 			
-			// 파일 경로 + 파일이름
-			String filePath = savePath + fileName;
-			
-			//파일 세이브
-			imgFile.transferTo(new File(filePath));
-			FileDto fileDto = new FileDto(filePath, origFileName, fileName);
-			fileNo = fileService.saveFile(fileDto); // Service에서 fileNo 반환 처리
-			
+			// 기존 파일이 존재하는지 확인.
+			// 새 파일이 업로드 되었으니 기존 파일 삭제.
 			int curFileNo = boardService.getView(no).getFileNo();
 			if(curFileNo>0) {
 				String curFilePath = fileService.getFile(curFileNo).getFilePath();
 				new File(curFilePath).delete();
 				fileService.delete(no);
 			}
+
+			
+		// 첨부파일 삭제 요청 시
 		}else if(fileDelChk==1) {
 			int curFileNo = boardService.getView(no).getFileNo();
 			if(curFileNo>0) {
@@ -192,9 +171,6 @@ public class BoardController {
 		
 		BoardDTO dto = new BoardDTO(no, title, content, writer, pwd, fileNo);
 		int result = boardService.update(dto);
-		
-		String msg = "";
-		String reUrl = "/board/list";
 		
 		if(result>0) {
 			msg = "수정 성공";
@@ -275,32 +251,14 @@ public class BoardController {
 	
 	@PostMapping("imgPopup")
 	public void imgPopup(MultipartFile attachedImg, Model model, HttpServletResponse response) throws IllegalStateException, IOException {
-		String origFileName = attachedImg.getOriginalFilename();
-		String contentType = attachedImg.getContentType();
-		String fileType = contentType.substring(contentType.indexOf("/")+1);
-		String fileName = UUID.randomUUID().toString();
 		String savePath = "C:/images/image/";
-		
+
+		String contentType = attachedImg.getContentType();
 		if(!contentType.contains("image")) {
 			return;
 		}
 		
-		// 업로드 경로가 없을 경우 확인 후 폴더 생성
-		if(!new File(savePath).exists()) {
-			try {
-				new File(savePath).mkdirs();
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		// 파일 경로 + 구분자 + 파일이름
-		String filePath = savePath + fileName;
-		
-		//파일 세이브
-		attachedImg.transferTo(new File(filePath));
-		
-		response.getWriter().write(fileName);
+		response.getWriter().write(boardService.uploadImg(attachedImg, savePath).getFileName());
 	}
 	
 	

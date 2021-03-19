@@ -1,9 +1,14 @@
 package com.myboard.web.board.service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.myboard.web.board.entity.BoardDTO;
 import com.myboard.web.board.entity.BoardViewDTO;
+import com.myboard.web.board.file.entity.FileDto;
 
 public interface BoardService {
 	
@@ -23,6 +28,9 @@ public interface BoardService {
 	List<BoardDTO> getList(int startRecord, int endRecord);
 	
 	List<BoardViewDTO> getViewList(int offSet, int conPerPage, String searchOption, String searchData);
+	Map<String, Integer> getPager(int conPerPage, int pageNavLength, int page);
+	Map<String, Integer> getPager(int conPerPage, int pageNavLength, int page, int totalConCount);
+	FileDto uploadImg(MultipartFile imgFile, String savePath) throws IllegalStateException, IOException;
 	
 	
 	
