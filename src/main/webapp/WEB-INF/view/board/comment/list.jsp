@@ -85,6 +85,9 @@
 	height:71px;
 	padding : 2px 7px 0px;
 }
+.reCommentDiv{
+	margin: 0px;
+}
 </style>
 
 <div style="max-width:900px; width:900px;">
@@ -92,7 +95,7 @@
 		<div id="mList">
 			<div style="width:850px;">
 				<div id="memcount">
-					* ${totalConCount}개의 댓글이 존재합니다.
+					* ${pager.totalConCount}개의 댓글이 존재합니다.
 				</div>
 			<c:forEach var="reply" items="${commentList}">
 				<div class="replyListCon">
@@ -113,40 +116,40 @@
 							</div>
 						</div>
 					</div>
-					<div id="reComment${reply.no}" class="reCommentDiv"></div>
+					<form id="reComment${reply.no}" name="reCommentForm" class="reCommentDiv"></form>
 				</div>
 			</c:forEach>
 		</div>
 		</div>
-		<div id="pager" style="${totalConCount>0?'display:flex;':'display:none;'}">
+		<div id="pager" style="${pager.totalConCount>0?'display:flex;':'display:none;'}">
 			<div><a href="#commentDiv" onclick="loadComment('${boardNo}','1');">[첫페이지]</a></div>
-			<c:if test="${startPage>pageNavLength}">
-				<div><a href="#commentDiv" onclick="loadComment('${boardNo}','${startPage-pageNavLength}');">[이전${pageNavLength}개]</a></div>
+			<c:if test="${pager.startPage>pager.pageNavLength}">
+				<div><a href="#commentDiv" onclick="loadComment('${boardNo}','${pager.startPage-pager.pageNavLength}');">[이전${pager.pageNavLength}개]</a></div>
 			</c:if>
-			<c:if test="${startPage<=pageNavLength}">
-				<div>[이전${pageNavLength}개]</div>
+			<c:if test="${pager.startPage<=pager.pageNavLength}">
+				<div>[이전${pager.pageNavLength}개]</div>
 			</c:if>
-			<c:forEach var="i" begin="${startPage}" end="${lastPage}" step="1">
-				<c:if test="${i==commentPage}">
+			<c:forEach var="i" begin="${pager.startPage}" end="${pager.lastPage}" step="1">
+				<c:if test="${i==pager.commentPage}">
 					<div>[${i}]</div>
 				</c:if>
-				<c:if test="${i!=commentPage}">
+				<c:if test="${i!=pager.commentPage}">
 					<div><a href="#commentDiv" onclick="loadComment('${boardNo}','${i}');">${i}</a></div>
 				</c:if>
 			</c:forEach>
-			<c:if test="${lastPage<totalPage}">
-				<div><a href="#commentDiv" onclick="loadComment('${boardNo}','${startPage+pageNavLength}');">[다음${pageNavLength}개]</a></div>
+			<c:if test="${pager.lastPage<pager.totalPage}">
+				<div><a href="#commentDiv" onclick="loadComment('${boardNo}','${pager.startPage+pager.pageNavLength}');">[다음${pager.pageNavLength}개]</a></div>
 			</c:if>
-			<c:if test="${lastPage>=totalPage}">
-				<div>[다음${pageNavLength}개]</div>
+			<c:if test="${pager.lastPage>=pager.totalPage}">
+				<div>[다음${pager.pageNavLength}개]</div>
 			</c:if>
-			<div><a href="#commentDiv" onclick="loadComment('${boardNo}','${totalPage}');">[끝페이지]</a></div>
+			<div><a href="#commentDiv" onclick="loadComment('${boardNo}','${pager.totalPage}');">[끝페이지]</a></div>
 			<div style="display:none;" id="pagerInfo">
 			</div>
 		</div>
 		<div style="width: 900px; display:flex; padding:5px; justify-content: center;">
-			<form id="replyForm" name="replyForm" method="post" action="">
-				<input type="hidden" name="cp" value="${totalPage}">
+			<form id="commentForm" name="replyForm" method="post" action="">
+				<input type="hidden" name="cp" value="${pager.totalPage}">
 				<input type="hidden" name="boardNo" value="${boardNo}">
 				<input type="hidden" name="groupNo" value="0">
 				<input type="hidden" name="stepNo" value="0">
@@ -156,7 +159,7 @@
 							<input type="text" class="replyShortInput" name="writer" placeholder="닉네임">
 						</div>
 						<div>
-							<input type="text" class="replyShortInput" name="pwd" placeholder="비밀번호">
+							<input type="password" class="replyShortInput" name="pwd" placeholder="비밀번호">
 						</div>
 					</div>
 					<div>
@@ -173,8 +176,7 @@
 
 <div id="reCommentHtml" style="display:none;">
 	<div style="width: 850px; margin-bottom:5px;">
-	<form id="replyForm" name="reCommentForm" method="post" action="">
-		<input type="hidden" name="cp" value="${totalPage}">
+		<input type="hidden" name="cp" value="${pager.totalPage}">
 		<input type="hidden" name="boardNo" value="${boardNo}">
 		<input type="hidden" name="groupNo" value="0">
 		<input type="hidden" name="stepNo" value="1">
@@ -184,7 +186,7 @@
 					<input type="text" class="replyShortInput" name="writer" placeholder="닉네임">
 				</div>
 				<div>
-					<input type="text" class="replyShortInput" name="pwd" placeholder="비밀번호">
+					<input type="password" class="replyShortInput" name="pwd" placeholder="비밀번호">
 				</div>
 			</div>
 			<div>
@@ -194,7 +196,6 @@
 		<div style="display:flex; justify-content: flex-end; margin-top: 5px;">
 			<input style="width:70px; height:35px;" type="button" value="댓글등록" onclick="regReComment();">
 		</div>
-	</form>
 	</div>
 </div>
 <script>

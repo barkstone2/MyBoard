@@ -93,12 +93,15 @@ $(function(){
 });
 
 function alertClose(){
-	opener.parent.loadComment('${boardNo}','','init');
-	jQuery('#alert_div').css("display", "none");
+	if($('#message').text()=='삭제 성공'){
+		opener.parent.loadComment('${boardNo}','','init');
+		window.close();
+	}else{
+		jQuery('#alert_div').css("display", "none");
+	}
 }
 
 window.alert=function(msg){
-    
 	$('#message').text(msg);
 	jQuery('#alert_div').css("display", "block");
     alert(msg);

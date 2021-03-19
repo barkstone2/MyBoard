@@ -39,7 +39,7 @@
     text-align: center;
 }
 .board_subj{
-    min-width:200px;
+    min-width:250px;
     --padding-left: 10px;
 }
 .board_writer{
@@ -59,7 +59,7 @@
     text-align: center;
 }
 .list{
-	max-width:570px;
+	width:620px;
 }
 .align-right{
 	justify-content: flex-end;
@@ -126,7 +126,7 @@ a{
 	        	<div class="list_content">
 		            <div class="board_num">${dto.no}</div>
 		            <div class="board_subj">
-		            	<a href="view?no=${dto.no}">${dto.title} [${dto.commentCount}]</a>
+		            	<a href="#" onclick="move('view','${pager.page}','${dto.no}')">${dto.title} [${dto.commentCount}]</a>
 		            </div>
 		            <div class="board_writer">${dto.writer}</div>
 		            <div class="board_date"><fmt:formatDate value="${dto.regDate}" pattern="yyyy-MM-dd"/></div>
@@ -134,33 +134,33 @@ a{
 		            <div class="board_recommend">${dto.like}</div>
 		        </div>
 	        </c:forEach>
-		    <div id="pager" style="${totalConCount>0?'display:flex;':'display:none;'}">
+		    <div id="pager" style="${pager.totalConCount>0?'display:flex;':'display:none;'}">
 				<div><a href="#" onclick="move('list','1');">[첫페이지]</a></div>
-				<c:if test="${startPage>pageNavLength}">
-					<div><a href="#" onclick="move('list','${startPage-pageNavLength}');">[이전 ${pageNavLength}개]</a></div>
+				<c:if test="${pager.startPage>pager.pageNavLength}">
+					<div><a href="#" onclick="move('list','${pager.startPage-pager.pageNavLength}','');">[이전 ${pager.pageNavLength}개]</a></div>
 				</c:if>
-				<c:if test="${startPage<=pageNavLength}">
-					<div>[이전 ${pageNavLength}개]</div>
+				<c:if test="${pager.startPage<=pager.pageNavLength}">
+					<div>[이전 ${pager.pageNavLength}개]</div>
 				</c:if>
-				<c:forEach var="i" begin="${startPage}" end="${lastPage}" step="1">
-					<c:if test="${i==page}">
+				<c:forEach var="i" begin="${pager.startPage}" end="${pager.lastPage}" step="1">
+					<c:if test="${i==pager.page}">
 						<div>[${i}]</div>
 					</c:if>
-					<c:if test="${i!=page}">
-						<div><a href="#" onclick="move('list','${i}');">${i}</a></div>
+					<c:if test="${i!=pager.page}">
+						<div><a href="#" onclick="move('list','${i}','');">${i}</a></div>
 					</c:if>
 				</c:forEach>
-				<c:if test="${lastPage<totalPage}">
-					<div><a href="#" onclick="move('list','${startPage+pageNavLength}');">[다음 ${pageNavLength}개]</a></div>
+				<c:if test="${pager.lastPage<pager.totalPage}">
+					<div><a href="#" onclick="move('list','${pager.startPage+pager.pageNavLength}','');">[다음 ${pager.pageNavLength}개]</a></div>
 				</c:if>
-				<c:if test="${lastPage>=totalPage}">
-					<div>[다음 ${pageNavLength}개]</div>
+				<c:if test="${pager.lastPage>=pager.totalPage}">
+					<div>[다음 ${pager.pageNavLength}개]</div>
 				</c:if>
-				<div><a href="#" onclick="move('list','${totalPage}');">[끝페이지]</a></div>
+				<div><a href="#" onclick="move('list','${pager.totalPage}','');">[끝페이지]</a></div>
 			</div>
 	    </div>
 	    <div class="flex f-center">
-		    <form class="flex f-center" name="searchForm" id="searchForm" method="post">
+		    <div class="flex f-center" id="searchForm">
 				<div>
 					<select name="search_option" id="search_option">
 						<option value="">-선택-</option>
@@ -175,9 +175,10 @@ a{
 					<input type="text" name="search_data" id="search_data" value="${searchData}">
 				</div>
 				<div>
-					<input type="button" value="검색" id="btnSearch" onclick="move('search')">
+					<button onclick="move('search')">검색</button>
+					<button onclick="location.href='list'">clear</button>
 				</div>
-			</form>
+			</div>
 	    </div>
 	    <div class="btn_block align-right">
 	        <button type="button" onclick="move('reg')">글쓰기</button>

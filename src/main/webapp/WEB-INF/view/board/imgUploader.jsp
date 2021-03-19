@@ -104,6 +104,7 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
+// imgUploader.js
 function deleteSelected(){
 	var arrLength = $("input[name=img]").length;
 	for(var i=0; i<arrLength; i++){             
