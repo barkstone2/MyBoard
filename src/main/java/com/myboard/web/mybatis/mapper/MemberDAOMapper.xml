@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myboard.web.member.dao.MemberDAO">
+	<insert id="insert" parameterType="com.myboard.web.member.entity.MemberDTO">
+		insert into member
+		(id, pwd, nickName, email)
+		values(#{id}, #{pwd}, #{nickName}, #{email})
+	</insert>
+	<select id="login" resultType="int">
+		select no from member
+		where id=#{id} and pwd=#{pwd}
+	</select>
+	<select id="loginChk" resultType="int">
+		select no from member
+		where id=#{id}
+	</select>
+	<select id="getView" resultType="com.myboard.web.member.entity.MemberDTO">
+		select * from member
+		where no=#{no}
+	</select>
+	<update id="update" parameterType="com.myboard.web.member.entity.MemberDTO">
+		update member
+		set pwd=#{pwd}, nickName=#{nickName}, email=#{email}
+		where no=#{no}
+	</update>
+</mapper>
+
