@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/view/inc/inc_header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +24,7 @@
 </head>
 <body>
 	
-	<form>
+	<form method="post">
 		<div class="flex">
 			<div class="label">
 				아이디
@@ -55,7 +56,7 @@
 			</div>
 			<input type="text" name="email1">
 			<span class="email_deco">@</span>
-			<input type="text" name="email2" readonly="readonly">
+			<input type="text" name="email2" id="email2">
 			<select id="email_list">
 				<option value="self">직접입력</option>
 				<option value="naver.com">naver.com</option>
@@ -66,7 +67,24 @@
 				<option value="nate.com">nate.com</option>
 			</select>
 		</div>
-		<button type="button">가입하기</button>
+		<button type="button" onclick="move('reg');">가입하기</button>
 	</form>
+	
+<script>
+function move(proc){
+	$('form').submit();
+}
+
+$('#email_list').on('change',function(){
+	var email2 = $('#email_list').val();
+	if(email2=='self'){
+		$('#email2').attr('readonly',false);
+	}else{
+		$('#email2').attr('readonly',true);
+		$('#email2').val($('#email_list').val());
+	}
+});
+</script>
+	
 </body>
 </html>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/view/inc/inc_header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +17,7 @@
 </style>
 </head>
 <body>
-	<form>
+	<form method="post">
 		<div class="flex">
 			<div class="label">
 				아이디
@@ -29,7 +30,14 @@
 			</div>
 			<input type="password" name="pwd">
 		</div>
-		<button type="button">로그인</button>
+		<button type="button" onclick="move('login')">로그인</button>
 	</form>
 </body>
+<script>
+	function move(proc){
+		if(proc == 'login'){
+			$('form').submit();
+		}
+	}
+</script>
 </html>

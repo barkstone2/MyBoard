@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/view/inc/inc_header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +24,7 @@
 </head>
 <body>
 	
-	
+	${cookNo}
 	<div class="flex">
 		<div class="label">
 			아이디
@@ -56,7 +57,45 @@
 			dummy@gmail.com
 		</div>
 	</div>
-	<button type="button">회원정보 수정</button>
+	
+	<div class="flex">
+		<div class="label">
+			아이디
+		</div>
+		<div>
+			${dto.id}
+		</div>
+	</div>
+	<div class="flex">
+		<div class="label">
+			닉네임
+		</div>
+		<div>
+			${dto.nickName}
+		</div>
+	</div>
+	<div class="flex">
+		<div class="label">
+			가입일
+		</div>
+		<div>
+			${dto.regDate}
+		</div>
+	</div>
+	<div class="flex">
+		<div class="label">
+			이메일
+		</div>
+		<div>
+			${dto.email}
+		</div>
+	</div>
+	<button type="button" onclick="move('modify');">회원정보 수정</button>
 	
 </body>
+<script>
+	function move(proc){
+		location.href=proc;
+	}
+</script>
 </html>

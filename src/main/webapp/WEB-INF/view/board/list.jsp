@@ -181,7 +181,7 @@ a{
 			</div>
 	    </div>
 	    <div class="btn_block align-right">
-	        <button type="button" onclick="move('reg')">글쓰기</button>
+	        <button type="button" onclick="move('reg','','')">글쓰기</button>
 	    </div>
 	</main>
 </body>
