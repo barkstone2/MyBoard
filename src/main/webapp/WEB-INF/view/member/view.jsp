@@ -23,74 +23,42 @@
 </style>
 </head>
 <body>
-	
-	${cookNo}
-	<div class="flex">
-		<div class="label">
-			아이디
+	<main>
+		${user.no}
+		<div class="flex">
+			<div class="label">
+				아이디
+			</div>
+			<div>
+				${user.id}
+			</div>
 		</div>
-		<div>
-			dummyId
+		<div class="flex">
+			<div class="label">
+				닉네임
+			</div>
+			<div>
+				${user.nickName}
+			</div>
 		</div>
-	</div>
-	<div class="flex">
-		<div class="label">
-			닉네임
+		<div class="flex">
+			<div class="label">
+				가입일
+			</div>
+			<div>
+				${user.regDate}
+			</div>
 		</div>
-		<div>
-			더미
+		<div class="flex">
+			<div class="label">
+				이메일
+			</div>
+			<div>
+				${user.email}
+			</div>
 		</div>
-	</div>
-	<div class="flex">
-		<div class="label">
-			가입일
-		</div>
-		<div>
-			2020-05-16
-		</div>
-	</div>
-	<div class="flex">
-		<div class="label">
-			이메일
-		</div>
-		<div>
-			dummy@gmail.com
-		</div>
-	</div>
-	
-	<div class="flex">
-		<div class="label">
-			아이디
-		</div>
-		<div>
-			${dto.id}
-		</div>
-	</div>
-	<div class="flex">
-		<div class="label">
-			닉네임
-		</div>
-		<div>
-			${dto.nickName}
-		</div>
-	</div>
-	<div class="flex">
-		<div class="label">
-			가입일
-		</div>
-		<div>
-			${dto.regDate}
-		</div>
-	</div>
-	<div class="flex">
-		<div class="label">
-			이메일
-		</div>
-		<div>
-			${dto.email}
-		</div>
-	</div>
-	<button type="button" onclick="move('modify');">회원정보 수정</button>
+		<button type="button" onclick="move('modify');">회원정보 수정</button>
+	</main>
 	
 </body>
 <script>
