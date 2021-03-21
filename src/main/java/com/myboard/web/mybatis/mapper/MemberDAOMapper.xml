@@ -8,8 +8,8 @@
 		(id, pwd, nickName, email)
 		values(#{id}, #{pwd}, #{nickName}, #{email})
 	</insert>
-	<select id="login" resultType="int">
-		select no from member
+	<select id="login" resultType="com.myboard.web.member.entity.MemberDTO">
+		select * from member
 		where id=#{id} and pwd=#{pwd}
 	</select>
 	<select id="loginChk" resultType="int">

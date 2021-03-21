@@ -44,7 +44,7 @@ public class BoardController {
 	@GetMapping("reg")
 	public String reg() {
 		
-		return "board/reg";
+		return "board.reg";
 	}
 	
 	@PostMapping("reg")
@@ -62,7 +62,7 @@ public class BoardController {
 			if(!contentType.contains("image")) {
 				msg = "이미지 파일만 업로드 가능합니다.";
 				reUrl = "/board/list";
-				return "/util/message";
+				return "util.message";
 			}
 			
 			fileNo = fileService.saveFile(boardService.uploadImg(imgFile, savePath)); // Service에서 fileNo 반환 처리
@@ -84,7 +84,7 @@ public class BoardController {
 		model.addAttribute("msg", msg);
 		model.addAttribute("reUrl", reUrl);
 		
-		return "/util/message";
+		return "util.message";
 	}
 	
 	@GetMapping("list")
@@ -104,7 +104,7 @@ public class BoardController {
 		
 		List<BoardViewDTO> list = boardService.getViewList(pager.get("offSet"), conPerPage, searchOption, searchData);
 		model.addAttribute("list", list);
-		return "board/list";
+		return "board.list";
 	}
 	
 	@GetMapping(value = "{reqUrl}") // get view, modify
@@ -126,7 +126,7 @@ public class BoardController {
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("searchData", searchData);
 		
-		return "board/"+reqUrl;
+		return "board."+reqUrl;
 	}
 	
 	@PostMapping("modify")
@@ -145,7 +145,7 @@ public class BoardController {
 			if(!contentType.contains("image")) {
 				msg = "이미지 파일만 업로드 가능합니다.";
 				reUrl = "/board/list";
-				return "/util/message";
+				return "util.message";
 			}
 			fileNo = fileService.saveFile(boardService.uploadImg(imgFile, savePath)); // Service에서 fileNo 반환 처리
 			
@@ -184,14 +184,14 @@ public class BoardController {
 		model.addAttribute("msg", msg);
 		model.addAttribute("reUrl", reUrl);
 		
-		return "/util/message";
+		return "util.message";
 	}
 	
 	@GetMapping("delete")
 	public String delete(int no, Model model) {
 		model.addAttribute("no", no);
 		
-		return "board/delete";
+		return "board.delete";
 	}
 	
 	@PostMapping("delete")
@@ -221,7 +221,7 @@ public class BoardController {
 		model.addAttribute("msg", msg);
 		model.addAttribute("reUrl", reUrl);
 		
-		return "/util/message";
+		return "util.message";
 	}
 	
 	@GetMapping(value = "download/{fileNo}")

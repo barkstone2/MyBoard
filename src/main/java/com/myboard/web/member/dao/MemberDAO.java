@@ -9,7 +9,7 @@ public interface MemberDAO {
 
 	int insert(MemberDTO dto);
 
-	int login(String id, String pwd);
+	MemberDTO login(String id, String pwd);
 
 	int loginChk(String id);
 

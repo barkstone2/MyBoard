@@ -6,7 +6,7 @@ public interface MemberService {
 
 	int insert(MemberDTO dto);
 
-	int login(String id, String pwd);
+	MemberDTO login(String id, String pwd);
 
 	int loginChk(String id);
 

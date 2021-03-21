@@ -24,13 +24,14 @@ public class MemberController {
 	public String move(@PathVariable String reqUrl, HttpServletRequest request, Model model) {
 		
 		if(reqUrl.equals("view")||reqUrl.equals("modify")) {
-			int cookNo = request.getSession().getAttribute("cookNo")!=null?
-					(int)request.getSession().getAttribute("cookNo"):0;
-			MemberDTO dto = memberService.getView(cookNo);
-			model.addAttribute("dto", dto);
+			if(request.getSession().getAttribute("user")!=null) {
+				int cookNo = ((MemberDTO)request.getSession().getAttribute("user")).getNo();
+				MemberDTO dto = memberService.getView(cookNo);
+				model.addAttribute("dto", dto);
+			}
 		}
 		
-		return "member/"+reqUrl;
+		return "member."+reqUrl;
 	}
 	
 	@PostMapping("reg")
@@ -64,7 +65,7 @@ public class MemberController {
 		
 		model.addAttribute("msg", msg);
 		model.addAttribute("reUrl", reUrl);
-		return "/util/message";
+		return "util.message";
 	}
 	
 	@PostMapping("login")
@@ -72,12 +73,12 @@ public class MemberController {
 		
 		String msg = "";
 		String reUrl = "/member/login";
+		MemberDTO user = memberService.login(id, pwd);
 		
-		try {
-			int result = memberService.login(id, pwd);
-			request.getSession().setAttribute("cookNo", result);
+		if(user!=null) {
+			request.getSession().setAttribute("user", user);
 			return "redirect:/member/view";
-		}catch (Exception e) {
+		}else {
 			try {
 				int loginChk = memberService.loginChk(id);
 				msg = "비밀번호가 일치하지 않습니다.";
@@ -89,7 +90,24 @@ public class MemberController {
 		model.addAttribute("msg", msg);
 		model.addAttribute("reUrl", reUrl);
 		
-		return "/util/message";
+		return "util.message";
+	}
+	
+	@GetMapping("logout")
+	public String logout(Model model, HttpServletRequest request) {
+		String msg = "";
+		String reUrl = "/member/login";
+		
+		if(request.getSession().getAttribute("user")!=null) {
+			msg = "로그아웃 되었습니다.";
+			request.getSession().invalidate();
+		}else {
+			msg = "로그인 되어 있지 않습니다.";
+		}
+		
+		model.addAttribute("msg", msg);
+		model.addAttribute("reUrl", reUrl);
+		return "util.message";
 	}
 	
 	@PostMapping("modify")
@@ -129,7 +147,7 @@ public class MemberController {
 		
 		model.addAttribute("msg", msg);
 		model.addAttribute("reUrl", reUrl);
-		return "/util/message";
+		return "util.message";
 	}
 	
 	

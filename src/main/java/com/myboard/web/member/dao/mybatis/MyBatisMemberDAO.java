@@ -25,7 +25,7 @@ public class MyBatisMemberDAO implements MemberDAO{
 
 
 	@Override
-	public int login(String id, String pwd) {
+	public MemberDTO login(String id, String pwd) {
 		return mapper.login(id, pwd);
 	}
 
