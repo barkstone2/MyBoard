@@ -72,18 +72,22 @@
 	
 <script>
 function move(proc){
-	$('form').submit();
+	if(proc == 'reg') document.querySelector("form").submit();
 }
 
-$('#email_list').on('change',function(){
-	var email2 = $('#email_list').val();
-	if(email2=='self'){
-		$('#email2').attr('readonly',false);
+const emailList = document.querySelector("#email_list");
+const email2 = document.querySelector("#email2");
+
+function handleChange(){
+	if(emailList.value==`self`){
+		email2.removeAttribute("readonly");
 	}else{
-		$('#email2').attr('readonly',true);
-		$('#email2').val($('#email_list').val());
+		email2.setAttribute(`readonly`, true);
+		email2.value = emailList.value;
 	}
-});
+}
+
+emailList.addEventListener('change', handleChange);
 </script>
 	
 </body>
