@@ -9,12 +9,12 @@
 	</select>
 	<insert id="insert" parameterType="com.myboard.web.board.entity.BoardDTO">
 		<if test="fileNo==0">
-			insert into board (title, content, writer, pwd)
-			values (#{title}, #{content}, #{writer}, #{pwd})
+			insert into board (title, content, writer, pwd, memberNo)
+			values (#{title}, #{content}, #{writer}, #{pwd}, #{memberNo})
 		</if>
 		<if test="fileNo>0">
-			insert into board (title, content, writer, pwd, fileNo)
-			values (#{title}, #{content}, #{writer}, #{pwd}, #{fileNo})
+			insert into board (title, content, writer, pwd, fileNo, memberNo)
+			values (#{title}, #{content}, #{writer}, #{pwd}, #{fileNo}, #{memberNo})
 		</if>
 	</insert>
 	<select id="getList" resultType="com.myboard.web.board.entity.BoardDTO">

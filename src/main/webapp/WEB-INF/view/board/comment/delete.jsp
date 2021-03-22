@@ -111,7 +111,6 @@ window.alert=function(msg){
 
 
 function deleteProc(){
-	var boardNo = '${boardNo};'
 	$.ajax({
 		type: "post",
 		data: $('form').serialize(),

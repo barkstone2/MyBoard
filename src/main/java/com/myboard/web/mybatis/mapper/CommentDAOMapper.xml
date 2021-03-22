@@ -11,8 +11,8 @@
 	</select>
 	<insert id="insert" parameterType="com.myboard.web.board.comment.entity.CommentDTO">
 		insert into comment 
-		(content, writer, pwd, groupNo, boardNo, stepNo)
-		values (#{content}, #{writer}, #{pwd}, #{groupNo}, #{boardNo}, #{stepNo})
+		(content, writer, pwd, groupNo, boardNo, stepNo, memberNo)
+		values (#{content}, #{writer}, #{pwd}, #{groupNo}, #{boardNo}, #{stepNo}, #{memberNo})
 	</insert>
 	<delete id="delete">
 		delete from comment

@@ -48,6 +48,15 @@ public class BoardDTO {
 		this.pwd = pwd;
 		this.fileNo = fileNo;
 	}
+	
+	public BoardDTO(String title, String content, String writer, String pwd, int fileNo, int memberNo) {
+		this.title = title;
+		this.content = content;
+		this.writer = writer;
+		this.pwd = pwd;
+		this.fileNo = fileNo;
+		this.memberNo = memberNo;
+	}
 
 	public BoardDTO(int no, String title, String content, String writer, String pwd) {
 		this.no = no;
