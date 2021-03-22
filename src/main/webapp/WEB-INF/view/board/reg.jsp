@@ -54,13 +54,14 @@
 			<input type="text" name="title" id="subject" class="longInput">
 		</div>
 	</div>
-	<div class="row">
+	<div class="user-info row"></div>
+	<div class="row writer-info">
 		<div class="shotLine">
 			<div class="label">
 				작성자
 			</div>
 			<div>
-				<input type="text" name="writer" id="bWriter" class="shortInput">
+				<input type="text" name="writer" id="writer" class="shortInput">
 			</div>
 		</div>
 		<div class="shotLine">
@@ -68,7 +69,7 @@
 				비밀번호
 			</div>
 			<div>
-				<input type="text" name="pwd" id="bPasswd" class="shortInput">
+				<input type="text" name="pwd" id="pwd" class="shortInput">
 			</div>
 		</div>
 		<div class="shotLine">
@@ -108,11 +109,27 @@
 	</div>
 	<div>
 		<input type="hidden" name="boardType" id="boardType" value="${boardType}">
-		<input type="hidden" name="bMemberNo" id="bMemberNo" value="">
+		<input type="hidden" name="bMemberNo" id="memberNo" value="">
 	</div>
 </form>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
+
+//form shape
+const writerInfo = document.querySelector(".writer-info");
+const userInfo = document.querySelector(".user-info");
+const userNameDiv = "<div class='shotLine'><div class='label'>작성자</div><div>${user.nickName}</div></div>";
+
+// 세션 유저가 존재할 경우 작성자, 비밀번호 자동.
+// memberNo 부여
+if(user!=''&&user!=null){
+	writerInfo.style.display = "none";
+	userInfo.innerHTML=userNameDiv;
+}else{
+	userInfo.style.display = "none";
+}
+
+
 function move(v_location){
 	if(v_location=='reg'){
 		$('#content').val($("#contentDiv").html());

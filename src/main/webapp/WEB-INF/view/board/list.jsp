@@ -41,10 +41,19 @@
 .board_subj{
     min-width:250px;
     --padding-left: 10px;
+    display: flex;
+}
+.board_title{
+	text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .board_writer{
-    min-width:100px;
+    min-width:150px;
     text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .board_date{
     min-width:100px;
@@ -59,7 +68,7 @@
     text-align: center;
 }
 .list{
-	width:620px;
+	width:660px;
 }
 .align-right{
 	justify-content: flex-end;
@@ -84,6 +93,10 @@ a{
 #searchForm > div{
 	padding: 5px;
 }
+.comment-user-icon{
+	width: 10px;
+	height: 10px;
+}
 </style>
 </head>
 <body>
@@ -98,37 +111,20 @@ a{
 	        <div class="board_recommend">추천</div>
 	    </div>
 	    <div class="list_content_block">
-	        <div class="list_content">
-	            <div class="board_num">1</div>
-	            <div class="board_subj">제목입니다</div>
-	            <div class="board_writer">김작성자</div>
-	            <div class="board_date">2012-12-12</div>
-	            <div class="board_hit">359</div>
-	            <div class="board_recommend">8</div>
-	        </div>
-	        <div class="list_content">
-	            <div class="board_num">2</div>
-	            <div class="board_subj">오늘은 날씨가 좋네요</div>
-	            <div class="board_writer">박덕자</div>
-	            <div class="board_date">2012-12-12</div>
-	            <div class="board_hit">33</div>
-	            <div class="board_recommend">1</div>
-	        </div>
-	        <div class="list_content">
-	            <div class="board_num">3</div>
-	            <div class="board_subj">안녕하세요 처음 왔습니다</div>
-	            <div class="board_writer">새로온 사람</div>
-	            <div class="board_date">2012-12-12</div>
-	            <div class="board_hit">1</div>
-	            <div class="board_recommend">0</div>
-	        </div>
 	        <c:forEach items="${list}" var="dto">
 	        	<div class="list_content">
 		            <div class="board_num">${dto.no}</div>
 		            <div class="board_subj">
-		            	<a href="#" onclick="move('view','${pager.page}','${dto.no}')">${dto.title} [${dto.commentCount}]</a>
+		            	<div class="board_title">
+			            	<a href="#" onclick="move('view','${pager.page}','${dto.no}')">${dto.title}</a>
+		            	</div>
+		            	<div>[${dto.commentCount}]</div>
 		            </div>
-		            <div class="board_writer">${dto.writer}</div>
+		            <div class="board_writer">${dto.writer}
+		            <c:if test="${dto.memberNo>0}">
+					 	<img class="comment-user-icon" src="/icon/member_profile_icon.png">
+					 </c:if>
+					 </div>
 		            <div class="board_date"><fmt:formatDate value="${dto.regDate}" pattern="yyyy-MM-dd"/></div>
 		            <div class="board_hit">${dto.hit}</div>
 		            <div class="board_recommend">${dto.like}</div>

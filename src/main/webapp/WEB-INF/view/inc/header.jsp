@@ -19,7 +19,7 @@ nav{
 }
 .user-menu{
 	position: absolute;
-	right: 8px;
+	right: 5%;
 	text-align: center;
 }
 .icon{
@@ -54,7 +54,7 @@ nav{
 		</div>
 		<div class="on-login">
 			<div>
-				${user.id}님
+				${user.nickName}님
 			</div>
 			<div>
 				<img class="icon" src="/icon/member_profile_icon.png">
@@ -66,7 +66,8 @@ nav{
 	</div>
 </nav>
 <script>
-	if(`${user}`!=null){
+const user = `${user}`;
+	if(user!=null&&user!=''){
 		document.querySelector(".on-login").style.display = "flex";
 		document.querySelector(".non-login").style.display = "none";
 	}else{

@@ -73,20 +73,38 @@
 }
 .replyShortInput{
 	height: 30px;
-	width: 140px;
+	width: 120px;
 	padding : 2px 7px 0px;
 }
-#replyForm{
-	width:850px;
-	
-}
 .replyCon{
-	width: 667px;
+	width: 600px;
 	height:71px;
 	padding : 2px 7px 0px;
 }
 .reCommentDiv{
 	margin: 0px;
+	justify-content: center;
+	display:flex;
+}
+.user-info{
+	display: flex;
+	align-items: center;
+	margin-right: 10px;
+}
+.user-info > div{
+	padding: 5px;
+	border : 1px solid black;
+}
+.commentForm{
+	width: 900px;
+	display:flex;
+	padding:5px;
+	justify-content: center;
+	align-items: center;
+}
+.comment-user-icon{
+	width:10px;
+	height: 10px;
 }
 </style>
 
@@ -104,6 +122,9 @@
 					<div class="replRow" style="margin-left: ${reply.stepNo>0?30:0}px">
 						<div style="width:158px;">
 							 ${reply.writer}
+							 <c:if test="${reply.memberNo>0}">
+							 	<img class="comment-user-icon" src="/icon/member_profile_icon.png">
+							 </c:if>
 						</div>
 						<div style="width:500px; display:flex; 
 						justify-content: flex-start; cursor: pointer;" onclick="reComment('${reply.no}');">
@@ -112,7 +133,7 @@
 						<div style="width:158px; display:flex;">
 							${reply.regDate}
 							<div style="width:18px; display:flex; align-items: center;">
-								<button type="button" onclick="openDeleteWindow('${boardNo}','${reply.no}');">X</button>
+								<button type="button" onclick="openDeleteWindow('${boardNo}','${reply.no}', '${reply.memberNo}');">X</button>
 							</div>
 						</div>
 					</div>
@@ -147,63 +168,88 @@
 			<div style="display:none;" id="pagerInfo">
 			</div>
 		</div>
-		<div style="width: 900px; display:flex; padding:5px; justify-content: center;">
-			<form id="commentForm" name="replyForm" method="post" action="">
-				<input type="hidden" name="cp" value="${pager.totalPage}">
-				<input type="hidden" name="boardNo" value="${boardNo}">
-				<input type="hidden" name="groupNo" value="0">
-				<input type="hidden" name="stepNo" value="0">
-				<div style="display:flex;">
-					<div style="margin-right: 10px;">
-						<div style="margin-bottom: 5px;">
-							<input type="text" class="replyShortInput" name="writer" placeholder="닉네임">
-						</div>
-						<div>
-							<input type="password" class="replyShortInput" name="pwd" placeholder="비밀번호">
-						</div>
+		<form id="commentForm" class="commentForm" name="replyForm" method="post">
+			<input type="hidden" name="cp" value="${pager.totalPage}">
+			<input type="hidden" name="boardNo" value="${boardNo}">
+			<input type="hidden" name="groupNo" value="0">
+			<input type="hidden" name="stepNo" value="0">
+			<input type="hidden" name="memberNo" value="0">
+			<div style="display:flex;">
+				<div class="user-info"></div>
+				<div class="writer-info" style="margin-right: 10px;">
+					<div style="margin-bottom: 5px;">
+						<input type="text" class="replyShortInput" name="writer" placeholder="닉네임">
 					</div>
 					<div>
-						<input type="text" class="replyCon" value="" name="content" placeholder="운영 정책에 위배되는 댓글은 삭제될 수 있습니다.">
+						<input type="password" class="replyShortInput" name="pwd" placeholder="비밀번호">
 					</div>
 				</div>
-				<div style="display:flex; justify-content: flex-end; margin-top: 5px;">
-					<input style="width:70px; height:35px;" type="button" value="댓글등록" id="btnReplyReg">
+				<div>
+					<input type="text" class="replyCon" value="" name="content" placeholder="운영 정책에 위배되는 댓글은 삭제될 수 있습니다.">
 				</div>
-			</form>
-		</div>
+			</div>
+			<div style="margin-left:10px;">
+				<input style="width:70px; height:80px;" type="button" value="댓글등록" id="btnReplyReg">
+			</div>
+		</form>
 	</div>
 </div>
 
 <div id="reCommentHtml" style="display:none;">
-	<div style="width: 850px; margin-bottom:5px;">
-		<input type="hidden" name="cp" value="${pager.totalPage}">
-		<input type="hidden" name="boardNo" value="${boardNo}">
-		<input type="hidden" name="groupNo" value="0">
-		<input type="hidden" name="stepNo" value="1">
-		<div style="display:flex;">
-			<div style="margin-right: 10px;">
-				<div style="margin-bottom: 5px;">
-					<input type="text" class="replyShortInput" name="writer" placeholder="닉네임">
-				</div>
-				<div>
-					<input type="password" class="replyShortInput" name="pwd" placeholder="비밀번호">
-				</div>
+	<input type="hidden" name="cp" value="${pager.totalPage}">
+	<input type="hidden" name="boardNo" value="${boardNo}">
+	<input type="hidden" name="groupNo" value="0">
+	<input type="hidden" name="stepNo" value="1">
+	<input type="hidden" name="memberNo" value="0">
+	<div style="display:flex;">
+		<div class="user-info"></div>
+		<div class="writer-info" style="margin-right: 10px;">
+			<div style="margin-bottom: 5px;">
+				<input type="text" class="replyShortInput" name="writer" placeholder="닉네임">
 			</div>
 			<div>
-				<input type="text" class="replyCon" value="" name="content" placeholder="운영 정책에 위배되는 댓글은 삭제될 수 있습니다.">
+				<input type="password" class="replyShortInput" name="pwd" placeholder="비밀번호">
 			</div>
 		</div>
-		<div style="display:flex; justify-content: flex-end; margin-top: 5px;">
-			<input style="width:70px; height:35px;" type="button" value="댓글등록" onclick="regReComment();">
+		<div>
+			<input type="text" class="replyCon" value="" name="content" placeholder="운영 정책에 위배되는 댓글은 삭제될 수 있습니다.">
+		</div>
+		<div style="margin-left:10px;">
+			<input style="width:70px; height:80px;" type="button" value="댓글등록" onclick="regReComment();">
 		</div>
 	</div>
 </div>
 <script>
+document.addEventListener("DOMContentLoaded", sessionChk());
+
+function sessionChk(){
+	//form shape
+	const writerInfo = document.querySelector(".writer-info");
+	const userInfo = document.querySelector(".user-info");
+	const userNameDiv ="<div>${user.nickName}</div>";
+
+	//input data
+	// 그냥 컨트롤러에서 세션으로 처리.
+	//세션에서 닉네임, 멤버No 뽑아서 넣기
+		
+	if(user!=''&&user!=null){
+		writerInfo.style.display = "none";
+		userInfo.innerHTML=userNameDiv;
+	}else{
+		userInfo.style.display = "none";
+	}
+}
+
+
+
+
+
 $(document).ready(function(){
 	$("#btnReplyReg").click(function(){
 		regComment();
 	});
 });
+
 
 function reComment(value1){
 	var toggleChk = 'toggle'+value1;
@@ -224,14 +270,37 @@ function reComment(value1){
 		$("#"+reCommentId).html('');
 		$("#"+reCommentId).find("input[name=groupNo]").val('0');
 	}
+	sessionChk();
 }
 
-function openDeleteWindow(boardNo, commentNo){
-	var queryString = "?boardNo="+boardNo+"&no="+commentNo;
-	var url = '/comment/delete'+queryString;
-	var title = 'delete comment';
-	var option = 'width=300, height=150, top=300, left=600, location=no, resizable=no';
-	window.open(url, title, option);
+function openDeleteWindow(boardNo, commentNo, memberNo){
+	if(memberNo>0){
+		if(`${user.no}`==memberNo){
+			if(confirm('삭제하시겠습니까?')){
+				var xhr = new XMLHttpRequest(); 
+		        xhr.onreadystatechange = function() {
+		          if (xhr.readyState === 4) {
+		            if (xhr.status === 200) {
+		              	alert(xhr.responseText);
+		            	loadComment('${boardNo}','','init');
+		            }
+		          }
+		        };
+
+		        xhr.open("POST", "/comment/delete");
+		        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		        xhr.send("memberNo=${user.no}&no="+commentNo);
+			}
+		}else{
+			alert('권한이 없습니다.');
+		}
+	}else{
+		var queryString = "?boardNo="+boardNo+"&no="+commentNo;
+		var url = '/comment/delete'+queryString;
+		var title = 'delete comment';
+		var option = 'width=300, height=150, top=300, left=600, location=no, resizable=no';
+		window.open(url, title, option);
+	}
 }
 
 </script>

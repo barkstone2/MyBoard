@@ -31,12 +31,15 @@
 			<input type="password" name="pwd">
 		</div>
 		<button type="button" onclick="move('login')">로그인</button>
+		<button type="button" onclick="move('reg')">회원가입</button>
 	</form>
 </body>
 <script>
 	function move(proc){
 		if(proc == 'login'){
 			$('form').submit();
+		}else{
+			location.href=proc;
 		}
 	}
 </script>
