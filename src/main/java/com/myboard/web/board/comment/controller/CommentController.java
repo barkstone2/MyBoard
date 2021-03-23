@@ -40,6 +40,9 @@ public class CommentController {
 			commentPage = -1;
 		}
 		
+		int deletedCount = commentService.getDeletedCount(boardNo);
+		model.addAttribute("deletedCount", deletedCount);
+		
 		Map<String, Integer> pager = commentService.getPager(conPerPage, pageNavLength, commentPage, boardNo);
 		model.addAttribute("pager", pager);
 		

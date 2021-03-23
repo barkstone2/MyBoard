@@ -12,6 +12,7 @@ public class CommentDTO {
 	private int boardNo;
 	private int stepNo;
 	private Timestamp regDate;
+	private boolean delChk;
 	
 	public CommentDTO() {
 	}
@@ -28,6 +29,16 @@ public class CommentDTO {
 
 	
 	
+	
+	
+	public boolean isDelChk() {
+		return delChk;
+	}
+
+	public void setDelChk(boolean delChk) {
+		this.delChk = delChk;
+	}
+
 	public int getStepNo() {
 		return stepNo;
 	}

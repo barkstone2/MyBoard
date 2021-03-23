@@ -14,10 +14,10 @@
 		(content, writer, pwd, groupNo, boardNo, stepNo, memberNo)
 		values (#{content}, #{writer}, #{pwd}, #{groupNo}, #{boardNo}, #{stepNo}, #{memberNo})
 	</insert>
-	<delete id="delete">
-		delete from comment
+	<update id="delete">
+		update comment set delChk=true
 		where no=#{no}
-	</delete>
+	</update>
 	<select id="getMaxGroupNo" resultType="int">
 		select COALESCE(max(groupNo),0) from comment
 		where boardNo=#{boardNo};
@@ -29,6 +29,10 @@
 	<select id="getTotalConCount" resultType="int">
 		select count(*) from comment
 		where boardNo=#{boardNo}
+	</select>
+	<select id="getDeletedCount" resultType="int">
+		select count(*) from comment
+		where boardNo=#{boardNo} and delChk=true
 	</select>
 </mapper>
 
