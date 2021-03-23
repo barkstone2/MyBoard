@@ -49,9 +49,13 @@
     overflow: hidden;
 }
 .board_writer{
+	display:flex;
     min-width:150px;
     text-align: center;
-    text-overflow: ellipsis;
+}
+.board_writer_text{
+	width:120px;
+ 	text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
@@ -120,11 +124,12 @@ a{
 		            	</div>
 		            	<div>[${dto.commentCount}]</div>
 		            </div>
-		            <div class="board_writer">${dto.writer}
+		            <div class="board_writer">
+		            	<div class="board_writer_text">${dto.writer}</div>
 		            <c:if test="${dto.memberNo>0}">
 					 	<img class="comment-user-icon" src="/icon/member_profile_icon.png">
-					 </c:if>
-					 </div>
+				 	</c:if>
+				 	</div>
 		            <div class="board_date"><fmt:formatDate value="${dto.regDate}" pattern="yyyy-MM-dd"/></div>
 		            <div class="board_hit">${dto.hit}</div>
 		            <div class="board_recommend">${dto.like}</div>
