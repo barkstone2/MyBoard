@@ -129,7 +129,7 @@ function move(proc, v_page, v_no){
 	+"&s_d=" + '${searchData}';
 	if(proc == 'delete'){
 		if(${dto.memberNo>0}){
-			if(${user.no}==${dto.memberNo}){
+			if(`${user.no}`==`${dto.memberNo}`){
 				if(confirm('삭제하시겠습니까?')){
 					var form = document.createElement("form");
 					form.setAttribute("charset", "UTF-8");

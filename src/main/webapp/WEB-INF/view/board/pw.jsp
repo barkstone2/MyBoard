@@ -18,7 +18,7 @@ button{
 	비밀번호 : <input type="password" id="pwd" name="pwd"><br><br>
 	<div style="display:flex; justify-content:space-around;">
 		<button type="button" onclick="pwProc();">확인</button>
-		<button type="button" onclick="window.close();">취소</button>
+		<button type="button" onclick="history.back();">취소</button>
 	</div>
 </form>
 <script>

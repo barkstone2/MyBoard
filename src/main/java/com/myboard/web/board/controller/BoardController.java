@@ -268,8 +268,8 @@ public class BoardController {
 	@GetMapping("delete")
 	public String delete(int no, Model model) {
 		model.addAttribute("no", no);
-		
-		return "board.delete";
+		model.addAttribute("reqUrl", "delete");
+		return "board.pw";
 	}
 	
 	@PostMapping("delete")
@@ -299,8 +299,6 @@ public class BoardController {
 				msg = "권한이 없습니다.";
 			}
 		}else if(dto.getPwd().equals(pwd)) {
-			
-			
 			int fileNo = dto.getFileNo();
 			if(fileNo>0) {
 				FileDto file = fileService.getFile(fileNo);
@@ -314,7 +312,7 @@ public class BoardController {
 			}
 		}else {
 			msg = "비밀번호가 일치하지 않습니다.";
-			reUrl = "/board/delete?no="+no;
+			reUrl = "/board/view?no="+no;
 		}
 		
 		model.addAttribute("msg", msg);
