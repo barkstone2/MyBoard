@@ -8,19 +8,14 @@
 		where no=#{no}
 	</select>
 	<insert id="insert" parameterType="com.myboard.web.board.entity.BoardDTO">
-		<if test="fileNo==0">
-			insert into board (title, content, writer, pwd, memberNo)
-			values (#{title}, #{content}, #{writer}, #{pwd}, #{memberNo})
-		</if>
-		<if test="fileNo>0">
-			insert into board (title, content, writer, pwd, fileNo, memberNo)
-			values (#{title}, #{content}, #{writer}, #{pwd}, #{fileNo}, #{memberNo})
-		</if>
+		insert into board (title, content, writer, pwd<if test="fileNo>0">,fileNo</if><if test="memberNo>0">,memberNo</if>)
+		values (#{title}, #{content}, #{writer}, #{pwd}<if test="fileNo>0">,#{fileNo}</if><if test="memberNo>0">,#{memberNo}</if>)
 	</insert>
 	<select id="getList" resultType="com.myboard.web.board.entity.BoardDTO">
 		select * from board
 		order by regdate desc
 	</select>
+	
 	<select id="getViewList" resultType="com.myboard.web.board.entity.BoardViewDTO">
 		select no, title, content, writer, pwd, fileNo, hit, boardView.like, regDate, memberNo, commentCount 
 		from boardView
