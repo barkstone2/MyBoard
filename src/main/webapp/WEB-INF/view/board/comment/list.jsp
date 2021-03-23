@@ -4,9 +4,8 @@
 <style>
 .replRow{
 	display:flex;
-	min-width:850px;
 	align-items: center;
-	max-width:850px;
+	width: inherit;
 }
 #btn{
 	display:flex;
@@ -40,6 +39,7 @@
 	justify-content: center;
 }
 .replyListCon{
+	max-width:850px;
 	width:850px;
 	border-bottom: 1px solid black;
 }
@@ -72,19 +72,28 @@
 	padding: 10px;
 }
 .replyShortInput{
-	height: 30px;
+	min-height: 30px;
 	width: 120px;
 	padding : 2px 7px 0px;
 }
 .replyCon{
 	width: 600px;
-	height:71px;
+	min-height:71px;
 	padding : 2px 7px 0px;
+	word-break:break-all;
+	resize: none;
 }
+.replyCon::placeholder{line-height:71px;}
+.replyCon::-webkit-input-placeholder{line-height:71px;}
+.replyCon::-ms-input-placeholder{line-height:71px;}
+.replyCon::-mos-input-placeholder{line-height:71px;}
+
 .reCommentDiv{
 	margin: 0px;
 	justify-content: center;
-	display:flex;
+	display:none;
+	padding: 20px 0px 20px 0px;
+	border-top:1px solid;
 }
 .user-info{
 	display: flex;
@@ -96,15 +105,75 @@
 	border : 1px solid black;
 }
 .commentForm{
-	width: 900px;
+	width: 800;
 	display:flex;
-	padding:5px;
+	padding:20px 0px 20px 0px;
 	justify-content: center;
 	align-items: center;
+	border-bottom: 1px solid;
 }
 .comment-user-icon{
 	width:10px;
 	height: 10px;
+}
+.delComment{
+	width: inherit;
+	display: flex;
+	align-items: center;
+	min-height:45px;
+}
+.delContent{
+	width: inherit;
+	display: flex;
+	align-items: center;
+	padding-left: 50px;
+	background-color: lightgray;
+}
+.comment-content{
+	width:500px;
+	--display:flex; 
+	cursor: pointer;
+    word-break:break-all;
+    text-align: left;
+}
+.re-content{
+	min-width:440px;
+	max-width:440px;
+}
+.comment-reg-div{
+	width:900px;
+	display: flex;
+	justify-content: center;
+}
+.comment-con-div{
+    padding: 10px;
+	width:600px;
+	min-height:55px;
+	--overflow:auto;
+	border: 1px solid #858585;
+	text-align: left;
+	align-items: center;
+	font: 400 13.3333px Arial;
+	border-radius: 3px;
+}
+.comment-con-div:empty:before{
+  content: attr(placeholder);
+  display: block; /* For Firefox */
+  height: 61px;
+  line-height: 61px;
+  color:#858585;
+}
+.re-row{
+	width: 810px;
+	border: 2px solid gray;
+	margin: 10px;
+	margin-left:30px;
+}
+.comment-writer{
+	width:80px;
+ 	text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 </style>
 
@@ -113,22 +182,28 @@
 		<div id="mList">
 			<div style="width:850px;">
 				<div id="memcount">
-					* ${pager.totalConCount}개의 댓글이 존재합니다.
+					* ${pager.totalConCount-deletedCount}개의 댓글이 존재합니다.
 				</div>
 			<c:forEach var="reply" items="${commentList}">
-				<div class="replyListCon">
+				<div class="replyListCon ">
+					<c:if test="${reply.delChk==true}">
+						<div class="delComment"><div class="delContent">삭제된 댓글입니다.</div></div>
+					</c:if>
+					<c:if test="${reply.delChk==false}">
 					<input type="hidden" value="${reply.groupNo}" id="reGroupNo${reply.no}">
 					<input type="hidden" value="0" class="toggleChk" id="toggle${reply.no}">
-					<div class="replRow" style="margin-left: ${reply.stepNo>0?30:0}px">
-						<div style="width:158px;">
-							 ${reply.writer}
+					<div class="replRow <c:if test="${reply.stepNo>0}">re-row</c:if>">
+						<div style="width:158px; display:flex; justify-content: center;">
+							<div class="comment-writer">
+								 ${reply.writer}
+							</div>
 							 <c:if test="${reply.memberNo>0}">
 							 	<img class="comment-user-icon" src="/icon/member_profile_icon.png">
 							 </c:if>
 						</div>
-						<div style="width:500px; display:flex; 
-						justify-content: flex-start; cursor: pointer;" onclick="reComment('${reply.no}');">
-							<c:if test="${reply.stepNo>0}">└ </c:if>${reply.content}
+						<c:if test="${reply.stepNo>0}"><div style="width:30px">└&nbsp;&nbsp;</div></c:if>
+						<div class="comment-content <c:if test="${reply.stepNo>0}">re-content</c:if>" onclick="reComment('${reply.no}');">
+							${reply.content}
 						</div>
 						<div style="width:158px; display:flex;">
 							${reply.regDate}
@@ -138,6 +213,7 @@
 						</div>
 					</div>
 					<form id="reComment${reply.no}" name="reCommentForm" class="reCommentDiv"></form>
+					</c:if>
 				</div>
 			</c:forEach>
 		</div>
@@ -168,30 +244,33 @@
 			<div style="display:none;" id="pagerInfo">
 			</div>
 		</div>
-		<form id="commentForm" class="commentForm" name="replyForm" method="post">
-			<input type="hidden" name="cp" value="${pager.totalPage}">
-			<input type="hidden" name="boardNo" value="${boardNo}">
-			<input type="hidden" name="groupNo" value="0">
-			<input type="hidden" name="stepNo" value="0">
-			<input type="hidden" name="memberNo" value="0">
-			<div style="display:flex;">
-				<div class="user-info"></div>
-				<div class="writer-info" style="margin-right: 10px;">
-					<div style="margin-bottom: 5px;">
-						<input type="text" class="replyShortInput" name="writer" placeholder="닉네임">
+		<div class="comment-reg-div">
+			<form id="commentForm" class="commentForm" name="replyForm" method="post">
+				<input type="hidden" name="cp" value="${pager.totalPage}">
+				<input type="hidden" name="boardNo" value="${boardNo}">
+				<input type="hidden" name="groupNo" value="0">
+				<input type="hidden" name="stepNo" value="0">
+				<input type="hidden" name="memberNo" value="0">
+				<div style="display:flex;">
+					<div class="user-info"></div>
+					<div class="writer-info" style="margin-right: 10px;">
+						<div style="margin-bottom: 5px;">
+							<input type="text" class="replyShortInput" name="writer" placeholder="닉네임">
+						</div>
+						<div>
+							<input type="password" class="replyShortInput" name="pwd" placeholder="비밀번호">
+						</div>
 					</div>
 					<div>
-						<input type="password" class="replyShortInput" name="pwd" placeholder="비밀번호">
+						<div contentEditable="true" class="comment-con-div" placeholder="운영 정책에 위배되는 댓글은 예고 없이 삭제될 수 있습니다."></div>
+						<textarea class="replyCon" name="content" hidden="hidden"></textarea>
 					</div>
 				</div>
-				<div>
-					<input type="text" class="replyCon" value="" name="content" placeholder="운영 정책에 위배되는 댓글은 삭제될 수 있습니다.">
+				<div style="margin-left:10px;">
+					<input style="width:70px; height:80px;" type="button" value="댓글등록" id="btnReplyReg">
 				</div>
-			</div>
-			<div style="margin-left:10px;">
-				<input style="width:70px; height:80px;" type="button" value="댓글등록" id="btnReplyReg">
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
 </div>
 
@@ -212,10 +291,11 @@
 			</div>
 		</div>
 		<div>
-			<input type="text" class="replyCon" value="" name="content" placeholder="운영 정책에 위배되는 댓글은 삭제될 수 있습니다.">
+			<div contentEditable="true" class="comment-con-div" placeholder="운영 정책에 위배되는 댓글은 예고 없이 삭제될 수 있습니다."></div>
+			<textarea class="replyCon" name="content" hidden="hidden"></textarea>
 		</div>
 		<div style="margin-left:10px;">
-			<input style="width:70px; height:80px;" type="button" value="댓글등록" onclick="regReComment();">
+			<input style="width:70px; height:80px;" type="button" value="댓글등록" onclick="regReCommentForm();">
 		</div>
 	</div>
 </div>
@@ -242,10 +322,25 @@ function sessionChk(){
 
 
 
+function regReCommentForm(){
+	
+	//EditableDiv의 값을 textarea에 넣어줌.
+	var formContent = document.querySelector(".reCommentDiv textarea[name=content]");
+	var editDiv = document.querySelector(".reCommentDiv div[class=comment-con-div]");
+	
+	formContent.value = editDiv.innerHTML;
+	
+	regReComment();
+}
 
 
 $(document).ready(function(){
 	$("#btnReplyReg").click(function(){
+		var formContent = document.querySelector("#commentForm textarea[name=content]");
+		var editDiv = document.querySelector("#commentForm div[class=comment-con-div]");
+		
+		formContent.value = editDiv.innerHTML;
+		
 		regComment();
 	});
 });
@@ -254,18 +349,29 @@ $(document).ready(function(){
 function reComment(value1){
 	var toggleChk = 'toggle'+value1;
 	var reCommentId = 'reComment'+value1;
+	
 	var reCommentForm = $("#reCommentHtml").html();
 	var groupNoId = 'reGroupNo'+value1;
 	var groupNo = $("#"+groupNoId).val();
 	
+	var reCommentDiv = document.querySelector("#"+reCommentId);
+	
 	if($("#"+toggleChk).val()=='0'){
+		
+		//바닐라로 클래스 가져올 때는 반복문 돌려야함
+		//일단 jQuery로 두고 나중에 바꾸기
+		
 		$(".toggleChk").val('0');
 		$("#"+toggleChk).val('1');
 		$(".reCommentDiv").html('');
 		$(".reCommentDiv").find("input[name=groupNo]").val('0');
+		$(".reCommentDiv").css("display","none");
+		
+		reCommentDiv.style.display = "block";
 		$("#"+reCommentId).html(reCommentForm);
 		$("#"+reCommentId).find("input[name=groupNo]").val(groupNo);
 	}else{
+		document.querySelector("#"+reCommentId).style.display = "none";
 		$("#"+toggleChk).val('0');
 		$("#"+reCommentId).html('');
 		$("#"+reCommentId).find("input[name=groupNo]").val('0');

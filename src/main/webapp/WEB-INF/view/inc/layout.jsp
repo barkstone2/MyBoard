@@ -9,14 +9,13 @@ html, body{
 }
 .header{
 	width:100%;
-	border: 1px solid black;
 	height: 80px;
 	display:flex;
 	align-items: center;
+	border-bottom: 1px solid;
 }
 .main{
 	width: 100%;
-	border: 1px solid red;
 	min-height: 800px;
 	display: flex;
 	align-items: center;
