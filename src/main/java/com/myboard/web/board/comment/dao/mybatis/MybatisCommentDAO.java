@@ -55,4 +55,9 @@ public class MybatisCommentDAO implements CommentDAO{
 		return mapper.getTotalConCount(boardNo);
 	}
 
+	@Override
+	public int getDeletedCount(int boardNo) {
+		return mapper.getDeletedCount(boardNo);
+	}
+
 }

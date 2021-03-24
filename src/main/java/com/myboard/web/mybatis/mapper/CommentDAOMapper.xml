@@ -11,13 +11,13 @@
 	</select>
 	<insert id="insert" parameterType="com.myboard.web.board.comment.entity.CommentDTO">
 		insert into comment 
-		(content, writer, pwd, groupNo, boardNo, stepNo)
-		values (#{content}, #{writer}, #{pwd}, #{groupNo}, #{boardNo}, #{stepNo})
+		(content, writer, pwd, groupNo, boardNo, stepNo<if test="memberNo>0">,memberNo</if>)
+		values (#{content}, #{writer}, #{pwd}, #{groupNo}, #{boardNo}, #{stepNo}<if test="memberNo>0">,#{memberNo}</if>)
 	</insert>
-	<delete id="delete">
-		delete from comment
+	<update id="delete">
+		update comment set delChk=true
 		where no=#{no}
-	</delete>
+	</update>
 	<select id="getMaxGroupNo" resultType="int">
 		select COALESCE(max(groupNo),0) from comment
 		where boardNo=#{boardNo};
@@ -29,6 +29,10 @@
 	<select id="getTotalConCount" resultType="int">
 		select count(*) from comment
 		where boardNo=#{boardNo}
+	</select>
+	<select id="getDeletedCount" resultType="int">
+		select count(*) from comment
+		where boardNo=#{boardNo} and delChk=true
 	</select>
 </mapper>
 

@@ -14,4 +14,5 @@ public interface CommentService {
 	String pwdChk(int no);
 	int getTotalConCount(int boardNo);
 	Map<String, Integer> getPager(int conPerPage, int pageNavLength, int commentPage, int boardNo);
+	int getDeletedCount(int boardNo);
 }

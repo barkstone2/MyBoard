@@ -21,4 +21,6 @@ public interface CommentDAO {
 
 	int getTotalConCount(int boardNo);
 
+	int getDeletedCount(int boardNo);
+
 }

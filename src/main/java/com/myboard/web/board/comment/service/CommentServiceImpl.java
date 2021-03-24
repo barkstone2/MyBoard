@@ -62,6 +62,11 @@ public class CommentServiceImpl implements CommentService{
 		return commentUtil.getPager(conPerPage, pageNavLength, commentPage, getTotalConCount(boardNo));
 	}
 
+	@Override
+	public int getDeletedCount(int boardNo) {
+		return commentDAO.getDeletedCount(boardNo);
+	}
+
 	
 
 }

@@ -34,6 +34,10 @@
 	display:flex;
 	margin-right: 30px;
 }
+.link-component{
+	cursor: pointer;
+	color: #0208d6;
+}
 </style>
 <div>
 	<form style="width:900px; border: 1px solid black;" name="chugaForm">
@@ -54,7 +58,13 @@
 					작성자
 				</div>
 				<div>
-					${dto.writer}
+					<span <c:if test="${dto.memberNo>0}">class="link-component" 
+			            	onclick="openUserInfo(`${dto.memberNo}`);"</c:if>>
+	            		${dto.writer}
+	            	</span>
+	            	<c:if test="${dto.memberNo>0}">
+					 	<img class="comment-user-icon" src="/icon/member_profile_icon.png">
+				 	</c:if>
 				</div>
 			</div>
 		</div>
@@ -127,6 +137,31 @@ function move(proc, v_page, v_no){
 	var queryString = "?p="+v_page+"&no="+v_no
 	+"&s_op=" + '${searchOption}'
 	+"&s_d=" + '${searchData}';
+	if(proc == 'delete'){
+		if(${dto.memberNo>0}){
+			if(`${user.no}`==`${dto.memberNo}`){
+				if(confirm('삭제하시겠습니까?')){
+					var form = document.createElement("form");
+					form.setAttribute("charset", "UTF-8");
+					form.setAttribute("method", post);
+					form.setAttribute("action", "delete");
+					
+				 	var hiddenField = document.createElement("input");
+	         		hiddenField.setAttribute("type", "hidden");
+		         	hiddenField.setAttribute("name", "no");
+		         	hiddenField.setAttribute("value", v_no);
+		         	
+		         	form.appendChild(hiddenField);
+		         	document.body.appendChild(form);
+		         	form.submit();
+		         	return;
+				}
+			}else{
+				alert('권한이 없습니다.');
+				return;
+			}
+		}
+	}
 	location.href = proc + queryString;
 }
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.myboard.web.board.comment.entity.CommentDTO;
 import com.myboard.web.board.comment.service.CommentService;
+import com.myboard.web.member.entity.MemberDTO;
 
 @Controller
 @RequestMapping("/comment/")
@@ -38,6 +40,9 @@ public class CommentController {
 			commentPage = -1;
 		}
 		
+		int deletedCount = commentService.getDeletedCount(boardNo);
+		model.addAttribute("deletedCount", deletedCount);
+		
 		Map<String, Integer> pager = commentService.getPager(conPerPage, pageNavLength, commentPage, boardNo);
 		model.addAttribute("pager", pager);
 		
@@ -49,10 +54,21 @@ public class CommentController {
 	}
 	
 	@PostMapping("reg")
-	public String reg(@RequestParam(defaultValue = "1", name="cp") int commentPage, String content, String writer, String pwd, int groupNo, int stepNo, int boardNo, Model model) {
+	public String reg(
+			@RequestParam(defaultValue = "1", name="cp") int commentPage, 
+			String content, String writer, String pwd, int groupNo, int stepNo, int boardNo, 
+			Model model, HttpServletRequest request) {
 		
 		int memberNo = 0;
 		if(groupNo==0) groupNo = commentService.getMaxGroupNo(boardNo)+1;
+		
+		
+		MemberDTO user = (MemberDTO)request.getSession().getAttribute("user");
+		
+		if(user != null) {
+			writer = user.getNickName();
+			memberNo = user.getNo();
+		}
 		
 		CommentDTO dto = new CommentDTO(content, writer, pwd, groupNo, memberNo, stepNo, boardNo);
 		int result = commentService.insert(dto);
@@ -70,23 +86,34 @@ public class CommentController {
 	}
 	
 	@PostMapping("delete")
-	public void delete(String pwd, int no, Model model, HttpServletResponse response) throws IOException {
+	public void delete(String pwd, int no, 
+			@RequestParam(defaultValue = "0", required = false) int memberNo,
+			Model model, HttpServletResponse response) throws IOException {
 		
 		String validPwd = commentService.pwdChk(no);
 		int result = 0;
 		String msg = "삭제 실패";
-		if(pwd.equals(validPwd)) {
+		
+		if(memberNo>0) {
 			result = commentService.delete(no);
-		}else if(pwd.equals("")||pwd==null){
-			msg = "비밀번호를 입력하세요";
-		}else{
-			msg = "비밀번호가 일치하지 않습니다.";
+			if(result>0) {
+				msg = "삭제성공";
+			}
+			
+		}else {
+			
+			if(pwd.equals(validPwd)) {
+				result = commentService.delete(no);
+			}else if(pwd.equals("")||pwd==null){
+				msg = "비밀번호를 입력하세요";
+			}else{
+				msg = "비밀번호가 일치하지 않습니다.";
+			}
+			
+			if(result>0) {
+				msg = "삭제 성공";
+			}
 		}
-		
-		if(result>0) {
-			msg = "삭제 성공";
-		}
-		
 		response.getWriter().write(msg);
 	}
 	
