@@ -38,6 +38,28 @@
 	cursor: pointer;
 	color: #0208d6;
 }
+.c-flex{
+	display:flex;
+	justify-content: center;
+}
+.like-btn{
+	width:100px;
+	height:40px;
+	margin:10px;
+	background-color: #9b9bd8;
+	border: 1px solid;
+	cursor: pointer;
+	box-shadow: 1px 4px 0 rgb(0,0,0,0.5);
+	border-radius: .25em;
+}
+.like-btn:focus { 
+ 	outline:none;
+}
+.like-btn:active{
+	box-shadow: 1px 1px 0 rgb(0,0,0,0.5);
+	position: relative;
+ 	top:2px;
+}
 </style>
 <div>
 	<form style="width:900px; border: 1px solid black;" name="chugaForm">
@@ -101,6 +123,17 @@
 				</div>
 			</div>
 		</div>
+		<div class="row c-flex">
+			<button type="button" class="like-btn" onclick="updateLike('like')">
+				<div id="likeCount">${dto.like}</div>
+				추천
+			</button>
+			<button type="button" class="like-btn" onclick="updateLike('dislike')">
+				<div id="dislikeCount">${dto.disLike}</div>
+				비추천
+			</button>
+		</div>
+		
 		<div id="commentDiv"></div>
 		<div class="row">	
 			<div class="btn">
@@ -123,6 +156,23 @@
 	</form>
 </div>
 <script>
+
+function updateLike(proc){
+	
+	var xhr = new XMLHttpRequest(); 
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+        	document.querySelector("#"+proc+"Count").innerHTML = xhr.responseText;
+        }
+      }
+    };
+
+    xhr.open("POST", proc);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send("boardNo="+${dto.no});
+	
+}
 function imgPreView(proc){
 	if(proc=='show') {
 		$('#uploadedImg').show();
