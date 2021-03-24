@@ -50,9 +50,9 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int updateLike(int no) {
+	public int updateLike(int boardNo) {
 		
-		return boardDao.updateLike(no);
+		return boardDao.updateLike(boardNo);
 	}
 
 	@Override
@@ -92,6 +92,12 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public FileDto uploadImg(MultipartFile imgFile, String savePath) throws IllegalStateException, IOException {
 		return boardUtil.uploadImg(imgFile, savePath);
+	}
+
+	@Override
+	public int updateDisLike(int boardNo) {
+		
+		return boardDao.updateDisLike(boardNo);
 	}
 
 }

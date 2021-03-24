@@ -357,5 +357,31 @@ public class BoardController {
 		response.getWriter().write(boardService.uploadImg(attachedImg, savePath).getFileName());
 	}
 	
+	@PostMapping("like")
+	public void like(int boardNo, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		System.out.println(request.getSession().getAttribute("user"));
+		
+		int result = boardService.updateLike(boardNo);
+		
+		int like = 0;
+		if(result>0) {
+			like = boardService.getView(boardNo).getLike();
+			response.getWriter().write(like+"");
+		}
+	}
+	
+	@PostMapping("dislike")
+	public void disLike(int boardNo, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		int result = boardService.updateDisLike(boardNo);
+		
+		int disLike = 0;
+		if(result>0) {
+			disLike = boardService.getView(boardNo).getDisLike();
+			response.getWriter().write(disLike+"");
+		}
+	}
+	
 	
 }
