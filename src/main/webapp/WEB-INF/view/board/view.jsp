@@ -34,6 +34,10 @@
 	display:flex;
 	margin-right: 30px;
 }
+.link-component{
+	cursor: pointer;
+	color: #0208d6;
+}
 </style>
 <div>
 	<form style="width:900px; border: 1px solid black;" name="chugaForm">
@@ -54,7 +58,13 @@
 					작성자
 				</div>
 				<div>
-					${dto.writer}
+					<span <c:if test="${dto.memberNo>0}">class="link-component" 
+			            	onclick="openUserInfo(`${dto.memberNo}`);"</c:if>>
+	            		${dto.writer}
+	            	</span>
+	            	<c:if test="${dto.memberNo>0}">
+					 	<img class="comment-user-icon" src="/icon/member_profile_icon.png">
+				 	</c:if>
 				</div>
 			</div>
 		</div>
