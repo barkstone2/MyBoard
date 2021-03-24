@@ -139,7 +139,7 @@ function move(v_location){
 	location.href=v_location;
 }
 function attachImg(){
-	var url = 'imgUploader';
+	var url = 'imguploader';
 	var windowName = '이미지 업로더';
 	var option = 'width=650, height=800, top=200, left=600';
 	window.open(url,windowName, option);

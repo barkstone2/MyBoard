@@ -144,7 +144,6 @@ public class BoardController {
 			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
 			int no, Model model, HttpServletRequest request) {
 		
-		
 		BoardDTO dto = boardService.getView(no);
 		model.addAttribute("dto", dto);
 		
@@ -334,19 +333,19 @@ public class BoardController {
 	    
 	}
 	
-	@GetMapping("imgUploader")
+	@GetMapping("imguploader")
 	public String imgUploader() {
 		
 		return "board/imgUploader";
 	}
 	
-	@GetMapping("imgPopup")
+	@GetMapping("imgpopup")
 	public String imgPopup() {
 		
 		return "board/imgPopup";
 	}
 	
-	@PostMapping("imgPopup")
+	@PostMapping("imgpopup")
 	public void imgPopup(MultipartFile attachedImg, Model model, HttpServletResponse response) throws IllegalStateException, IOException {
 		String savePath = "C:/images/image/";
 

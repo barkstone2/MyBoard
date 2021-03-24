@@ -125,7 +125,7 @@ function deleteSelected(){
 	}
 }
 function imgPopUp(){
-	var url = 'imgPopup';
+	var url = 'imgpopup';
 	var windowName = '이미지 추가';
 	var option = 'width=400, height=80, top=300, left=600';
 	window.open(url,windowName, option);
