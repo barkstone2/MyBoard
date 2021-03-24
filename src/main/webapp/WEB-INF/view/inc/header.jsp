@@ -33,6 +33,10 @@ nav{
 .on-login > div{
 	padding: 0px 5px 0px 5px;
 }
+.link-component{
+	cursor: pointer;
+	color: #0208d6;
+}
 </style>
 
 
@@ -53,10 +57,10 @@ nav{
 			<a href="/member/login">로그인</a>
 		</div>
 		<div class="on-login">
-			<div>
+			<div class="link-component" onclick="location.href='/member/view'">
 				${user.nickName}님
 			</div>
-			<div>
+			<div class="link-component" onclick="location.href='/member/view'">
 				<img class="icon" src="/icon/member_profile_icon.png">
 			</div>
 			<div>

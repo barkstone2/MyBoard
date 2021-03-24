@@ -175,6 +175,10 @@
     white-space: nowrap;
     overflow: hidden;
 }
+.link-span{
+	cursor: pointer;
+	color: #0208d6;
+}
 </style>
 
 <div style="max-width:900px; width:900px;">
@@ -195,7 +199,10 @@
 					<div class="replRow <c:if test="${reply.stepNo>0}">re-row</c:if>">
 						<div style="width:158px; display:flex; justify-content: center;">
 							<div class="comment-writer">
-								 ${reply.writer}
+								<span <c:if test="${reply.memberNo>0}">class="link-span" 
+				            	onclick="openUserInfo(`${reply.memberNo}`);"</c:if>>
+				            	${reply.writer}
+				            	</span>
 							</div>
 							 <c:if test="${reply.memberNo>0}">
 							 	<img class="comment-user-icon" src="/icon/member_profile_icon.png">
@@ -300,6 +307,15 @@
 	</div>
 </div>
 <script>
+function openUserInfo(memberNo){
+	
+	var queryString = "?memberNo="+memberNo;
+	var url = '/member/info'+queryString;
+	var option = 'width=500, height=300, top=200%, left=500%, location=no, resizable=no';
+	window.open(url, '', option);
+	
+}
+
 document.addEventListener("DOMContentLoaded", sessionChk());
 
 function sessionChk(){

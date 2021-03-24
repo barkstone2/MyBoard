@@ -150,6 +150,14 @@ public class MemberController {
 		return "util.message";
 	}
 	
+	@GetMapping("info")
+	public String info(int memberNo, Model model) {
+		
+		MemberDTO dto = memberService.getView(memberNo);
+		model.addAttribute("dto", dto);
+		
+		return "member/info";
+	}
 	
 	
 	

@@ -51,10 +51,11 @@
 .board_writer{
 	display:flex;
     min-width:150px;
+    justify-content: center;
     text-align: center;
 }
 .board_writer_text{
-	width:120px;
+	--width:120px;
  	text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -101,6 +102,13 @@ a{
 	width: 10px;
 	height: 10px;
 }
+.having-user-icon{
+	margin-left: 10px;
+}
+.link-component{
+	cursor: pointer;
+	color: #0208d6;
+}
 </style>
 </head>
 <body>
@@ -125,7 +133,12 @@ a{
 		            	<div>[${dto.commentCount}]</div>
 		            </div>
 		            <div class="board_writer">
-		            	<div class="board_writer_text">${dto.writer}</div>
+		            	<div class="board_writer_text <c:if test="${dto.memberNo>0}">having-user-icon</c:if>">
+			            	<span <c:if test="${dto.memberNo>0}">class="link-component" 
+			            	onclick="openUserInfo(`${dto.memberNo}`);"</c:if>>
+			            	${dto.writer}
+			            	</span>
+		            	</div>
 		            <c:if test="${dto.memberNo>0}">
 					 	<img class="comment-user-icon" src="/icon/member_profile_icon.png">
 				 	</c:if>
@@ -187,6 +200,16 @@ a{
 	</main>
 </body>
 <script>
+
+function openUserInfo(memberNo){
+	
+	var queryString = "?memberNo="+memberNo;
+	var url = '/member/info'+queryString;
+	var option = 'width=500, height=300, top=200%, left=500%, location=no, resizable=no';
+	window.open(url, '', option);
+	
+}
+
 function move(proc, v_page, v_no){
 	if(proc=='search'){
 		proc = 'list';
