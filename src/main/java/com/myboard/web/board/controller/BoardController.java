@@ -30,6 +30,8 @@ import com.myboard.web.board.entity.BoardDTO;
 import com.myboard.web.board.entity.BoardViewDTO;
 import com.myboard.web.board.file.entity.FileDto;
 import com.myboard.web.board.file.service.FileService;
+import com.myboard.web.board.recommend.entity.RecommendDTO;
+import com.myboard.web.board.recommend.service.RecommendService;
 import com.myboard.web.board.service.BoardService;
 import com.myboard.web.member.entity.MemberDTO;
 
@@ -42,6 +44,9 @@ public class BoardController {
 	
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private RecommendService recommendService;
 	
 	@GetMapping("reg")
 	public String reg() {
@@ -360,26 +365,53 @@ public class BoardController {
 	@PostMapping("like")
 	public void like(int boardNo, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
-		request.getSession().getAttribute("user");
+		int memberNo = ((MemberDTO)request.getSession().getAttribute("user")).getNo();
 		
-		int result = boardService.updateLike(boardNo);
+		int checkLike = recommendService.checkLike(boardNo, memberNo);
 		
-		int like = 0;
-		if(result>0) {
-			like = boardService.getView(boardNo).getLike();
-			response.getWriter().write(like+"");
+		if(checkLike>0) {
+			response.getWriter().write("추천은 게시글 당 하루에 한 번만 가능합니다.");
+		}else {
+			
+			RecommendDTO dto = RecommendDTO.builder()
+					.boardNo(boardNo)
+					.memberNo(memberNo)
+					.type("like")
+					.build();
+			
+			recommendService.insert(dto);
+			int result = boardService.updateLike(boardNo);
+			int like = 0;
+			if(result>0) {
+				like = boardService.getView(boardNo).getLike();
+				response.getWriter().write(like+"|");
+			}
 		}
 	}
 	
 	@PostMapping("dislike")
 	public void disLike(int boardNo, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
-		int result = boardService.updateDisLike(boardNo);
+		int memberNo = ((MemberDTO)request.getSession().getAttribute("user")).getNo();
 		
-		int disLike = 0;
-		if(result>0) {
-			disLike = boardService.getView(boardNo).getDisLike();
-			response.getWriter().write(disLike+"");
+		int checkDisLike = recommendService.checkDisLike(boardNo, memberNo);
+		
+		if(checkDisLike>0) {
+			response.getWriter().write("비추천은 게시글 당 하루에 한 번만 가능합니다.");
+		}else {
+			
+			RecommendDTO dto = RecommendDTO.builder()
+					.boardNo(boardNo)
+					.memberNo(memberNo)
+					.type("dislike")
+					.build();
+			recommendService.insert(dto);
+			int result = boardService.updateDisLike(boardNo);
+			int disLike = 0;
+			if(result>0) {
+				disLike = boardService.getView(boardNo).getDisLike();
+				response.getWriter().write(disLike+"|");
+			}
 		}
 	}
 	
