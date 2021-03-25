@@ -360,7 +360,7 @@ public class BoardController {
 	@PostMapping("like")
 	public void like(int boardNo, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
-		System.out.println(request.getSession().getAttribute("user"));
+		request.getSession().getAttribute("user");
 		
 		int result = boardService.updateLike(boardNo);
 		

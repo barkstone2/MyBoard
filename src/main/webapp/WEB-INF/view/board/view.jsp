@@ -163,7 +163,12 @@ function updateLike(proc){
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
-        	document.querySelector("#"+proc+"Count").innerHTML = xhr.responseText;
+        	if(xhr.responseText.indexOf("<!DOCTYPE html>")>0){
+    			  alert('로그인이 필요한 작업입니다.\n로그인 페이지로 이동합니다.');
+    			  location.href="/member/login";
+        	}else{
+	        	document.querySelector("#"+proc+"Count").innerHTML = xhr.responseText;
+        	}
         }
       }
     };
