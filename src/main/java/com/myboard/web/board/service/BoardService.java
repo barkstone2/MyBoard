@@ -21,7 +21,7 @@ public interface BoardService {
 	//게시글 수정
 	int update(BoardDTO dto);
 	//좋아요 표시
-	int updateLike(int no);
+	int updateLike(int boardNo);
 	//게시글 목록
 	int getBoardNo(int fileNo);
 	int getTotalConCount();
@@ -31,6 +31,7 @@ public interface BoardService {
 	Map<String, Integer> getPager(int conPerPage, int pageNavLength, int page);
 	Map<String, Integer> getPager(int conPerPage, int pageNavLength, int page, int totalConCount);
 	FileDto uploadImg(MultipartFile imgFile, String savePath) throws IllegalStateException, IOException;
+	int updateDisLike(int boardNo);
 	
 	
 	

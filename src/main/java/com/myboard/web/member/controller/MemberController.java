@@ -24,11 +24,9 @@ public class MemberController {
 	public String move(@PathVariable String reqUrl, HttpServletRequest request, Model model) {
 		
 		if(reqUrl.equals("view")||reqUrl.equals("modify")) {
-			if(request.getSession().getAttribute("user")!=null) {
-				int cookNo = ((MemberDTO)request.getSession().getAttribute("user")).getNo();
-				MemberDTO dto = memberService.getView(cookNo);
-				model.addAttribute("dto", dto);
-			}
+			int cookNo = ((MemberDTO)request.getSession().getAttribute("user")).getNo();
+			MemberDTO dto = memberService.getView(cookNo);
+			model.addAttribute("dto", dto);
 		}
 		
 		return "member."+reqUrl;
@@ -98,12 +96,8 @@ public class MemberController {
 		String msg = "";
 		String reUrl = "/member/login";
 		
-		if(request.getSession().getAttribute("user")!=null) {
-			msg = "로그아웃 되었습니다.";
-			request.getSession().invalidate();
-		}else {
-			msg = "로그인 되어 있지 않습니다.";
-		}
+		msg = "로그아웃 되었습니다.";
+		request.getSession().invalidate();
 		
 		model.addAttribute("msg", msg);
 		model.addAttribute("reUrl", reUrl);

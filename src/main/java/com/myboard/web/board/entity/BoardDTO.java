@@ -12,6 +12,7 @@ public class BoardDTO {
 	private int fileNo;
 	private int hit;
 	private int like;
+	private int disLike;
 	private Date regDate;
 	private int memberNo;
 	
@@ -64,6 +65,16 @@ public class BoardDTO {
 		this.content = content;
 		this.writer = writer;
 		this.pwd = pwd;
+	}
+
+	
+	
+	public int getDisLike() {
+		return disLike;
+	}
+
+	public void setDisLike(int disLike) {
+		this.disLike = disLike;
 	}
 
 	public int getFileNo() {

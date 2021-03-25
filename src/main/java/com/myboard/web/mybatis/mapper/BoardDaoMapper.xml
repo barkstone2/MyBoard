@@ -59,6 +59,13 @@
 	<select id="getTotalConCount" resultType="int">
 		select count(*) from board
 	</select>
+	<update id="updateLike">
+		update board set board.like=(board.like+1) where no=#{boardNo}
+	</update>
+	<update id="updateDisLike">
+		update board set dislike=(dislike+1) where no=#{boardNo}
+	</update>
+	
 	
 </mapper>
 
