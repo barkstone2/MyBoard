@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.myboard.web.board.category.service.CategoryService;
 import com.myboard.web.board.entity.BoardDTO;
 import com.myboard.web.board.entity.BoardViewDTO;
 import com.myboard.web.board.file.entity.FileDto;
@@ -41,12 +42,12 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService boardService;
-	
 	@Autowired
 	private FileService fileService;
-	
 	@Autowired
 	private RecommendService recommendService;
+	@Autowired
+	private CategoryService categoryService;
 	
 	@GetMapping("reg")
 	public String reg() {
@@ -124,20 +125,24 @@ public class BoardController {
 	
 	@GetMapping("list")
 	public String list(
-			@RequestParam(defaultValue = "1", name="p") int page, 
+			@RequestParam(required = false, name="p", defaultValue = "1") int page, 
 			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
-			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
+			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
+			@RequestParam(required = false, name = "ctg", defaultValue = "자유") String category,
 						Model model) {
 		
 		int conPerPage = 10; // 페이지 당 개시글 수(limit)
 		int pageNavLength = 5; // 페이징 번호 범위
 		
+		List<String> categoryList = categoryService.getList();
+		model.addAttribute("categoryList", categoryList);
+		
 		Map<String, Integer> pager = boardService.getPager(conPerPage, pageNavLength, page);
 		model.addAttribute("pager", pager);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("searchData", searchData);
-		
-		List<BoardViewDTO> list = boardService.getViewList(pager.get("offSet"), conPerPage, searchOption, searchData);
+		model.addAttribute("category", category);
+		List<BoardViewDTO> list = boardService.getViewList(pager.get("offSet"), conPerPage, searchOption, searchData, category);
 		model.addAttribute("list", list);
 		return "board.list";
 	}

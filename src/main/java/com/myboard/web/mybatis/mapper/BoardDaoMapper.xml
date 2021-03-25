@@ -3,6 +3,25 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myboard.web.board.dao.BoardDAO">
+	<sql id="search">
+		<where>
+		<if test="searchOption != '' and searchData != ''">
+			<choose>
+				<when test="searchOption=='title_content'">
+					and (title like '%${searchData}%' or content like '%${searchData}%')
+				</when>
+				<when test="searchOption=='all'">
+					and (title like '%${searchData}%' or content like '%${searchData}%' or writer like '%${searchData}%')
+				</when>
+				<otherwise>
+					and ${searchOption} like '%${searchData}%'
+				</otherwise>
+			</choose>
+		</if>
+			and categoryName=#{category}
+		</where>
+	</sql>
+
 	<select id="getView" resultType="com.myboard.web.board.entity.BoardDTO">
 		select * from board
 		where no=#{no}
@@ -19,21 +38,7 @@
 	<select id="getViewList" resultType="com.myboard.web.board.entity.BoardViewDTO">
 		select no, title, content, writer, pwd, fileNo, hit, boardView.like, regDate, memberNo, commentCount 
 		from boardView
-		<if test="searchOption != '' and searchData != ''">
-		<where>
-			<choose>
-				<when test="searchOption=='title_content'">
-					and (title like '%${searchData}%' or content like '%${searchData}%')
-				</when>
-				<when test="searchOption=='all'">
-					and (title like '%${searchData}%' or content like '%${searchData}%' or writer like '%${searchData}%')
-				</when>
-				<otherwise>
-					and ${searchOption} like '%${searchData}%'
-				</otherwise>
-			</choose>
-		</where>
-		</if>
+		<include refid="search"></include>
 		order by regdate desc
 		limit #{offSet}, #{conPerPage}
 	</select>

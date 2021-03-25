@@ -154,6 +154,11 @@ a{
 		<div class="category-list-div">
 			<img class="icon" src="/icon/icon_left.png">
 			<div class="category-list">
+				<c:forEach var="category" items="${categoryList}">
+				<div class="category-content ${category}" onclick="move('list', '1', '', '${category}')">
+					${category}
+				</div>
+				</c:forEach>
 				<div class="category-content 공지" onclick="move('list', '1', '', '공지')">
 					공지
 				</div>
