@@ -166,8 +166,7 @@ function updateLike(proc){
         	if(xhr.responseText.indexOf("|")>0){
         		var count = xhr.responseText.substring(0, xhr.responseText.length-1);
         		document.querySelector("#"+proc+"Count").innerHTML = count;
-        	}else if(xhr.responseText == null || xhr.responseText == ''){
-        		
+        	}else if(xhr.responseText.indexOf("<!DOCTYPE html>")>0){
     			  alert('로그인이 필요한 작업입니다.\n로그인 페이지로 이동합니다.');
     			  location.href="/member/login";
         	}else{

@@ -35,7 +35,7 @@
     }
 
 .board_num{
-    min-width:50px;
+    min-width:60px;
     text-align: center;
 }
 .board_subj{
@@ -69,11 +69,11 @@
     text-align: center;
 }
 .board_recommend{
-    min-width:50px;
+    min-width:80px;
     text-align: center;
 }
 .list{
-	width:660px;
+	width:700px;
 }
 .align-right{
 	justify-content: flex-end;
@@ -143,6 +143,9 @@ a{
 .icon:hover{
 	background-color:  #ff9393;
 }
+.category-content-color{
+	background-color: #8FD6CE;
+}
 </style>
 </head>
 <body>
@@ -151,10 +154,10 @@ a{
 		<div class="category-list-div">
 			<img class="icon" src="/icon/icon_left.png">
 			<div class="category-list">
-				<div class="category-content" style="background-color: #ff4747">
+				<div class="category-content 공지" onclick="move('list', '1', '', '공지')">
 					공지
 				</div>
-				<div class="category-content">
+				<div class="category-content 자유" onclick="move('list', '1', '', '자유')">
 					자유
 				</div>
 				<div class="category-content">
@@ -253,7 +256,7 @@ a{
 				</div>
 				<div>
 					<button onclick="move('search')">검색</button>
-					<button onclick="location.href='list'">clear</button>
+					<button onclick="move('searchClear')">clear</button>
 				</div>
 			</div>
 	    </div>
@@ -266,6 +269,12 @@ a{
 
 const categoryList = document.querySelector(".category-list-div");
 const icons = document.querySelectorAll(".icon");
+
+var categorys = document.querySelectorAll(".category-content");
+categorys.forEach(element => element.className += " category-content-color");
+
+var category = document.querySelector(".${category}");
+category.style.backgroundColor = "#ff4747";
 
 categoryList.addEventListener("mouseover", function(){
 	icons[1].style.display = "block";
@@ -287,14 +296,35 @@ function openUserInfo(memberNo){
 	
 }
 
-function move(proc, v_page, v_no){
+function move(proc, v_page, v_no, v_ctg){
+	var sop;
+	var sd;
 	if(proc=='search'){
 		proc = 'list';
 		v_page = '1';
+		sop = $('#search_option').val();
+		sd = $('#search_data').val();
+	}else if(proc == 'searchClear'){
+		proc = 'list';
+		v_page = '1';
+		sop = '';
+		sd = '';
+	}	
+	else{
+		sop = '${searchOption}';
+		sd = '${searchData}';
+	}
+	
+	var ctg;
+	if(v_ctg != null){
+		ctg = v_ctg;
+	}else{
+		ctg = '${category}';
 	}
 	var queryString = "?p="+v_page+"&no="+v_no
-					+"&s_op=" + $('#search_option').val()
-					+"&s_d=" + $('#search_data').val();
+					+"&s_op=" + sop
+					+"&s_d=" + sd
+					+"&ctg=" + ctg;
 	location.href = proc + queryString;
 }
 $('#op_${searchOption}').prop('selected', true);
