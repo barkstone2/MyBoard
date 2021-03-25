@@ -41,7 +41,7 @@
 .board_subj{
     min-width:250px;
     --padding-left: 10px;
-    display: flex;
+    --display: flex;
 }
 .board_title{
 	text-overflow: ellipsis;
@@ -94,6 +94,7 @@ a{
 }
 .f-center{
 	justify-content: center;
+	align-items: center;
 }
 #searchForm > div{
 	padding: 5px;
@@ -109,11 +110,71 @@ a{
 	cursor: pointer;
 	color: #0208d6;
 }
+.category-content{
+	width:50px;
+	height:20px;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px;
+	margin:10px;
+	border-radius: 7px;
+	background-color: #8FD6CE;
+	cursor: pointer;
+}
+.category-content:hover{
+	background-color: #ff9393;
+}
+.category-list-div{
+	display:flex;
+	align-items: center;
+	justify-content: center;
+}
+.category-list{
+	display:flex;
+	justify-content: space-around;
+	align-items: center;
+}
+.icon{
+	display: none;
+	border-radius: 15px;
+	cursor: pointer;
+}
+.icon:hover{
+	background-color:  #ff9393;
+}
 </style>
 </head>
 <body>
-
 	<main class="list">
+		<!-- 7개가 최대 -->
+		<div class="category-list-div">
+			<img class="icon" src="/icon/icon_left.png">
+			<div class="category-list">
+				<div class="category-content" style="background-color: #ff4747">
+					공지
+				</div>
+				<div class="category-content">
+					자유
+				</div>
+				<div class="category-content">
+					질문
+				</div>
+				<div class="category-content">
+					질문
+				</div>
+				<div class="category-content">
+					질문
+				</div>
+				<div class="category-content">
+					질문
+				</div>
+				<div class="category-content">
+					질문
+				</div>
+			</div>
+			<img class="icon" src="/icon/icon_right.png">
+		</div>
 	    <div class="list_label">
 	        <div class="board_num">번호</div>
 	        <div class="board_subj">제목</div>
@@ -127,10 +188,12 @@ a{
 	        	<div class="list_content">
 		            <div class="board_num">${dto.no}</div>
 		            <div class="board_subj">
-		            	<div class="board_title">
-			            	<a href="#" onclick="move('view','${pager.page}','${dto.no}')">${dto.title}</a>
+		            	<div class="flex">
+			            	<div class="board_title">
+				            	<a href="#" onclick="move('view','${pager.page}','${dto.no}')">${dto.title}</a>
+			            	</div>
+			            	<div>[${dto.commentCount}]</div>
 		            	</div>
-		            	<div>[${dto.commentCount}]</div>
 		            </div>
 		            <div class="board_writer">
 		            	<div class="board_writer_text <c:if test="${dto.memberNo>0}">having-user-icon</c:if>">
@@ -200,6 +263,20 @@ a{
 	</main>
 </body>
 <script>
+
+const categoryList = document.querySelector(".category-list-div");
+const icons = document.querySelectorAll(".icon");
+
+categoryList.addEventListener("mouseover", function(){
+	icons[1].style.display = "block";
+	icons[2].style.display = "block";
+});
+categoryList.addEventListener("mouseleave", function(){
+	icons[1].style.display = "none";
+	icons[2].style.display = "none";
+});
+
+
 
 function openUserInfo(memberNo){
 	
