@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/util/")
 public class UtilController {
 	
-	public String message(Model model) {
+	@GetMapping("message")
+	public String message(String msg, String reUrl, Model model) {
 		
-		return "message";
+		model.addAttribute("msg", msg);
+		model.addAttribute("reUrl", reUrl);
+		
+		return "util.message";
 	}
 	
 	

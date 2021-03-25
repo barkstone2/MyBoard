@@ -40,7 +40,7 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(sessionInterceptor)
-				.addPathPatterns("/board/reg", "/member/modify", "/member/logout");
+				.addPathPatterns(sessionInterceptor.NEEDSESSION);
 		
 	}
 	
