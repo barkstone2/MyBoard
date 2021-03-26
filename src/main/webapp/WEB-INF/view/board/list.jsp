@@ -146,6 +146,13 @@ a{
 .category-content-color{
 	background-color: #8FD6CE;
 }
+.empty-list{
+	width: inherit;
+	height: 300px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 </style>
 </head>
 <body>
@@ -159,27 +166,6 @@ a{
 					${category}
 				</div>
 				</c:forEach>
-				<div class="category-content 공지" onclick="move('list', '1', '', '공지')">
-					공지
-				</div>
-				<div class="category-content 자유" onclick="move('list', '1', '', '자유')">
-					자유
-				</div>
-				<div class="category-content">
-					질문
-				</div>
-				<div class="category-content">
-					질문
-				</div>
-				<div class="category-content">
-					질문
-				</div>
-				<div class="category-content">
-					질문
-				</div>
-				<div class="category-content">
-					질문
-				</div>
 			</div>
 			<img class="icon" src="/icon/icon_right.png">
 		</div>
@@ -192,6 +178,11 @@ a{
 	        <div class="board_recommend">추천</div>
 	    </div>
 	    <div class="list_content_block">
+	    	<c:if test="${pager.totalConCount==0}">
+	    		<div class="empty-list">
+	    			게시글이 없습니다.
+	    		</div>
+	    	</c:if>
 	        <c:forEach items="${list}" var="dto">
 	        	<div class="list_content">
 		            <div class="board_num">${dto.no}</div>
@@ -272,25 +263,49 @@ a{
 </body>
 <script>
 
-const categoryList = document.querySelector(".category-list-div");
-const icons = document.querySelectorAll(".icon");
+const _categoryList = document.querySelector(".category-list-div");
 
-var categorys = document.querySelectorAll(".category-content");
-categorys.forEach(element => element.className += " category-content-color");
+function categoryCss(){
+	const _icons = document.querySelectorAll(".icon");
+    var _categorys = document.querySelectorAll(".category-content");
+    _categorys.forEach(element => element.className += " category-content-color");
+	
+    var _category = document.querySelector(".${category}");
+    if(_category!=null){
+	    _category.style.backgroundColor = "#ff4747";
+    }
 
-var category = document.querySelector(".${category}");
-category.style.backgroundColor = "#ff4747";
+    if(${totalCategoryCount>7}){
+    	_categoryList.addEventListener("mouseover", function(){
+    		_icons[1].style.display = "block";
+    		_icons[2].style.display = "block";
+    	});
+    	_categoryList.addEventListener("mouseleave", function(){
+    		_icons[1].style.display = "none";
+    		_icons[2].style.display = "none";
+    	});
+   }
+}
 
-categoryList.addEventListener("mouseover", function(){
-	icons[1].style.display = "block";
-	icons[2].style.display = "block";
-});
-categoryList.addEventListener("mouseleave", function(){
-	icons[1].style.display = "none";
-	icons[2].style.display = "none";
-});
+function categoryMove(v_ctgp){
+	if(v_ctgp==null || v_ctgp == ''){
+		v_ctgp = '1';
+	}
+	var xhr = new XMLHttpRequest(); 
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+        	_categoryList.innerHTML = xhr.responseText;
+        	categoryCss();
+           }
+        }
+    };
+    xhr.open("GET", "/board/ctglist?ctgp="+v_ctgp);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(null);
+}
 
-
+document.addEventListener('DOMContentLoaded', categoryMove(${categoryPage}));
 
 function openUserInfo(memberNo){
 	
@@ -301,7 +316,7 @@ function openUserInfo(memberNo){
 	
 }
 
-function move(proc, v_page, v_no, v_ctg){
+function move(proc, v_page, v_no, v_ctg, v_ctgp){
 	var sop;
 	var sd;
 	if(proc=='search'){
@@ -329,7 +344,8 @@ function move(proc, v_page, v_no, v_ctg){
 	var queryString = "?p="+v_page+"&no="+v_no
 					+"&s_op=" + sop
 					+"&s_d=" + sd
-					+"&ctg=" + ctg;
+					+"&ctg=" + ctg
+					+"&ctgp=" + v_ctgp;
 	location.href = proc + queryString;
 }
 $('#op_${searchOption}').prop('selected', true);
