@@ -63,6 +63,7 @@
 	</select>
 	<select id="getTotalConCount" resultType="int">
 		select count(*) from board
+		<include refid="search"></include>
 	</select>
 	<update id="updateLike">
 		update board set board.like=(board.like+1) where no=#{boardNo}
