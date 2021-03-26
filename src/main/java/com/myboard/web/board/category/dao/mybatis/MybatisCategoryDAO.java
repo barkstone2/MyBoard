@@ -15,8 +15,13 @@ public class MybatisCategoryDAO implements CategoryDAO{
 	}
 	
 	@Override
-	public List<String> getList() {
-		return mapper.getList();
+	public List<String> getList(int categoryOffset, int categoryLimit) {
+		return mapper.getList(categoryOffset, categoryLimit);
+	}
+
+	@Override
+	public int getTotalCount() {
+		return mapper.getTotalCount();
 	}
 	
 }

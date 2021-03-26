@@ -14,9 +14,15 @@ public class CategoryServiceImpl implements CategoryService{
 	private CategoryDAO categoryDAO;
 	
 	@Override
-	public List<String> getList() {
+	public List<String> getList(int categoryOffset, int categoryLimit) {
 		
-		return categoryDAO.getList();
+		return categoryDAO.getList(categoryOffset, categoryLimit);
+	}
+
+	@Override
+	public int getTotalCount() {
+		
+		return categoryDAO.getTotalCount();
 	}
 
 }

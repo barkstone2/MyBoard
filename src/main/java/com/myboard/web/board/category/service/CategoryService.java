@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface CategoryService {
 
-	List<String> getList();
+	List<String> getList(int categoryOffset, int categoryLimit);
+
+	int getTotalCount();
 	
 }

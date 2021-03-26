@@ -129,19 +129,22 @@ public class BoardController {
 			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
 			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
 			@RequestParam(required = false, name = "ctg", defaultValue = "자유") String category,
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 						Model model) {
 		
 		int conPerPage = 10; // 페이지 당 개시글 수(limit)
 		int pageNavLength = 5; // 페이징 번호 범위
+	
+		int totalCategoryCount = categoryService.getTotalCount();
+		model.addAttribute("totalCategoryCount", totalCategoryCount);
 		
-		List<String> categoryList = categoryService.getList();
-		model.addAttribute("categoryList", categoryList);
-		
-		Map<String, Integer> pager = boardService.getPager(conPerPage, pageNavLength, page);
+		Map<String, Integer> pager = boardService.getPager(conPerPage, pageNavLength, page, searchOption, searchData, category);
 		model.addAttribute("pager", pager);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("searchData", searchData);
 		model.addAttribute("category", category);
+		model.addAttribute("categoryPage", categoryPage);
+		
 		List<BoardViewDTO> list = boardService.getViewList(pager.get("offSet"), conPerPage, searchOption, searchData, category);
 		model.addAttribute("list", list);
 		return "board.list";
@@ -418,6 +421,25 @@ public class BoardController {
 				response.getWriter().write(disLike+"|");
 			}
 		}
+	}
+	
+	@GetMapping("ctglist")
+	public String categoryList(
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
+			Model model) {
+		
+		int categoryLimit = 7;
+		int categoryOffset = categoryLimit * (categoryPage-1);
+		
+		int totalCategoryCount = categoryService.getTotalCount();
+		int totalCategoryPage = (int)Math.ceil((totalCategoryCount / (double)categoryLimit));
+		
+		List<String> categoryList = categoryService.getList(categoryOffset, categoryLimit);
+		model.addAttribute("categoryList", categoryList);
+		model.addAttribute("categoryPage", categoryPage);
+		model.addAttribute("totalCategoryCount", totalCategoryCount);
+		model.addAttribute("totalCategoryPage", totalCategoryPage);
+		return "board/category/categoryList";
 	}
 	
 	
