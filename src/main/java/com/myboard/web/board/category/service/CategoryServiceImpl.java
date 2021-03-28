@@ -25,4 +25,9 @@ public class CategoryServiceImpl implements CategoryService{
 		return categoryDAO.getTotalCount();
 	}
 
+	@Override
+	public List<String> getList() {
+		return getList(0,0);
+	}
+
 }

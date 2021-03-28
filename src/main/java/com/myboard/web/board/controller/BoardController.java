@@ -80,12 +80,15 @@ public class BoardController {
 		model.addAttribute("searchData", searchData);
 		model.addAttribute("no", no);
 		model.addAttribute("reqUrl", reqUrl);
+		model.addAttribute("category", category);
+		model.addAttribute("categoryPage", categoryPage);
 		
 		return "board.pw";
 	}
 	
 	@PostMapping("reg")
-	public String reg(String title, String content, String writer, String pwd, MultipartFile imgFile, 
+	public String reg(String title, String content, String writer, String pwd, 
+			MultipartFile imgFile, String category,
 			Model model, HttpServletRequest request) throws IOException {
 		
 		int fileNo = 0;
@@ -202,6 +205,9 @@ public class BoardController {
 			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 			int no, String pwd, Model model, HttpServletRequest request) {
 		
+		List<String> categoryList = categoryService.getList();
+		model.addAttribute("categoryList", categoryList);
+		
 		BoardDTO dto = boardService.getView(no);
 		model.addAttribute("dto", dto);
 		
@@ -245,7 +251,7 @@ public class BoardController {
 	
 	@PostMapping("modify")
 	public String modify(int no, String title, String content, String writer, String pwd, 
-			MultipartFile imgFile, int fileDelChk, Model model) throws IllegalStateException, IOException {
+			MultipartFile imgFile, String category, int fileDelChk, Model model) throws IllegalStateException, IOException {
 		
 		int fileNo = 0;
 		String msg = "";
@@ -461,7 +467,7 @@ public class BoardController {
 			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 			Model model) {
 		
-		int categoryLimit = 7;
+		int categoryLimit = 6;
 		int categoryOffset = categoryLimit * (categoryPage-1);
 		
 		int totalCategoryCount = categoryService.getTotalCount();
