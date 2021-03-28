@@ -3,24 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myboard.web.board.dao.BoardDAO">
-	<select id="getView" resultType="com.myboard.web.board.entity.BoardDTO">
-		select * from board
-		where no=#{no}
-	</select>
-	<insert id="insert" parameterType="com.myboard.web.board.entity.BoardDTO">
-		insert into board (title, content, writer, pwd<if test="fileNo>0">,fileNo</if><if test="memberNo>0">,memberNo</if>)
-		values (#{title}, #{content}, #{writer}, #{pwd}<if test="fileNo>0">,#{fileNo}</if><if test="memberNo>0">,#{memberNo}</if>)
-	</insert>
-	<select id="getList" resultType="com.myboard.web.board.entity.BoardDTO">
-		select * from board
-		order by regdate desc
-	</select>
-	
-	<select id="getViewList" resultType="com.myboard.web.board.entity.BoardViewDTO">
-		select no, title, content, writer, pwd, fileNo, hit, boardView.like, regDate, memberNo, commentCount 
-		from boardView
-		<if test="searchOption != '' and searchData != ''">
+	<sql id="search">
 		<where>
+		<if test="searchOption != '' and searchData != ''">
 			<choose>
 				<when test="searchOption=='title_content'">
 					and (title like '%${searchData}%' or content like '%${searchData}%')
@@ -32,8 +17,34 @@
 					and ${searchOption} like '%${searchData}%'
 				</otherwise>
 			</choose>
-		</where>
 		</if>
+		<if test="category != '전체'">
+			and category=#{category}
+		</if>
+		</where>
+	</sql>
+
+	<select id="getView" resultType="com.myboard.web.board.entity.BoardDTO">
+		select * from board
+		where no=#{no}
+	</select>
+	<insert id="insert" parameterType="com.myboard.web.board.entity.BoardDTO">
+		insert into board (title, content, writer, pwd
+		<if test="fileNo>0">,fileNo</if><if test="memberNo>0">,memberNo</if>
+		,category)
+		values (#{title}, #{content}, #{writer}, #{pwd}
+		<if test="fileNo>0">,#{fileNo}</if><if test="memberNo>0">,#{memberNo}</if>
+		,#{category})
+	</insert>
+	<select id="getList" resultType="com.myboard.web.board.entity.BoardDTO">
+		select * from board
+		order by regdate desc
+	</select>
+	
+	<select id="getViewList" resultType="com.myboard.web.board.entity.BoardViewDTO">
+		select no, title, content, writer, pwd, fileNo, hit, boardView.like, dislike, regDate, memberNo, commentCount, category 
+		from boardView
+		<include refid="search"></include>
 		order by regdate desc
 		limit #{offSet}, #{conPerPage}
 	</select>
@@ -58,6 +69,7 @@
 	</select>
 	<select id="getTotalConCount" resultType="int">
 		select count(*) from board
+		<include refid="search"></include>
 	</select>
 	<update id="updateLike">
 		update board set board.like=(board.like+1) where no=#{boardNo}

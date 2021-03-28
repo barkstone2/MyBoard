@@ -62,9 +62,9 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int getTotalConCount() {
+	public int getTotalConCount(String searchOption, String searchData, String category) {
 		
-		return boardDao.getTotalConCount();
+		return boardDao.getTotalConCount(searchOption, searchData, category);
 	}
 
 	@Override
@@ -73,14 +73,14 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<BoardViewDTO> getViewList(int offSet, int conPerPage, String searchOption, String searchData) {
-		return boardDao.getViewList(offSet, conPerPage, searchOption, searchData);
+	public List<BoardViewDTO> getViewList(int offSet, int conPerPage, String searchOption, String searchData, String category) {
+		return boardDao.getViewList(offSet, conPerPage, searchOption, searchData, category);
 	}
 
 	@Override
-	public Map<String, Integer> getPager(int conPerPage, int pageNavLength, int page) {
+	public Map<String, Integer> getPager(int conPerPage, int pageNavLength, int page, String searchOption, String searchData, String category) {
 		
-		return getPager(conPerPage, pageNavLength, page, getTotalConCount());
+		return getPager(conPerPage, pageNavLength, page, getTotalConCount(searchOption, searchData, category));
 	}
 
 	@Override

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myboard.web.board.category.dao.CategoryDAO">
+	<select id="getList" resultType="String">
+		select name from category
+		<if test="categoryLimit != 0">
+			limit #{categoryOffset}, #{categoryLimit}
+		</if>
+	</select>
+	<select id="getTotalCount" resultType="int">
+		select count(*) from category
+	</select>
+</mapper>
+

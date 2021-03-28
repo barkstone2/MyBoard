@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.myboard.web.board.category.service.CategoryService;
 import com.myboard.web.board.entity.BoardDTO;
 import com.myboard.web.board.entity.BoardViewDTO;
 import com.myboard.web.board.file.entity.FileDto;
@@ -41,15 +42,25 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService boardService;
-	
 	@Autowired
 	private FileService fileService;
-	
 	@Autowired
 	private RecommendService recommendService;
+	@Autowired
+	private CategoryService categoryService;
 	
 	@GetMapping("reg")
-	public String reg() {
+	public String reg(@RequestParam(defaultValue = "1", name="p") int page, 
+			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage, 
+			Model model) {
+		
+		List<String> categoryList = categoryService.getList();
+		model.addAttribute("categoryList", categoryList);
+		
+		model.addAttribute("page", page);
+		model.addAttribute("category", category);
+		model.addAttribute("categoryPage", categoryPage);
 		
 		return "board.reg";
 	}
@@ -58,7 +69,9 @@ public class BoardController {
 	public String pw(
 			@RequestParam(defaultValue = "1", name="p") int page, 
 			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
-			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
+			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
+			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 			int no, String reqUrl, 
 			Model model, HttpServletRequest request) {
 		
@@ -67,12 +80,15 @@ public class BoardController {
 		model.addAttribute("searchData", searchData);
 		model.addAttribute("no", no);
 		model.addAttribute("reqUrl", reqUrl);
+		model.addAttribute("category", category);
+		model.addAttribute("categoryPage", categoryPage);
 		
 		return "board.pw";
 	}
 	
 	@PostMapping("reg")
-	public String reg(String title, String content, String writer, String pwd, MultipartFile imgFile, 
+	public String reg(String title, String content, String writer, String pwd, 
+			MultipartFile imgFile, String category,
 			Model model, HttpServletRequest request) throws IOException {
 		
 		int fileNo = 0;
@@ -102,8 +118,15 @@ public class BoardController {
 			
 			fileNo = fileService.saveFile(boardService.uploadImg(imgFile, savePath)); // Service에서 fileNo 반환 처리
 		}
-		
-		BoardDTO dto = new BoardDTO(title, content, writer, pwd, fileNo, memberNo);
+		BoardDTO dto = BoardDTO.builder()
+				.title(title)
+				.content(content)
+				.writer(writer)
+				.pwd(pwd)
+				.fileNo(fileNo)
+				.memberNo(memberNo)
+				.category(category).build();
+				
 		int result = boardService.insert(dto);
 		
 		if(result>0) {
@@ -124,20 +147,27 @@ public class BoardController {
 	
 	@GetMapping("list")
 	public String list(
-			@RequestParam(defaultValue = "1", name="p") int page, 
+			@RequestParam(required = false, name="p", defaultValue = "1") int page, 
 			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
-			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
+			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
+			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 						Model model) {
 		
 		int conPerPage = 10; // 페이지 당 개시글 수(limit)
 		int pageNavLength = 5; // 페이징 번호 범위
+	
+		int totalCategoryCount = categoryService.getTotalCount();
+		model.addAttribute("totalCategoryCount", totalCategoryCount);
 		
-		Map<String, Integer> pager = boardService.getPager(conPerPage, pageNavLength, page);
+		Map<String, Integer> pager = boardService.getPager(conPerPage, pageNavLength, page, searchOption, searchData, category);
 		model.addAttribute("pager", pager);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("searchData", searchData);
+		model.addAttribute("category", category);
+		model.addAttribute("categoryPage", categoryPage);
 		
-		List<BoardViewDTO> list = boardService.getViewList(pager.get("offSet"), conPerPage, searchOption, searchData);
+		List<BoardViewDTO> list = boardService.getViewList(pager.get("offSet"), conPerPage, searchOption, searchData, category);
 		model.addAttribute("list", list);
 		return "board.list";
 	}
@@ -146,7 +176,9 @@ public class BoardController {
 	public String view(
 			@RequestParam(defaultValue = "1", name="p") int page, 
 			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
-			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
+			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
+			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 			int no, Model model, HttpServletRequest request) {
 		
 		BoardDTO dto = boardService.getView(no);
@@ -158,7 +190,8 @@ public class BoardController {
 		model.addAttribute("page", page);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("searchData", searchData);
-		
+		model.addAttribute("category", category);
+		model.addAttribute("categoryPage", categoryPage);
 		
 		return "board.view";
 	}
@@ -168,7 +201,12 @@ public class BoardController {
 			@RequestParam(defaultValue = "1", name="p") int page, 
 			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
 			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
+			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 			int no, String pwd, Model model, HttpServletRequest request) {
+		
+		List<String> categoryList = categoryService.getList();
+		model.addAttribute("categoryList", categoryList);
 		
 		BoardDTO dto = boardService.getView(no);
 		model.addAttribute("dto", dto);
@@ -179,6 +217,8 @@ public class BoardController {
 		model.addAttribute("page", page);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("searchData", searchData);
+		model.addAttribute("category", category);
+		model.addAttribute("categoryPage", categoryPage);
 		
 		if(dto.getMemberNo()>0) {
 			MemberDTO user = (MemberDTO)request.getSession().getAttribute("user");
@@ -211,7 +251,7 @@ public class BoardController {
 	
 	@PostMapping("modify")
 	public String modify(int no, String title, String content, String writer, String pwd, 
-			MultipartFile imgFile, int fileDelChk, Model model) throws IllegalStateException, IOException {
+			MultipartFile imgFile, String category, int fileDelChk, Model model) throws IllegalStateException, IOException {
 		
 		int fileNo = 0;
 		String msg = "";
@@ -250,8 +290,15 @@ public class BoardController {
 				fileService.delete(no);
 			}
 		}
-		
-		BoardDTO dto = new BoardDTO(no, title, content, writer, pwd, fileNo);
+		BoardDTO dto = BoardDTO.builder()
+				.no(no)
+				.title(title)
+				.content(content)
+				.writer(writer)
+				.pwd(pwd)
+				.fileNo(fileNo)
+				.category(category).build();
+				
 		int result = boardService.update(dto);
 		
 		if(result>0) {
@@ -413,6 +460,25 @@ public class BoardController {
 				response.getWriter().write(disLike+"|");
 			}
 		}
+	}
+	
+	@GetMapping("ctglist")
+	public String categoryList(
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
+			Model model) {
+		
+		int categoryLimit = 6;
+		int categoryOffset = categoryLimit * (categoryPage-1);
+		
+		int totalCategoryCount = categoryService.getTotalCount();
+		int totalCategoryPage = (int)Math.ceil((totalCategoryCount / (double)categoryLimit));
+		
+		List<String> categoryList = categoryService.getList(categoryOffset, categoryLimit);
+		model.addAttribute("categoryList", categoryList);
+		model.addAttribute("categoryPage", categoryPage);
+		model.addAttribute("totalCategoryCount", totalCategoryCount);
+		model.addAttribute("totalCategoryPage", totalCategoryPage);
+		return "board/category/categoryList";
 	}
 	
 	

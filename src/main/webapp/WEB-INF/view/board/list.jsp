@@ -35,13 +35,17 @@
     }
 
 .board_num{
-    min-width:50px;
+    min-width:60px;
     text-align: center;
+}
+.board_category{
+	min-width:100px;
+	text-align: center;
 }
 .board_subj{
     min-width:250px;
     --padding-left: 10px;
-    display: flex;
+    --display: flex;
 }
 .board_title{
 	text-overflow: ellipsis;
@@ -69,11 +73,11 @@
     text-align: center;
 }
 .board_recommend{
-    min-width:50px;
+    min-width:80px;
     text-align: center;
 }
 .list{
-	width:660px;
+	min-width:700px;
 }
 .align-right{
 	justify-content: flex-end;
@@ -94,6 +98,7 @@ a{
 }
 .f-center{
 	justify-content: center;
+	align-items: center;
 }
 #searchForm > div{
 	padding: 5px;
@@ -109,13 +114,59 @@ a{
 	cursor: pointer;
 	color: #0208d6;
 }
+.category-content{
+	width:50px;
+	height:20px;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px;
+	margin:10px;
+	border-radius: 7px;
+	background-color: #8FD6CE;
+	cursor: pointer;
+}
+.category-content:hover{
+	background-color: #ff9393;
+}
+.category-list-div{
+	display:flex;
+	align-items: center;
+	justify-content: center;
+}
+.category-list{
+	display:flex;
+	justify-content: space-around;
+	align-items: center;
+}
+.icon{
+	display: none;
+	border-radius: 15px;
+	cursor: pointer;
+}
+.icon:hover{
+	background-color:  #ff9393;
+}
+.category-content-color{
+	background-color: #8FD6CE;
+}
+.empty-list{
+	width: inherit;
+	height: 300px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 </style>
 </head>
 <body>
-
 	<main class="list">
+		<!-- 6개가 최대 -->
+		<div class="category-list-div">
+		</div>
 	    <div class="list_label">
 	        <div class="board_num">번호</div>
+	        <div class="board_category">분류</div>
 	        <div class="board_subj">제목</div>
 	        <div class="board_writer">작성자</div>
 	        <div class="board_date">작성일</div>
@@ -123,14 +174,22 @@ a{
 	        <div class="board_recommend">추천</div>
 	    </div>
 	    <div class="list_content_block">
+	    	<c:if test="${pager.totalConCount==0}">
+	    		<div class="empty-list">
+	    			게시글이 없습니다.
+	    		</div>
+	    	</c:if>
 	        <c:forEach items="${list}" var="dto">
 	        	<div class="list_content">
 		            <div class="board_num">${dto.no}</div>
+		             <div class="board_category">${dto.category}</div>
 		            <div class="board_subj">
-		            	<div class="board_title">
-			            	<a href="#" onclick="move('view','${pager.page}','${dto.no}')">${dto.title}</a>
+		            	<div class="flex">
+			            	<div class="board_title">
+				            	<a href="#" onclick="move('view','${pager.page}','${dto.no}')">${dto.title}</a>
+			            	</div>
+			            	<div>[${dto.commentCount}]</div>
 		            	</div>
-		            	<div>[${dto.commentCount}]</div>
 		            </div>
 		            <div class="board_writer">
 		            	<div class="board_writer_text <c:if test="${dto.memberNo>0}">having-user-icon</c:if>">
@@ -190,7 +249,7 @@ a{
 				</div>
 				<div>
 					<button onclick="move('search')">검색</button>
-					<button onclick="location.href='list'">clear</button>
+					<button onclick="move('searchClear')">clear</button>
 				</div>
 			</div>
 	    </div>
@@ -201,6 +260,50 @@ a{
 </body>
 <script>
 
+const _categoryList = document.querySelector(".category-list-div");
+
+function categoryCss(){
+	const _icons = document.querySelectorAll(".icon");
+    var _categorys = document.querySelectorAll(".category-content");
+    _categorys.forEach(element => element.className += " category-content-color");
+	
+    var _category = document.querySelector(".${category}");
+    if(_category!=null){
+	    _category.style.backgroundColor = "#ff4747";
+    }
+
+    if(${totalCategoryCount>6}){
+    	_categoryList.addEventListener("mouseover", function(){
+    		_icons[1].style.display = "block";
+    		_icons[2].style.display = "block";
+    	});
+    	_categoryList.addEventListener("mouseleave", function(){
+    		_icons[1].style.display = "none";
+    		_icons[2].style.display = "none";
+    	});
+   }
+}
+
+function categoryMove(v_ctgp){
+	if(v_ctgp==null || v_ctgp == ''){
+		v_ctgp = '1';
+	}
+	var xhr = new XMLHttpRequest(); 
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+        	_categoryList.innerHTML = xhr.responseText;
+        	categoryCss();
+           }
+        }
+    };
+    xhr.open("GET", "/board/ctglist?ctgp="+v_ctgp);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(null);
+}
+
+document.addEventListener('DOMContentLoaded', categoryMove(${categoryPage}));
+
 function openUserInfo(memberNo){
 	
 	var queryString = "?memberNo="+memberNo;
@@ -210,16 +313,42 @@ function openUserInfo(memberNo){
 	
 }
 
-function move(proc, v_page, v_no){
+function move(proc, v_page, v_no, v_ctg, v_ctgp){
+	var sop;
+	var sd;
 	if(proc=='search'){
 		proc = 'list';
 		v_page = '1';
+		sop = $('#search_option').val();
+		sd = $('#search_data').val();
+	}else if(proc == 'searchClear'){
+		proc = 'list';
+		v_page = '1';
+		sop = '';
+		sd = '';
+	}	
+	else{
+		sop = '${searchOption}';
+		sd = '${searchData}';
 	}
-	var queryString = "?p="+v_page+"&no="+v_no
-					+"&s_op=" + $('#search_option').val()
-					+"&s_d=" + $('#search_data').val();
+	
+	var page = '${page}';
+	var no = '${no}';
+	var ctg = '${category}';
+	var ctgp = '${ctgp}';
+	if(v_ctg != null) ctg = v_ctg;
+	if(v_ctgp != null) ctgp = v_ctgp;
+	if(v_page != null) page = v_page;
+	if(v_no != null) no = v_no;
+	
+	var queryString = "?p="+page+"&no="+no
+					+"&s_op=" + sop
+					+"&s_d=" + sd
+					+"&ctg=" + ctg
+					+"&ctgp=" + ctgp;
 	location.href = proc + queryString;
 }
+
 $('#op_${searchOption}').prop('selected', true);
 
 </script>

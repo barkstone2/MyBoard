@@ -22,11 +22,11 @@ public interface BoardDAO {
 
 	int getBoardNo(int fileNo);
 
-	int getTotalConCount();
+	int getTotalConCount(String searchOption, String searchData, String category);
 
 	List<BoardDTO> getList(int startRecord, int endRecord);
 
-	List<BoardViewDTO> getViewList(int offSet, int conPerPage, String searchOption, String searchData);
+	List<BoardViewDTO> getViewList(int offSet, int conPerPage, String searchOption, String searchData, String category);
 
 	int updateDisLike(int boardNo);
 	
