@@ -103,8 +103,15 @@ public class BoardController {
 			
 			fileNo = fileService.saveFile(boardService.uploadImg(imgFile, savePath)); // Service에서 fileNo 반환 처리
 		}
-		
-		BoardDTO dto = new BoardDTO(title, content, writer, pwd, fileNo, memberNo);
+		BoardDTO dto = BoardDTO.builder()
+				.title(title)
+				.content(content)
+				.writer(writer)
+				.pwd(pwd)
+				.fileNo(fileNo)
+				.memberNo(memberNo)
+				.category(category).build();
+				
 		int result = boardService.insert(dto);
 		
 		if(result>0) {
@@ -258,8 +265,15 @@ public class BoardController {
 				fileService.delete(no);
 			}
 		}
-		
-		BoardDTO dto = new BoardDTO(no, title, content, writer, pwd, fileNo);
+		BoardDTO dto = BoardDTO.builder()
+				.no(no)
+				.title(title)
+				.content(content)
+				.writer(writer)
+				.pwd(pwd)
+				.fileNo(fileNo)
+				.category(category).build();
+				
 		int result = boardService.update(dto);
 		
 		if(result>0) {
