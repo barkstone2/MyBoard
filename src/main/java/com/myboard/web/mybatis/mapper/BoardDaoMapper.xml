@@ -18,7 +18,9 @@
 				</otherwise>
 			</choose>
 		</if>
-			and categoryName=#{category}
+		<if test="category != '전체'">
+			and category=#{category}
+		</if>
 		</where>
 	</sql>
 
@@ -27,8 +29,12 @@
 		where no=#{no}
 	</select>
 	<insert id="insert" parameterType="com.myboard.web.board.entity.BoardDTO">
-		insert into board (title, content, writer, pwd<if test="fileNo>0">,fileNo</if><if test="memberNo>0">,memberNo</if>)
-		values (#{title}, #{content}, #{writer}, #{pwd}<if test="fileNo>0">,#{fileNo}</if><if test="memberNo>0">,#{memberNo}</if>)
+		insert into board (title, content, writer, pwd
+		<if test="fileNo>0">,fileNo</if><if test="memberNo>0">,memberNo</if>
+		,category)
+		values (#{title}, #{content}, #{writer}, #{pwd}
+		<if test="fileNo>0">,#{fileNo}</if><if test="memberNo>0">,#{memberNo}</if>
+		,#{category})
 	</insert>
 	<select id="getList" resultType="com.myboard.web.board.entity.BoardDTO">
 		select * from board
@@ -36,7 +42,7 @@
 	</select>
 	
 	<select id="getViewList" resultType="com.myboard.web.board.entity.BoardViewDTO">
-		select no, title, content, writer, pwd, fileNo, hit, boardView.like, regDate, memberNo, commentCount 
+		select no, title, content, writer, pwd, fileNo, hit, boardView.like, dislike, regDate, memberNo, commentCount, category 
 		from boardView
 		<include refid="search"></include>
 		order by regdate desc
