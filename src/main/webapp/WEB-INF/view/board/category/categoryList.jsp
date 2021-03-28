@@ -10,6 +10,9 @@
 	</c:if>
 	<img class="icon" src="/icon/icon_left.png" onclick="categoryMove('${preCategoryPage}');">
 	<div class="category-list">
+		<div class="category-content 전체" onclick="move('list', '1', '', '전체')">
+			전체
+		</div>
 		<c:forEach var="category" items="${categoryList}">
 		<div class="category-content ${category}" onclick="move('list', '1', '', '${category}', '${categoryPage}')">
 			${category}

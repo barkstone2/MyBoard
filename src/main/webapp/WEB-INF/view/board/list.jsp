@@ -38,6 +38,10 @@
     min-width:60px;
     text-align: center;
 }
+.board_category{
+	min-width:100px;
+	text-align: center;
+}
 .board_subj{
     min-width:250px;
     --padding-left: 10px;
@@ -73,7 +77,7 @@
     text-align: center;
 }
 .list{
-	width:700px;
+	min-width:700px;
 }
 .align-right{
 	justify-content: flex-end;
@@ -157,20 +161,12 @@ a{
 </head>
 <body>
 	<main class="list">
-		<!-- 7개가 최대 -->
+		<!-- 6개가 최대 -->
 		<div class="category-list-div">
-			<img class="icon" src="/icon/icon_left.png">
-			<div class="category-list">
-				<c:forEach var="category" items="${categoryList}">
-				<div class="category-content ${category}" onclick="move('list', '1', '', '${category}')">
-					${category}
-				</div>
-				</c:forEach>
-			</div>
-			<img class="icon" src="/icon/icon_right.png">
 		</div>
 	    <div class="list_label">
 	        <div class="board_num">번호</div>
+	        <div class="board_category">분류</div>
 	        <div class="board_subj">제목</div>
 	        <div class="board_writer">작성자</div>
 	        <div class="board_date">작성일</div>
@@ -186,6 +182,7 @@ a{
 	        <c:forEach items="${list}" var="dto">
 	        	<div class="list_content">
 		            <div class="board_num">${dto.no}</div>
+		             <div class="board_category">${dto.category}</div>
 		            <div class="board_subj">
 		            	<div class="flex">
 			            	<div class="board_title">
@@ -275,7 +272,7 @@ function categoryCss(){
 	    _category.style.backgroundColor = "#ff4747";
     }
 
-    if(${totalCategoryCount>7}){
+    if(${totalCategoryCount>6}){
     	_categoryList.addEventListener("mouseover", function(){
     		_icons[1].style.display = "block";
     		_icons[2].style.display = "block";
@@ -335,19 +332,23 @@ function move(proc, v_page, v_no, v_ctg, v_ctgp){
 		sd = '${searchData}';
 	}
 	
-	var ctg;
-	if(v_ctg != null){
-		ctg = v_ctg;
-	}else{
-		ctg = '${category}';
-	}
-	var queryString = "?p="+v_page+"&no="+v_no
+	var page = '${page}';
+	var no = '${no}';
+	var ctg = '${category}';
+	var ctgp = '${ctgp}';
+	if(v_ctg != null) ctg = v_ctg;
+	if(v_ctgp != null) ctgp = v_ctgp;
+	if(v_page != null) page = v_page;
+	if(v_no != null) no = v_no;
+	
+	var queryString = "?p="+page+"&no="+no
 					+"&s_op=" + sop
 					+"&s_d=" + sd
 					+"&ctg=" + ctg
-					+"&ctgp=" + v_ctgp;
+					+"&ctgp=" + ctgp;
 	location.href = proc + queryString;
 }
+
 $('#op_${searchOption}').prop('selected', true);
 
 </script>
