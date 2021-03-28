@@ -167,8 +167,7 @@ function updateLike(proc){
         		var count = xhr.responseText.substring(0, xhr.responseText.length-1);
         		document.querySelector("#"+proc+"Count").innerHTML = count;
         	}else if(xhr.responseText.indexOf("<!DOCTYPE html>")>0){
-    			  alert('로그인이 필요한 작업입니다.\n로그인 페이지로 이동합니다.');
-    			  location.href="/member/login";
+    			  alert('추천/비추천은 로그인한 유저만 가능합니다.');
         	}else{
         		alert(xhr.responseText);
         	}
