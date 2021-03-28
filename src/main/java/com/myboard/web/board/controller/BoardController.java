@@ -50,7 +50,17 @@ public class BoardController {
 	private CategoryService categoryService;
 	
 	@GetMapping("reg")
-	public String reg() {
+	public String reg(@RequestParam(defaultValue = "1", name="p") int page, 
+			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage, 
+			Model model) {
+		
+		List<String> categoryList = categoryService.getList();
+		model.addAttribute("categoryList", categoryList);
+		
+		model.addAttribute("page", page);
+		model.addAttribute("category", category);
+		model.addAttribute("categoryPage", categoryPage);
 		
 		return "board.reg";
 	}
@@ -59,7 +69,9 @@ public class BoardController {
 	public String pw(
 			@RequestParam(defaultValue = "1", name="p") int page, 
 			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
-			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
+			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
+			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 			int no, String reqUrl, 
 			Model model, HttpServletRequest request) {
 		
@@ -135,7 +147,7 @@ public class BoardController {
 			@RequestParam(required = false, name="p", defaultValue = "1") int page, 
 			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
 			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
-			@RequestParam(required = false, name = "ctg", defaultValue = "자유") String category,
+			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
 			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 						Model model) {
 		
@@ -161,7 +173,9 @@ public class BoardController {
 	public String view(
 			@RequestParam(defaultValue = "1", name="p") int page, 
 			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
-			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
+			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
+			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 			int no, Model model, HttpServletRequest request) {
 		
 		BoardDTO dto = boardService.getView(no);
@@ -173,7 +187,8 @@ public class BoardController {
 		model.addAttribute("page", page);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("searchData", searchData);
-		
+		model.addAttribute("category", category);
+		model.addAttribute("categoryPage", categoryPage);
 		
 		return "board.view";
 	}
@@ -183,6 +198,8 @@ public class BoardController {
 			@RequestParam(defaultValue = "1", name="p") int page, 
 			@RequestParam(required = false, name = "s_op", defaultValue = "") String searchOption,
 			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
+			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
+			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 			int no, String pwd, Model model, HttpServletRequest request) {
 		
 		BoardDTO dto = boardService.getView(no);
@@ -194,6 +211,8 @@ public class BoardController {
 		model.addAttribute("page", page);
 		model.addAttribute("searchOption", searchOption);
 		model.addAttribute("searchData", searchData);
+		model.addAttribute("category", category);
+		model.addAttribute("categoryPage", categoryPage);
 		
 		if(dto.getMemberNo()>0) {
 			MemberDTO user = (MemberDTO)request.getSession().getAttribute("user");
