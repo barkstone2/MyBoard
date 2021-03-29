@@ -62,7 +62,7 @@
 }
 </style>
 <div>
-	<form style="width:900px; border: 1px solid black;" name="chugaForm">
+	<div style="width:900px; border: 1px solid black;">
 		<div id="formTitle">
 			<h2>게시글 보기</h2>
 		</div>
@@ -109,7 +109,9 @@
 					파일없음
 				</c:if>
 				<a href="download/${fileDto.no}" onmouseover="imgPreView('show');" onmouseout="imgPreView('hide');">
-					<img src="/file/${fileDto.fileName}" id="uploadedImg" style="display:none;">
+					<c:if test="${fileDto.fileName!=null}">
+						<img src="/file/${fileDto.fileName}" id="uploadedImg" style="display:none;">
+					</c:if>
 					<span id="uploadedImgName">
 						${fileDto.origFileName}
 					</span>
@@ -153,12 +155,197 @@
 				</div>
 			</div>
 		</div>
-	</form>
+	</div>
 </div>
-<script>
 
-function updateLike(proc){
+<script>
+//세션 체크 스크립트
+//ajax 댓글 로드 후 실행
+function sessionChk(){
+	//form shape
+	var writerInfo = document.querySelector("#commentWriterInfo");
+	var userInfo = document.querySelector("#commentUserInfo");
+	var reWriterInfo = document.querySelector("#reCommentWriterInfo");
+	var reUserInfo = document.querySelector("#reCommentUserInfo");
+	var userNameDiv ="<div>${user.nickName}</div>";
 	
+	// 컨트롤러에서 세션으로 처리.
+	// 세션에서 닉네임, 멤버No 뽑아서 넣기
+	
+	if(user != null && user != ''){
+		writerInfo.style.display = "none";
+		userInfo.innerHTML = userNameDiv;	
+		reWriterInfo.style.display = "none";
+		reUserInfo.innerHTML = userNameDiv;	
+	}else{
+		userInfo.style.display = "none";
+		reUserInfo.style.display = "none";
+	}
+}
+
+//댓글 목록 출력 스크립트
+function loadComment(no, c_pageNumber, initChk){
+	var queryString = "?boardNo="+ no + "&cp="+c_pageNumber+"&initChk="+initChk;
+	var target = document.querySelector("#commentDiv");
+	var xhr = new XMLHttpRequest(); 
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+        		target.innerHTML = xhr.responseText;
+        		sessionChk();
+           }
+        }
+    };
+    xhr.open("GET", "/comment/list"+queryString);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(null);
+	
+}
+document.addEventListener("DOMContentLoaded", loadComment('${dto.no}','', 'init'));
+
+//댓글 등록 스크립트
+function regComment(){
+	var formContent = document.querySelector("#commentForm textarea[name=content]");
+	var editDiv = document.querySelector("#commentForm div[class=comment-con-div]");
+	formContent.value = editDiv.innerHTML;
+	var form = document.querySelector("#commentForm").elements;
+	var data = "";
+	for(var i=0; i<form.length; i++){
+		if(form[i].hasAttribute("name")){
+			data += form[i].getAttribute("name") + "=" + form[i].value + "&";
+		}
+	} 
+	data = data.substring(0, data.length-1);
+	var target = document.querySelector("#commentDiv");
+	var xhr = new XMLHttpRequest(); 
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+        	target.innerHTML = xhr.responseText;
+        	sessionChk();
+           }
+        }
+    };
+    xhr.open("POST", "/comment/reg");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(data);
+}
+
+// 대댓글 입력 창 스크립트
+function reComment(value1){
+	
+	var toggleChk = document.querySelector("#toggle"+value1); // 선택 위치에 대한 toggle check 값
+	var reCommentForm = document.querySelector("#reCommentHtml").innerHTML; // 대댓글 layout
+	var groupNo = document.querySelector("#reGroupNo"+value1).value; // 대댓글 작성시 사용되는 groupNo 값
+	var reCommentDiv = document.querySelector("#reComment"+value1); // 사용자가 선택한 대댓글 위치 
+	var toggleClass = document.querySelectorAll(".toggleChk"); // 선택 위치를 제외한 나머지 위치
+	
+	if(toggleChk.value == '0'){
+		
+		// 다른 대댓글 창을 모두 닫는다.
+		toggleClass.forEach(element => element.value = '0');
+
+		var comDivs = document.querySelectorAll(".reCommentDiv");
+		comDivs.forEach(element => {
+			element.innerHTML = '';
+			element.style.display = "none";
+			}
+		);
+		
+		var groupNos = document.querySelectorAll(".reCommentDiv input[name=groupNo]");
+		groupNos.forEach(element => element.value = '0');
+		
+		// 선택 위치에 대댓글 창 출력
+		toggleChk.value = '1';
+		reCommentDiv.style.display = "flex";
+		reCommentDiv.innerHTML = reCommentForm;
+		reCommentDiv.querySelector("input[name=groupNo]").value = groupNo;
+		
+	}else{
+		document.querySelector("#reComment"+value1).style.display = "none";
+		toggleChk.value = '0';
+		reCommentDiv.innerHTML = '';
+	}
+	sessionChk();
+}
+
+//대댓글 등록
+function regReComment(){
+	
+	//EditableDiv의 값을 textarea에 넣어줌.
+	var formContent = document.querySelector(".reCommentDiv textarea[name=content]");
+	var editDiv = document.querySelector(".reCommentDiv div[class=comment-con-div]");
+	
+	formContent.value = editDiv.innerHTML;
+	
+	var form = document.querySelector(".reCommentDiv form[name=reCommentForm]").elements;
+	var data = "";
+	for(var i=0; i<form.length; i++){
+		if(form[i].hasAttribute("name")){
+			data += form[i].getAttribute("name") + "=" + form[i].value + "&";
+		}
+	} 
+	data = data.substring(0, data.length-1);
+	
+	var xhr = new XMLHttpRequest(); 
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+        	document.querySelector("#commentDiv").innerHTML = xhr.responseText;
+        	sessionChk();
+        }
+      }
+    };
+
+    xhr.open("POST", "/comment/reg");
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(data);
+}
+
+// 댓글 삭제 스크립트
+function openDeleteWindow(boardNo, commentNo, memberNo){
+	if(memberNo>0){
+		if(`${user.no}`==memberNo){
+			if(confirm('삭제하시겠습니까?')){
+				var xhr = new XMLHttpRequest(); 
+		        xhr.onreadystatechange = function() {
+		          if (xhr.readyState === 4) {
+		            if (xhr.status === 200) {
+		              	alert(xhr.responseText);
+		            	loadComment(boardNo,'','init');
+		            }
+		          }
+		        };
+
+		        xhr.open("POST", "/comment/delete");
+		        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		        xhr.send("memberNo=${user.no}&no="+commentNo);
+			}
+		}else{
+			alert('권한이 없습니다.');
+		}
+	}else{
+		var queryString = "?boardNo="+boardNo+"&no="+commentNo;
+		var url = '/comment/delete'+queryString;
+		var title = 'delete comment';
+		var option = 'width=300, height=150, top=300, left=600, location=no, resizable=no';
+		window.open(url, title, option);
+	}
+}
+
+
+//유저 정보 보기 스크립트
+function openUserInfo(memberNo){
+	
+	var queryString = "?memberNo="+memberNo;
+	var url = '/member/info'+queryString;
+	var option = 'width=500, height=300, top=200%, left=500%, location=no, resizable=no';
+	window.open(url, '', option);
+	
+}
+
+// 추천 비추천 스크립트
+function updateLike(proc){
 	var xhr = new XMLHttpRequest(); 
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
@@ -180,18 +367,22 @@ function updateLike(proc){
     xhr.send("boardNo="+${dto.no});
 	
 }
+
+// 이미지 미리보기 스크립트
 function imgPreView(proc){
+	var upimg = document.querySelector("#uploadedImg");
+	var upimgName = document.querySelector("#uploadedImgName");
 	if(proc=='show') {
-		$('#uploadedImg').show();
-		$('#uploadedImgName').hide();
+		upimg.style.display = "block";
+		upimgName.style.display = "none";
 	}
 	if(proc=='hide') {
-		$('#uploadedImg').hide();
-		$('#uploadedImgName').show();
+		upimg.style.display = "none";
+		upimgName.style.display = "block";
 	}
 }
 
-
+// 페이지 이동 스크립트
 function move(proc, v_page, v_no, v_ctg, v_ctgp){
 	var sop;
 	var sd;
@@ -259,51 +450,4 @@ function move(proc, v_page, v_no, v_ctg, v_ctgp){
 	location.href = proc + queryString;
 }
 
-$(document).ready(function(){
-	loadComment('${dto.no}','', 'init');
-});
-
-function loadComment(no, c_pageNumber, initChk){
-	var param = {
-			"boardNo" : no,
-			"cp" : c_pageNumber,
-			"initChk" : initChk
-	};
-	$.ajax({
-			type: "get",
-			data: param,
-			dataType: "html", 
-			async:true,
-			url: "/comment/list",
-			success: function(data){
-				$("#commentDiv").html(data);
-				/* if(initChk!='init'){
-					var offset = $("#commentDiv").offset();
-				    $('html, body').animate({scrollTop : offset.top}, 0);
-				} */
-			}
-		});
-}
-
-function regComment(){
-	$.ajax({
-			type: "post",
-			data: $('#commentForm').serialize(),
-			url: "/comment/reg",
-			success: function(data){
-				$("#commentDiv").html(data);
-			}
-		});
-}
-
-function regReComment(){
-	$.ajax({
-			type: "post",
-			data: $('form[name=reCommentForm]').serialize(),
-			url: "/comment/reg",
-			success: function(data){
-				$("#commentDiv").html(data);
-			}
-		});
-}
 </script>

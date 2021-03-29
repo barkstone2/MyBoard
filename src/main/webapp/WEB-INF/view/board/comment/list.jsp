@@ -144,6 +144,7 @@
 	width:900px;
 	display: flex;
 	justify-content: center;
+	padding-top: 10px;
 }
 .comment-con-div{
     padding: 10px;
@@ -219,7 +220,7 @@
 							</div>
 						</div>
 					</div>
-					<form id="reComment${reply.no}" name="reCommentForm" class="reCommentDiv"></form>
+					<div id="reComment${reply.no}" class="reCommentDiv"></div>
 					</c:if>
 				</div>
 			</c:forEach>
@@ -252,15 +253,15 @@
 			</div>
 		</div>
 		<div class="comment-reg-div">
-			<form id="commentForm" class="commentForm" name="replyForm" method="post">
+			<form id="commentForm" class="commentForm">
 				<input type="hidden" name="cp" value="${pager.totalPage}">
 				<input type="hidden" name="boardNo" value="${boardNo}">
 				<input type="hidden" name="groupNo" value="0">
 				<input type="hidden" name="stepNo" value="0">
 				<input type="hidden" name="memberNo" value="0">
 				<div style="display:flex;">
-					<div class="user-info"></div>
-					<div class="writer-info" style="margin-right: 10px;">
+					<div id="commentUserInfo" class="user-info"></div>
+					<div id="commentWriterInfo" class="writer-info" style="margin-right: 10px;">
 						<div style="margin-bottom: 5px;">
 							<input type="text" class="replyShortInput" name="writer" placeholder="닉네임">
 						</div>
@@ -274,22 +275,22 @@
 					</div>
 				</div>
 				<div style="margin-left:10px;">
-					<input style="width:70px; height:80px;" type="button" value="댓글등록" id="btnReplyReg">
+					<input style="width:70px; height:80px;" type="button" value="댓글등록" onclick="regComment();">
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
-
 <div id="reCommentHtml" style="display:none;">
+	<form name="reCommentForm">
 	<input type="hidden" name="cp" value="${pager.totalPage}">
 	<input type="hidden" name="boardNo" value="${boardNo}">
 	<input type="hidden" name="groupNo" value="0">
 	<input type="hidden" name="stepNo" value="1">
 	<input type="hidden" name="memberNo" value="0">
 	<div style="display:flex;">
-		<div class="user-info"></div>
-		<div class="writer-info" style="margin-right: 10px;">
+		<div id="reCommentUserInfo" class="user-info"></div>
+		<div id="reCommentWriterInfo" class="writer-info" style="margin-right: 10px;">
 			<div style="margin-bottom: 5px;">
 				<input type="text" class="replyShortInput" name="writer" placeholder="닉네임">
 			</div>
@@ -302,127 +303,8 @@
 			<textarea class="replyCon" name="content" hidden="hidden"></textarea>
 		</div>
 		<div style="margin-left:10px;">
-			<input style="width:70px; height:80px;" type="button" value="댓글등록" onclick="regReCommentForm();">
+			<input style="width:70px; height:80px;" type="button" value="댓글등록" onclick="regReComment();">
 		</div>
 	</div>
+	</form>
 </div>
-<script>
-function openUserInfo(memberNo){
-	
-	var queryString = "?memberNo="+memberNo;
-	var url = '/member/info'+queryString;
-	var option = 'width=500, height=300, top=200%, left=500%, location=no, resizable=no';
-	window.open(url, '', option);
-	
-}
-
-document.addEventListener("DOMContentLoaded", sessionChk());
-
-function sessionChk(){
-	//form shape
-	const writerInfo = document.querySelector(".writer-info");
-	const userInfo = document.querySelector(".user-info");
-	const userNameDiv ="<div>${user.nickName}</div>";
-
-	//input data
-	// 그냥 컨트롤러에서 세션으로 처리.
-	//세션에서 닉네임, 멤버No 뽑아서 넣기
-		
-	if(user!=''&&user!=null){
-		writerInfo.style.display = "none";
-		userInfo.innerHTML=userNameDiv;
-	}else{
-		userInfo.style.display = "none";
-	}
-}
-
-
-
-function regReCommentForm(){
-	
-	//EditableDiv의 값을 textarea에 넣어줌.
-	var formContent = document.querySelector(".reCommentDiv textarea[name=content]");
-	var editDiv = document.querySelector(".reCommentDiv div[class=comment-con-div]");
-	
-	formContent.value = editDiv.innerHTML;
-	
-	regReComment();
-}
-
-
-$(document).ready(function(){
-	$("#btnReplyReg").click(function(){
-		var formContent = document.querySelector("#commentForm textarea[name=content]");
-		var editDiv = document.querySelector("#commentForm div[class=comment-con-div]");
-		
-		formContent.value = editDiv.innerHTML;
-		
-		regComment();
-	});
-});
-
-
-function reComment(value1){
-	var toggleChk = 'toggle'+value1;
-	var reCommentId = 'reComment'+value1;
-	
-	var reCommentForm = $("#reCommentHtml").html();
-	var groupNoId = 'reGroupNo'+value1;
-	var groupNo = $("#"+groupNoId).val();
-	
-	var reCommentDiv = document.querySelector("#"+reCommentId);
-	
-	if($("#"+toggleChk).val()=='0'){
-		
-		//바닐라로 클래스 가져올 때는 반복문 돌려야함
-		//일단 jQuery로 두고 나중에 바꾸기
-		
-		$(".toggleChk").val('0');
-		$("#"+toggleChk).val('1');
-		$(".reCommentDiv").html('');
-		$(".reCommentDiv").find("input[name=groupNo]").val('0');
-		$(".reCommentDiv").css("display","none");
-		
-		reCommentDiv.style.display = "block";
-		$("#"+reCommentId).html(reCommentForm);
-		$("#"+reCommentId).find("input[name=groupNo]").val(groupNo);
-	}else{
-		document.querySelector("#"+reCommentId).style.display = "none";
-		$("#"+toggleChk).val('0');
-		$("#"+reCommentId).html('');
-		$("#"+reCommentId).find("input[name=groupNo]").val('0');
-	}
-	sessionChk();
-}
-
-function openDeleteWindow(boardNo, commentNo, memberNo){
-	if(memberNo>0){
-		if(`${user.no}`==memberNo){
-			if(confirm('삭제하시겠습니까?')){
-				var xhr = new XMLHttpRequest(); 
-		        xhr.onreadystatechange = function() {
-		          if (xhr.readyState === 4) {
-		            if (xhr.status === 200) {
-		              	alert(xhr.responseText);
-		            	loadComment('${boardNo}','','init');
-		            }
-		          }
-		        };
-
-		        xhr.open("POST", "/comment/delete");
-		        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		        xhr.send("memberNo=${user.no}&no="+commentNo);
-			}
-		}else{
-			alert('권한이 없습니다.');
-		}
-	}else{
-		var queryString = "?boardNo="+boardNo+"&no="+commentNo;
-		var url = '/comment/delete'+queryString;
-		var title = 'delete comment';
-		var option = 'width=300, height=150, top=300, left=600, location=no, resizable=no';
-		window.open(url, title, option);
-	}
-}
-
-</script>

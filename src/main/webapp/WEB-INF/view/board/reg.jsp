@@ -138,9 +138,9 @@ if(currentCategory != '전체'){
 }
 
 //form shape
-const writerInfo = document.querySelector(".writer-info");
-const userInfo = document.querySelector(".user-info");
-const userNameDiv = "<div class='shotLine'><div class='label'>작성자</div><div>${user.nickName}</div></div>";
+var writerInfo = document.querySelector(".writer-info");
+var userInfo = document.querySelector(".user-info");
+var userNameDiv = "<div class='shotLine'><div class='label'>작성자</div><div>${user.nickName}</div></div>";
 
 // 세션 유저가 존재할 경우 작성자, 비밀번호 자동.
 // memberNo 부여
