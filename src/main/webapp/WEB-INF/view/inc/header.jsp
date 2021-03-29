@@ -49,7 +49,7 @@ nav{
 			<a href="/board/list">게시판</a> 
 		</div>
 		<div>
-			관리자
+			<a href="/admin/board/list">관리자</a>
 		</div>
 	</div>
 	<div class="user-menu">

@@ -28,11 +28,19 @@
         height: 30px;
         line-height: 30px;
         min-width: 570px;
+        align-items: center;
     }
      .btn_block {
         display: flex;
         min-width: 570px;
     }
+.board_select{
+	min-width:30px;
+	min-height:30px;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+}
 
 .board_num{
     min-width:60px;
@@ -157,6 +165,13 @@ a{
 	justify-content: center;
 	align-items: center;
 }
+.list-checkbox{
+	width:20px;
+	height:20px;
+	border: 1px solid black;
+	cursor: pointer;
+	margin: 0px;
+}
 </style>
 </head>
 <body>
@@ -165,6 +180,7 @@ a{
 		<div class="category-list-div">
 		</div>
 	    <div class="list_label">
+	    	<div class="board_select"><input type="checkbox" id="checkAllBox" class="list-checkbox"></div>
 	        <div class="board_num">번호</div>
 	        <div class="board_category">분류</div>
 	        <div class="board_subj">제목</div>
@@ -181,8 +197,9 @@ a{
 	    	</c:if>
 	        <c:forEach items="${list}" var="dto">
 	        	<div class="list_content">
+	        		<div class="board_select"><input type="checkbox" class="list-checkbox checkBox-value" name="nos" value="${dto.no}"></div>
 		            <div class="board_num">${dto.no}</div>
-		             <div class="board_category">${dto.category}</div>
+	             	<div class="board_category">${dto.category}</div>
 		            <div class="board_subj">
 		            	<div class="flex">
 			            	<div class="board_title">
@@ -231,7 +248,18 @@ a{
 				</c:if>
 				<div><a href="#" onclick="move('list','${pager.totalPage}','');">[끝페이지]</a></div>
 			</div>
+			<div>
+				<select name="ctgVal">
+					<option>카테고리</option>
+					<c:forEach var="categoryName" items="${categoryList}">
+						<option value="${categoryName}">${categoryName}</option>
+					</c:forEach>
+				</select>
+				<button type="button" onclick="changeCategory();">카테고리 변경</button>
+				<button type="button" onclick="deleteSelected();">삭제</button>
+			</div>
 	    </div>
+	    
 	    <div class="flex f-center">
 		    <div class="flex f-center" id="searchForm">
 				<div>
@@ -260,6 +288,51 @@ a{
 </body>
 <script>
 
+
+// 관리자 페이지 게시글 체크박스 스크립트
+const checkAllBtn = document.querySelector("#checkAllBox");
+var checkBoxs = document.querySelectorAll(".checkBox-value");
+checkAllBtn.addEventListener('click', function(){
+	checkBoxs.forEach(element => element.checked = checkAllBtn.checked);
+});
+
+// 선택 삭제
+function deleteSelected(){
+	
+	var form = document.createElement('form');
+	form.setAttribute('method', 'post');
+	form.setAttribute('action', '/admin/board/delsel');
+	checkBoxs.forEach(function(element){
+		if(element.checked){
+			form.appendChild(element);
+		}
+	});
+	document.body.appendChild(form);
+	form.submit();
+}
+
+// 카테고리 변경
+function changeCategory(){
+	var ctgVal = document.getElementsByName("ctgVal")[0];
+	var nos = "";
+	
+	var form = document.createElement('form');
+	form.setAttribute('method', 'post');
+	form.setAttribute('action', '/admin/board/chanctg');
+	form.appendChild(ctgVal);
+	checkBoxs.forEach(function(element){
+		if(element.checked){
+			//nos += element.value + ",";
+			form.appendChild(element);
+		}
+	});
+	document.body.appendChild(form);
+	form.submit();
+}
+
+
+
+// 카테고리 출력 스크립트
 const _categoryList = document.querySelector(".category-list-div");
 
 function categoryCss(){
@@ -304,6 +377,7 @@ function categoryMove(v_ctgp){
 
 document.addEventListener('DOMContentLoaded', categoryMove(${categoryPage}));
 
+// 회원 정보 팝업 오픈 스크립트
 function openUserInfo(memberNo){
 	
 	var queryString = "?memberNo="+memberNo;
@@ -313,6 +387,7 @@ function openUserInfo(memberNo){
 	
 }
 
+// 페이지 이동 스크립트
 function move(proc, v_page, v_no, v_ctg, v_ctgp){
 	var sop;
 	var sd;

@@ -6,6 +6,10 @@
  <definition name="layout.common" template="/WEB-INF/view/inc/layout.jsp">
     <put-attribute name="header" value="/WEB-INF/view/inc/header.jsp" />
   </definition>
+  <definition name="admin.*.*" template="/WEB-INF/view/admin/inc/layout.jsp" extends="layout.common">
+  	<put-attribute name="adminMenu" value="/WEB-INF/view/admin/inc/adminMenu.jsp" />
+    <put-attribute name="main" value="/WEB-INF/view/admin/{1}/{2}.jsp" />
+  </definition>
   <definition name="*.*" extends="layout.common">
     <put-attribute name="main" value="/WEB-INF/view/{1}/{2}.jsp" />
   </definition>

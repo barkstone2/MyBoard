@@ -67,7 +67,7 @@ function saveFile(){
 	$.ajax({
 		type: "POST",
         enctype: 'multipart/form-data',
-        url: "imgPopup",
+        url: "imgpopup",
         data: param,
         processData: false,
         contentType: false,
