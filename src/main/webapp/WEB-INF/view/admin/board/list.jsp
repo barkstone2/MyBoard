@@ -172,11 +172,14 @@ a{
 	cursor: pointer;
 	margin: 0px;
 }
+.hidden{
+	display:none;
+}
 </style>
 </head>
 <body>
 	<main class="list">
-		<!-- 6개가 최대 -->
+		<!-- 카테고리 한 화면에 6개가 최대 -->
 		<div class="category-list-div">
 		</div>
 	    <div class="list_label">
@@ -196,33 +199,36 @@ a{
 	    		</div>
 	    	</c:if>
 	        <c:forEach items="${list}" var="dto">
-	        	<div class="list_content">
-	        		<div class="board_select"><input type="checkbox" class="list-checkbox checkBox-value" name="nos" value="${dto.no}"></div>
-		            <div class="board_num">${dto.no}</div>
-	             	<div class="board_category">${dto.category}</div>
-		            <div class="board_subj">
-		            	<div class="flex">
-			            	<div class="board_title">
-				            	<a href="#" onclick="move('view','${pager.page}','${dto.no}')">${dto.title}</a>
+	        	<div class="list-content-wrap" id="list-content-wrap${dto.no}">
+		        	<div class="list_content">
+		        		<div class="board_select"><input type="checkbox" class="list-checkbox checkBox-value" name="nos" value="${dto.no}"></div>
+			            <div class="board_num">${dto.no}</div>
+		             	<div class="board_category">${dto.category}</div>
+			            <div class="board_subj">
+			            	<div class="flex">
+				            	<div class="board_title">
+					            	<a href="#" onclick="move('contentView','','${dto.no}')">${dto.title}</a>
+				            	</div>
+				            	<div>[${dto.commentCount}]</div>
 			            	</div>
-			            	<div>[${dto.commentCount}]</div>
-		            	</div>
-		            </div>
-		            <div class="board_writer">
-		            	<div class="board_writer_text <c:if test="${dto.memberNo>0}">having-user-icon</c:if>">
-			            	<span <c:if test="${dto.memberNo>0}">class="link-component" 
-			            	onclick="openUserInfo(`${dto.memberNo}`);"</c:if>>
-			            	${dto.writer}
-			            	</span>
-		            	</div>
-		            <c:if test="${dto.memberNo>0}">
-					 	<img class="comment-user-icon" src="/icon/member_profile_icon.png">
-				 	</c:if>
-				 	</div>
-		            <div class="board_date"><fmt:formatDate value="${dto.regDate}" pattern="yyyy-MM-dd"/></div>
-		            <div class="board_hit">${dto.hit}</div>
-		            <div class="board_recommend">${dto.like}</div>
-		        </div>
+			            </div>
+			            <div class="board_writer">
+			            	<div class="board_writer_text <c:if test="${dto.memberNo>0}">having-user-icon</c:if>">
+				            	<span <c:if test="${dto.memberNo>0}">class="link-component" 
+				            	onclick="openUserInfo(`${dto.memberNo}`);"</c:if>>
+				            	${dto.writer}
+				            	</span>
+			            	</div>
+			            <c:if test="${dto.memberNo>0}">
+						 	<img class="comment-user-icon" src="/icon/member_profile_icon.png">
+					 	</c:if>
+					 	</div>
+			            <div class="board_date"><fmt:formatDate value="${dto.regDate}" pattern="yyyy-MM-dd"/></div>
+			            <div class="board_hit">${dto.hit}</div>
+			            <div class="board_recommend">${dto.like}</div>
+			        </div>
+			        <div id="listContentView${dto.no}" class="hidden content-view"></div>
+	        	</div>
 	        </c:forEach>
 		    <div id="pager" style="${pager.totalConCount>0?'display:flex;':'display:none;'}">
 				<div><a href="#" onclick="move('list','1');">[첫페이지]</a></div>
@@ -347,12 +353,12 @@ function categoryCss(){
 
     if(${totalCategoryCount>6}){
     	_categoryList.addEventListener("mouseover", function(){
+    		_icons[0].style.display = "block";
     		_icons[1].style.display = "block";
-    		_icons[2].style.display = "block";
     	});
     	_categoryList.addEventListener("mouseleave", function(){
+    		_icons[0].style.display = "none";
     		_icons[1].style.display = "none";
-    		_icons[2].style.display = "none";
     	});
    }
 }
@@ -401,6 +407,29 @@ function move(proc, v_page, v_no, v_ctg, v_ctgp){
 		v_page = '1';
 		sop = '';
 		sd = '';
+	}else if(proc == 'contentView'){
+		var target = document.querySelector("#listContentView"+v_no);
+		var contentViewClass = document.querySelectorAll(".content-view");
+		target.classList.toggle("hidden");
+		contentViewClass.forEach(function(elem){
+			if(elem == target){
+			}else{
+				elem.classList.add("hidden");
+			}
+		});	
+		var xhr = new XMLHttpRequest(); 
+	    xhr.onreadystatechange = function() {
+	      if (xhr.readyState === 4) {
+	        if (xhr.status === 200) {
+	        	target.innerHTML = xhr.responseText;
+	        }
+	      }
+	    };
+
+	    xhr.open("GET", "view?no="+v_no);
+	    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	    xhr.send(null);
+		return;
 	}	
 	else{
 		sop = '${searchOption}';

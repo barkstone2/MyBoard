@@ -274,12 +274,12 @@ function categoryCss(){
 
     if(${totalCategoryCount>6}){
     	_categoryList.addEventListener("mouseover", function(){
+    		_icons[0].style.display = "block";
     		_icons[1].style.display = "block";
-    		_icons[2].style.display = "block";
     	});
     	_categoryList.addEventListener("mouseleave", function(){
+    		_icons[0].style.display = "none";
     		_icons[1].style.display = "none";
-    		_icons[2].style.display = "none";
     	});
    }
 }

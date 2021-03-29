@@ -28,9 +28,9 @@ public class CommentController {
 	
 	@GetMapping("list")
 	public String list(
-			@RequestParam(defaultValue = "1", name="cp") int commentPage, 
+			@RequestParam(required = false, defaultValue = "1", name="cp") int commentPage, 
 			@RequestParam(defaultValue = "", required = false) String initChk,
-						int boardNo, Model model) {
+						int boardNo, Model model, HttpServletRequest request) {
 		
 		int conPerPage = 10; // 페이지 당 개시글 수(limit)
 		int pageNavLength = 5; // 페이징 번호 범위
@@ -73,7 +73,7 @@ public class CommentController {
 		CommentDTO dto = new CommentDTO(content, writer, pwd, groupNo, memberNo, stepNo, boardNo);
 		int result = commentService.insert(dto);
 		
-		return list(commentPage, "init", boardNo, model);
+		return list(commentPage, "init", boardNo, model, request);
 	}
 	
 	@GetMapping("delete")

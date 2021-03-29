@@ -22,7 +22,7 @@ nav{
 	right: 5%;
 	text-align: center;
 }
-.icon{
+.user-icon{
 	width: 30px;
 	height: 30px;
 }
@@ -61,7 +61,7 @@ nav{
 				${user.nickName}님
 			</div>
 			<div class="link-component" onclick="location.href='/member/view'">
-				<img class="icon" src="/icon/member_profile_icon.png">
+				<img class="user-icon" src="/icon/member_profile_icon.png">
 			</div>
 			<div>
 				<a href="/member/logout">로그아웃</a>
@@ -70,7 +70,7 @@ nav{
 	</div>
 </nav>
 <script>
-const user = `${user}`;
+const user = '${user}';
 	if(user!=null&&user!=''){
 		document.querySelector(".on-login").style.display = "flex";
 		document.querySelector(".non-login").style.display = "none";

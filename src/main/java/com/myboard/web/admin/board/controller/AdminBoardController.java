@@ -1,25 +1,21 @@
 package com.myboard.web.admin.board.controller;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.anything;
-
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.myboard.web.admin.board.service.AdminBoardService;
 import com.myboard.web.board.category.service.CategoryService;
+import com.myboard.web.board.entity.BoardDTO;
 import com.myboard.web.board.entity.BoardViewDTO;
+import com.myboard.web.board.file.entity.FileDto;
 import com.myboard.web.board.file.service.FileService;
 import com.myboard.web.board.recommend.service.RecommendService;
 import com.myboard.web.board.service.BoardService;
@@ -106,12 +102,15 @@ public class AdminBoardController {
 		return "util.message";
 	}
 	
-	@GetMapping(value = "{reqUrl}")
-	public String redirect(@PathVariable String reqUrl, HttpServletRequest request) {
+	@GetMapping("view")
+	public String view(int no, Model model) {
+		BoardDTO dto = boardService.getView(no);
+		model.addAttribute("dto", dto);
 		
-		String queryString = request.getQueryString();
+		FileDto fileDto = fileService.getFile(dto.getFileNo());
+		model.addAttribute("fileDto", fileDto);
 		
-		return "redirect:/board/"+reqUrl+"?"+queryString;
+		return "/board/view";
 	}
 	
 }
