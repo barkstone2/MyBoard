@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myboard.web.admin.category.dao.AdminCategoryDAO">
+	<update id="update">
+		update category set preorder=#{preOrder}
+		where name=#{name}
+	</update>
+	<insert id="insert">
+		insert into category (name, preOrder)
+		values(#{name}, #{preOrder})
+	</insert>
+	<delete id="delete">
+		delete from category where name in
+		<foreach item="name" collection="nameArray" open="(" separator="," close=")">
+			#{name}
+		</foreach>
+	</delete>
+</mapper>
+

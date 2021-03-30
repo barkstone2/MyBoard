@@ -5,6 +5,7 @@
 <mapper namespace="com.myboard.web.board.category.dao.CategoryDAO">
 	<select id="getList" resultType="String">
 		select name from category
+		order by preOrder
 		<if test="categoryLimit != 0">
 			limit #{categoryOffset}, #{categoryLimit}
 		</if>
