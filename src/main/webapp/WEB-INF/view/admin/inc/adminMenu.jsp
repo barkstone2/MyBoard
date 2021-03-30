@@ -15,6 +15,7 @@
 }
 .flex{
 	color: black;
+	display: flex;
 }
 </style>
 
