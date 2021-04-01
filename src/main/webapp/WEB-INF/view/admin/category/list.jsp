@@ -153,17 +153,18 @@ var index = ${i};
 function addCategory(){
 	var frame = document.querySelector("#categoryFrame").children[0];
 	var newName = document.querySelector("#newName");
-	var printName = frame;
-	var inputName = frame.children[0];
-	var inputPreOrder = frame.children[1];
-	
-	printName.text = newName.value;
-	inputName.value = newName.value;
-	inputPreOrder.value = index;
-	frame.id = "category"+index;
-	newName.value = "";
 	
 	var createdFrame = frame.cloneNode(true);
+	var inputName = createdFrame.children[0];
+	var inputPreOrder = createdFrame.children[1];
+	
+	createdFrame.append(newName.value);
+	inputName.value = newName.value;
+	inputPreOrder.value = index;
+	createdFrame.id = "category"+index;
+	
+	newName.value = "";
+	
 	addEvent(createdFrame);
 	parent.insertBefore(createdFrame, insertDiv);
 	

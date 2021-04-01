@@ -203,7 +203,7 @@ a{
 		        	<div class="list_content">
 		        		<div class="board_select"><input type="checkbox" class="list-checkbox checkBox-value" name="nos" value="${dto.no}"></div>
 			            <div class="board_num">${dto.no}</div>
-		             	<div class="board_category">${dto.category}</div>
+		             	<div class="board_category">${dto.category}<c:if test="${dto.category==null}">없음</c:if></div>
 			            <div class="board_subj">
 			            	<div class="flex">
 				            	<div class="board_title">
