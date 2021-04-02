@@ -45,7 +45,12 @@
 		select no, title, content, writer, pwd, fileNo, hit, boardView.like, dislike, regDate, memberNo, commentCount, category 
 		from boardView
 		<include refid="search"></include>
-		order by regdate desc
+		<if test="order != null and order != ''">
+			order by boardView.like ${order}, regdate desc
+		</if>
+		<if test="order == '' or order == null">
+			order by regdate desc
+		</if>
 		limit #{offSet}, #{conPerPage}
 	</select>
 	

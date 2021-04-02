@@ -27,7 +27,7 @@ public interface BoardService {
 	int getTotalConCount(String searchOption, String searchData, String category);
 	List<BoardDTO> getList(int startRecord, int endRecord);
 	
-	List<BoardViewDTO> getViewList(int offSet, int conPerPage, String searchOption, String searchData, String category);
+	List<BoardViewDTO> getViewList(int offSet, int conPerPage, String searchOption, String searchData, String category, String order);
 	Map<String, Integer> getPager(int conPerPage, int pageNavLength, int page, String searchOption, String searchData, String category);
 	Map<String, Integer> getPager(int conPerPage, int pageNavLength, int page, int totalConCount);
 	FileDto uploadImg(MultipartFile imgFile, String savePath) throws IllegalStateException, IOException;

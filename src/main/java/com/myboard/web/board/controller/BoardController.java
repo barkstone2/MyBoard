@@ -73,6 +73,7 @@ public class BoardController {
 			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
 			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
 			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
+			@RequestParam(required = false, name = "od", defaultValue = "") String order,
 			int no, String reqUrl, 
 			Model model, HttpServletRequest request) {
 		
@@ -83,6 +84,7 @@ public class BoardController {
 		model.addAttribute("reqUrl", reqUrl);
 		model.addAttribute("category", category);
 		model.addAttribute("categoryPage", categoryPage);
+		model.addAttribute("order", order);
 		
 		return "board.pw";
 	}
@@ -153,6 +155,7 @@ public class BoardController {
 			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
 			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
 			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
+			@RequestParam(required = false, name = "od", defaultValue = "") String order,
 						Model model) {
 		
 		int conPerPage = 10; // 페이지 당 개시글 수(limit)
@@ -167,8 +170,9 @@ public class BoardController {
 		model.addAttribute("searchData", searchData);
 		model.addAttribute("category", category);
 		model.addAttribute("categoryPage", categoryPage);
+		model.addAttribute("order", order);
 		
-		List<BoardViewDTO> list = boardService.getViewList(pager.get("offSet"), conPerPage, searchOption, searchData, category);
+		List<BoardViewDTO> list = boardService.getViewList(pager.get("offSet"), conPerPage, searchOption, searchData, category, order);
 		model.addAttribute("list", list);
 		return "board.list";
 	}
@@ -180,6 +184,7 @@ public class BoardController {
 			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
 			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
 			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
+			@RequestParam(required = false, name = "od", defaultValue = "") String order,
 			int no, Model model, HttpServletRequest request) {
 		
 		BoardDTO dto = boardService.getView(no);
@@ -193,6 +198,7 @@ public class BoardController {
 		model.addAttribute("searchData", searchData);
 		model.addAttribute("category", category);
 		model.addAttribute("categoryPage", categoryPage);
+		model.addAttribute("order", order);
 		
 		return "board.view";
 	}
@@ -204,6 +210,7 @@ public class BoardController {
 			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData, 
 			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
 			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
+			@RequestParam(required = false, name = "od", defaultValue = "") String order,
 			int no, String pwd, Model model, HttpServletRequest request) {
 		
 		List<CategoryDTO> categoryList = categoryService.getList();
@@ -220,6 +227,7 @@ public class BoardController {
 		model.addAttribute("searchData", searchData);
 		model.addAttribute("category", category);
 		model.addAttribute("categoryPage", categoryPage);
+		model.addAttribute("order", order);
 		
 		if(dto.getMemberNo()>0) {
 			MemberDTO user = (MemberDTO)request.getSession().getAttribute("user");

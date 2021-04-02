@@ -44,6 +44,7 @@ public class AdminBoardController {
 			@RequestParam(required = false, name = "s_d", defaultValue = "") String searchData,
 			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
 			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
+			@RequestParam(required = false, name = "od", defaultValue = "") String order,
 						Model model) {
 		
 		int conPerPage = 10; // 페이지 당 개시글 수(limit)
@@ -61,8 +62,9 @@ public class AdminBoardController {
 		model.addAttribute("searchData", searchData);
 		model.addAttribute("category", category);
 		model.addAttribute("categoryPage", categoryPage);
+		model.addAttribute("order", order);
 		
-		List<BoardViewDTO> list = boardService.getViewList(pager.get("offSet"), conPerPage, searchOption, searchData, category);
+		List<BoardViewDTO> list = boardService.getViewList(pager.get("offSet"), conPerPage, searchOption, searchData, category, order);
 		model.addAttribute("list", list);
 		return "admin.board.list";
 	}
