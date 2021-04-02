@@ -14,8 +14,8 @@
 			전체
 		</div>
 		<c:forEach var="category" items="${categoryList}">
-		<div class="category-content ${category}" onclick="move('list', '1', '', '${category}', '${categoryPage}')">
-			${category}
+		<div class="category-content ${category.name}" onclick="move('list', '1', '', '${category.name}', '${categoryPage}')">
+			${category.name}
 		</div>
 		</c:forEach>
 	</div>
