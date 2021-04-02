@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myboard.web.admin.category.service.AdminCategoryService;
+import com.myboard.web.board.category.entity.CategoryDTO;
 import com.myboard.web.board.category.service.CategoryService;
 
 @Controller
@@ -35,7 +34,7 @@ public class AdminCategoryController {
 	@GetMapping("list")
 	public String list(Model model) {
 		
-		List<String> categoryList = categoryService.getList();
+		List<CategoryDTO> categoryList = categoryService.getList();
 		model.addAttribute("categoryList", categoryList);
 		
 		return "admin.category.list";
@@ -65,7 +64,8 @@ public class AdminCategoryController {
 			for(Map<String, String> temp : modList) {
 				String name = temp.get("name");
 				String preOrder = temp.get("preOrder");
-				adminCategoryService.update(name, preOrder);
+				String no = temp.get("no");
+				adminCategoryService.update(name, preOrder, no);
 			}
 		}
 		

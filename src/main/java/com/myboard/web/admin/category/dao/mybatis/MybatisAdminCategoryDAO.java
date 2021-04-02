@@ -20,8 +20,8 @@ public class MybatisAdminCategoryDAO implements AdminCategoryDAO{
 	}
 	
 	@Override
-	public void update(String name, String preOrder) {
-		mapper.update(name, preOrder);
+	public void update(String name, String preOrder, String no) {
+		mapper.update(name, preOrder, no);
 	}
 
 	@Override

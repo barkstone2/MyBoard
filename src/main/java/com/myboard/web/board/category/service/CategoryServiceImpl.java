@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.myboard.web.board.category.dao.CategoryDAO;
+import com.myboard.web.board.category.entity.CategoryDTO;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
@@ -14,7 +15,7 @@ public class CategoryServiceImpl implements CategoryService{
 	private CategoryDAO categoryDAO;
 	
 	@Override
-	public List<String> getList(int categoryOffset, int categoryLimit) {
+	public List<CategoryDTO> getList(int categoryOffset, int categoryLimit) {
 		
 		return categoryDAO.getList(categoryOffset, categoryLimit);
 	}
@@ -26,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 
 	@Override
-	public List<String> getList() {
+	public List<CategoryDTO> getList() {
 		return getList(0,0);
 	}
 

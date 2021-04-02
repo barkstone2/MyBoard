@@ -17,8 +17,8 @@ public class AdminCategoryServiceImpl implements AdminCategoryService{
 	}
 
 	@Override
-	public void update(String name, String preOrder) {
-		adminCategoryDAO.update(name, preOrder);
+	public void update(String name, String preOrder, String no) {
+		adminCategoryDAO.update(name, preOrder, no);
 	}
 
 	@Override

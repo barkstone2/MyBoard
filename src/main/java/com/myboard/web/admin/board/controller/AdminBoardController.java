@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.myboard.web.admin.board.service.AdminBoardService;
+import com.myboard.web.board.category.entity.CategoryDTO;
 import com.myboard.web.board.category.service.CategoryService;
 import com.myboard.web.board.entity.BoardDTO;
 import com.myboard.web.board.entity.BoardViewDTO;
@@ -51,7 +52,7 @@ public class AdminBoardController {
 		int totalCategoryCount = categoryService.getTotalCount();
 		model.addAttribute("totalCategoryCount", totalCategoryCount);
 		
-		List<String> categoryList = categoryService.getList();
+		List<CategoryDTO> categoryList = categoryService.getList();
 		model.addAttribute("categoryList", categoryList);
 		
 		Map<String, Integer> pager = boardService.getPager(conPerPage, pageNavLength, page, searchOption, searchData, category);

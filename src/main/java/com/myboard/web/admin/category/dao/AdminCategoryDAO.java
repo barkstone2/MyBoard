@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AdminCategoryDAO {
 
-	void update(String name, String preOrder);
+	void update(String name, String preOrder, String no);
 
 	void insert(String name, String preOrder);
 

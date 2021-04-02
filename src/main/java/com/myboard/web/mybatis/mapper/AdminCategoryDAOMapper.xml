@@ -4,8 +4,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myboard.web.admin.category.dao.AdminCategoryDAO">
 	<update id="update">
-		update category set preorder=#{preOrder}
-		where name=#{name}
+		update category set name=#{name}, preorder=#{preOrder}
+		where no=#{no}
 	</update>
 	<insert id="insert">
 		insert into category (name, preOrder)

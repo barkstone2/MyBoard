@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import com.myboard.web.board.category.dao.CategoryDAO;
+import com.myboard.web.board.category.entity.CategoryDTO;
 
 public class MybatisCategoryDAO implements CategoryDAO{
 	
@@ -15,7 +16,7 @@ public class MybatisCategoryDAO implements CategoryDAO{
 	}
 	
 	@Override
-	public List<String> getList(int categoryOffset, int categoryLimit) {
+	public List<CategoryDTO> getList(int categoryOffset, int categoryLimit) {
 		return mapper.getList(categoryOffset, categoryLimit);
 	}
 

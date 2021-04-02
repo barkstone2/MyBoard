@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.myboard.web.board.category.entity.CategoryDTO;
 import com.myboard.web.board.category.service.CategoryService;
 import com.myboard.web.board.entity.BoardDTO;
 import com.myboard.web.board.entity.BoardViewDTO;
@@ -55,7 +56,7 @@ public class BoardController {
 			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage, 
 			Model model) {
 		
-		List<String> categoryList = categoryService.getList();
+		List<CategoryDTO> categoryList = categoryService.getList();
 		model.addAttribute("categoryList", categoryList);
 		
 		model.addAttribute("page", page);
@@ -205,7 +206,7 @@ public class BoardController {
 			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 			int no, String pwd, Model model, HttpServletRequest request) {
 		
-		List<String> categoryList = categoryService.getList();
+		List<CategoryDTO> categoryList = categoryService.getList();
 		model.addAttribute("categoryList", categoryList);
 		
 		BoardDTO dto = boardService.getView(no);
@@ -473,7 +474,7 @@ public class BoardController {
 		int totalCategoryCount = categoryService.getTotalCount();
 		int totalCategoryPage = (int)Math.ceil((totalCategoryCount / (double)categoryLimit));
 		
-		List<String> categoryList = categoryService.getList(categoryOffset, categoryLimit);
+		List<CategoryDTO> categoryList = categoryService.getList(categoryOffset, categoryLimit);
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("categoryPage", categoryPage);
 		model.addAttribute("totalCategoryCount", totalCategoryCount);

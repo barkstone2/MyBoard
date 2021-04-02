@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.myboard.web.board.category.entity.CategoryDTO;
+
 @Mapper
 public interface CategoryDAO {
 
-	List<String> getList(int categoryOffset, int categoryLimit);
+	List<CategoryDTO> getList(int categoryOffset, int categoryLimit);
 
 	int getTotalCount();
 
