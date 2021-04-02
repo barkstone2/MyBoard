@@ -53,8 +53,8 @@
 		<div>
 			<select class="longInput" id="categorySelect" name="category">
 				<option>선택</option>
-			<c:forEach var="categoryName" items="${categoryList}">
-				<option value="${categoryName}">${categoryName}</option>
+			<c:forEach var="category" items="${categoryList}">
+				<option value="${category.name}">${category.name}</option>
 			</c:forEach>
 			</select>
 		</div>
@@ -168,13 +168,47 @@ function attachImg(){
 	var option = 'width=650, height=800, top=200, left=600';
 	window.open(url,windowName, option);
 }
-function move(v_location, v_pageNumber, v_no){
-	var queryString = "?pageNumber="+v_pageNumber+"&no="+v_no;
-	if(v_location=='modify'){
+
+function move(proc, v_page, v_no, v_ctg, v_ctgp, v_order){
+	var sop;
+	var sd;
+	if(proc=='search'){
+		proc = 'list';
+		v_page = '1';
+		sop = $('#search_option').val();
+		sd = $('#search_data').val();
+	}else if(proc == 'searchClear'){
+		proc = 'list';
+		v_page = '1';
+		sop = '';
+		sd = '';
+	}else if(proc=='modify'){
 		$('#content').val($("#contentDiv").html());
 		$('form').submit();
 		return;
 	}
-	location.href=v_location+queryString;
+	else{
+		sop = '${searchOption}';
+		sd = '${searchData}';
+	}
+	
+	var page = '${page}';
+	var no = '${no}';
+	var ctg = '${category}';
+	var ctgp = '${categoryPage}';
+	var od = '${order}';
+	if(v_ctg != null) ctg = v_ctg;
+	if(v_ctgp != null) ctgp = v_ctgp;
+	if(v_page != null) page = v_page;
+	if(v_no != null) no = v_no;
+	if(v_order != null) od = v_order;
+	
+	var queryString = "?p="+page+"&no="+no
+					+"&s_op=" + sop
+					+"&s_d=" + sd
+					+"&ctg=" + ctg
+					+"&ctgp=" + ctgp
+					+"&od=" + od;
+	location.href = proc + queryString;
 }
 </script>

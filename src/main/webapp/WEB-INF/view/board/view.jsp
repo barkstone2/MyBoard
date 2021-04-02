@@ -383,7 +383,7 @@ function imgPreView(proc){
 }
 
 // 페이지 이동 스크립트
-function move(proc, v_page, v_no, v_ctg, v_ctgp){
+function move(proc, v_page, v_no, v_ctg, v_ctgp, v_order){
 	var sop;
 	var sd;
 	if(proc=='search'){
@@ -437,16 +437,19 @@ function move(proc, v_page, v_no, v_ctg, v_ctgp){
 	var no = '${no}';
 	var ctg = '${category}';
 	var ctgp = '${categoryPage}';
+	var od = '${order}';
 	if(v_ctg != null) ctg = v_ctg;
 	if(v_ctgp != null) ctgp = v_ctgp;
 	if(v_page != null) page = v_page;
 	if(v_no != null) no = v_no;
+	if(v_order != null) od = v_order;
 	
 	var queryString = "?p="+page+"&no="+no
 					+"&s_op=" + sop
 					+"&s_d=" + sd
 					+"&ctg=" + ctg
-					+"&ctgp=" + ctgp;
+					+"&ctgp=" + ctgp
+					+"&od=" + od;
 	location.href = proc + queryString;
 }
 

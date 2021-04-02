@@ -73,8 +73,9 @@
     text-align: center;
 }
 .board_recommend{
-    min-width:80px;
+    min-width:100px;
     text-align: center;
+    position: relative;
 }
 .list{
 	min-width:700px;
@@ -157,6 +158,9 @@ a{
 	justify-content: center;
 	align-items: center;
 }
+.list_label > .board_recommend{
+	cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -171,7 +175,10 @@ a{
 	        <div class="board_writer">작성자</div>
 	        <div class="board_date">작성일</div>
 	        <div class="board_hit">조회수</div>
-	        <div class="board_recommend">추천</div>
+	        <div class="board_recommend" onclick="descRecommend();">
+	        	추천
+	        	<img src="/icon/arrow_down_icon.png" style="display:none; position: absolute; right: 5px;">
+	        </div>
 	    </div>
 	    <div class="list_content_block">
 	    	<c:if test="${pager.totalConCount==0}">
@@ -259,6 +266,31 @@ a{
 	</main>
 </body>
 <script>
+var recommendLabel = document.querySelector(".list_label div[class='board_recommend']");
+
+if(`${order}`=='desc'){
+	recommendLabel.children[0].style.display = "inline";
+	recommendLabel.children[0].setAttribute("src", "/icon/arrow_down_icon.png");
+	recommendLabel.onclick = ascRecommend;
+}else if(`${order}`=='asc'){
+	recommendLabel.children[0].style.display = "inline";
+	recommendLabel.children[0].setAttribute("src", "/icon/arrow_up_icon.png");
+	recommendLabel.onclick = descRecommend;
+}
+
+
+function descRecommend(){
+	recommendLabel.children[0].style.display = "inline";
+	recommendLabel.children[0].setAttribute("src", "/icon/arrow_down_icon.png");
+	recommendLabel.onclick = ascRecommend;
+	move('list',null,null,null,null,'desc');
+}
+
+function ascRecommend(){
+	recommendLabel.children[0].setAttribute("src", "/icon/arrow_up_icon.png");
+	recommendLabel.onclick = descRecommend;
+	move('list',null,null,null,null,'asc');
+}
 
 const _categoryList = document.querySelector(".category-list-div");
 
@@ -313,7 +345,7 @@ function openUserInfo(memberNo){
 	
 }
 
-function move(proc, v_page, v_no, v_ctg, v_ctgp){
+function move(proc, v_page, v_no, v_ctg, v_ctgp, v_order){
 	var sop;
 	var sd;
 	if(proc=='search'){
@@ -335,17 +367,20 @@ function move(proc, v_page, v_no, v_ctg, v_ctgp){
 	var page = '${page}';
 	var no = '${no}';
 	var ctg = '${category}';
-	var ctgp = '${ctgp}';
+	var ctgp = '${categoryPage}';
+	var od = '${order}';
 	if(v_ctg != null) ctg = v_ctg;
 	if(v_ctgp != null) ctgp = v_ctgp;
 	if(v_page != null) page = v_page;
 	if(v_no != null) no = v_no;
+	if(v_order != null) od = v_order;
 	
 	var queryString = "?p="+page+"&no="+no
 					+"&s_op=" + sop
 					+"&s_d=" + sd
 					+"&ctg=" + ctg
-					+"&ctgp=" + ctgp;
+					+"&ctgp=" + ctgp
+					+"&od=" + od;
 	location.href = proc + queryString;
 }
 

@@ -29,7 +29,10 @@ function pwProc(){
 	var pwd = document.querySelector("#pwd").value;
 	var queryString = "?p="+`${page}`+"&no="+`${no}`
 	+"&s_op=" + '${searchOption}'
-	+"&s_d=" + '${searchData}';
+	+"&s_d=" + '${searchData}'
+	+"&ctg=" + '${category}'
+	+"&ctgp=" + '${categoryPage}'
+	+"&od=" + '${order}';
 	if(reqUrl == "delete"){
 		var form = document.querySelector("#pwForm");
 		form.action = reqUrl;
