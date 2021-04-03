@@ -43,7 +43,8 @@ public class AdminCategoryController {
 	@PostMapping("modify")
 	public void modify(@RequestBody String data, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		List<Map<String, Map<String, String>>> list = mapper.readValue(data, new TypeReference<List<Map<String, Map<String, String>>>>(){});
+		List<Map<String, Map<String, String>>> list = 
+				mapper.readValue(data, new TypeReference<List<Map<String, Map<String, String>>>>(){});
 		
 		List<Map<String,String>> modList = new ArrayList<>();
 		List<Map<String,String>> addList = new ArrayList<>();

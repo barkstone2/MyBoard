@@ -409,7 +409,7 @@ function move(proc, v_page, v_no, v_ctg, v_ctgp, v_order){
 				if(confirm('삭제하시겠습니까?')){
 					var form = document.createElement("form");
 					form.setAttribute("charset", "UTF-8");
-					form.setAttribute("method", post);
+					form.setAttribute("method", "post");
 					form.setAttribute("action", "delete");
 					
 				 	var hiddenField = document.createElement("input");

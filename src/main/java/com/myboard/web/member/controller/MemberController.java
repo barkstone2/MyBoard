@@ -75,6 +75,7 @@ public class MemberController {
 		
 		if(user!=null) {
 			request.getSession().setAttribute("user", user);
+			request.getSession().setMaxInactiveInterval(30*60);
 			return "redirect:/member/view";
 		}else {
 			try {

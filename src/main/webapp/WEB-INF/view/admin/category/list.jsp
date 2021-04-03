@@ -96,18 +96,7 @@ draggable.forEach(elem => {
 		event.dataTransfer.setData("selCategory", this.id);
 	});
 	
-	elem.addEventListener("dragenter", function(event){
-		event.preventDefault();	
-		this.style.borderTop = "1px solid red";
-	});
-	elem.addEventListener("dragleave", function(event){
-		this.style.borderTop = "1px solid black";
-	});
-	elem.addEventListener("dragend", function(event){
-		this.style.borderTop = "1px solid black";
-	});
 	elem.addEventListener("drop", function(event){
-		this.style.borderTop = "1px solid black";
 		var id = event.dataTransfer.getData("selCategory");
 		var selElem = document.getElementById(id);
 		parent.insertBefore(selElem, this);
@@ -147,25 +136,25 @@ function confirmMod(){
 
 
 function deleteSelected(){
-	var selectedNames = document.querySelectorAll(".clicked input[name=name]");
-	var nameString = "";
-	selectedNames.forEach(elem => nameString += elem.value+",");
-	nameString = nameString.substring(0, nameString.length-1);
-	console.log(nameString);
-	var xhr = new XMLHttpRequest(); 
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-        	alert(xhr.responseText);
-        	location.reload();
-           }
-        }
-    };
-    xhr.open("POST", "delete");
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send("names="+nameString);
-	
-	console.log(nameString);
+	if(confirm('삭제하시겠습니까?')){
+		var selectedNames = document.querySelectorAll(".clicked input[name=name]");
+		var nameString = "";
+		selectedNames.forEach(elem => nameString += elem.value+",");
+		nameString = nameString.substring(0, nameString.length-1);
+		console.log(nameString);
+		var xhr = new XMLHttpRequest(); 
+	    xhr.onreadystatechange = function() {
+	      if (xhr.readyState === 4) {
+	        if (xhr.status === 200) {
+	        	alert(xhr.responseText);
+	        	location.reload();
+	           }
+	        }
+	    };
+	    xhr.open("POST", "delete");
+	    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	    xhr.send("names="+nameString);
+	}
 }
 
 function addEvent(elem){
@@ -190,18 +179,7 @@ function addEvent(elem){
 		event.dataTransfer.setData("selCategory", this.id);
 		console.log(this.id);
 	});
-	elem.addEventListener("dragenter", function(event){
-		event.preventDefault();	
-		this.style.borderTop = "1px solid red";
-	});
-	elem.addEventListener("dragleave", function(event){
-		this.style.borderTop = "1px solid black";
-	});
-	elem.addEventListener("dragend", function(event){
-		this.style.borderTop = "1px solid black";
-	});
 	elem.addEventListener("drop", function(event){
-		this.style.borderTop = "1px solid black";
 		var id = event.dataTransfer.getData("selCategory");
 		var selElem = document.getElementById(id);
 		parent.insertBefore(selElem, this);
@@ -214,7 +192,7 @@ var index = ${i};
 function addCategory(){
 	var frame = document.querySelector("#categoryFrame").children[0];
 	var newName = document.querySelector("#newName");
-	
+	if(newName.value == '') return;
 	var createdFrame = frame.cloneNode(true);
 	var inputName = createdFrame.children[0];
 	var inputPreOrder = createdFrame.children[1];
@@ -247,6 +225,7 @@ function saveChange(){
 		data.no = no;
 		if(addModChk == 'add'){
 			array.push({"add":data});
+			listContent[i].children[2].value = "mod";
 		}else{
 			array.push({"mod":data});
 		}

@@ -15,7 +15,7 @@ button{
 <!DOCTYPE html>
 <form method="post" id="pwForm" name="pwForm">
 	<input type="hidden" name="no" value="${no}">
-	비밀번호 : <input type="password" id="pwd" name="pwd"><br><br>
+	비밀번호 : <input type="password" id="pwc" name="pwc"><br><br>
 	<div style="display:flex; justify-content:space-around;">
 		<button type="button" onclick="pwProc();">확인</button>
 		<button type="button" onclick="history.back();">취소</button>
@@ -26,7 +26,7 @@ const reqUrl = '${reqUrl}';
 const no = `${no}`;
 
 function pwProc(){
-	var pwd = document.querySelector("#pwd").value;
+	var pwc = document.querySelector("#pwc").value;
 	var queryString = "?p="+`${page}`+"&no="+`${no}`
 	+"&s_op=" + '${searchOption}'
 	+"&s_d=" + '${searchData}'
@@ -38,7 +38,7 @@ function pwProc(){
 		form.action = reqUrl;
 		document.querySelector("#pwForm").submit();
 	}else{
-		location.href = reqUrl + queryString + "&pwd=" + pwd;
+		location.href = reqUrl + queryString + "&pwc=" + pwc;
 	}
 }
 </script>

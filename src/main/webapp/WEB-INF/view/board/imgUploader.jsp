@@ -83,7 +83,7 @@
 			<button class="imgbox-btn" onclick="selectAll();">전체 선택</button>
 			<button class="imgbox-btn" onclick="deleteSelected();">선택 삭제</button>
 			<a href="#" onclick="imgPopUp();"><button class="imgbox-btn"> 사진 추가</button></a>
-			<button class="imgbox-btn" onclick="selectImgTest();">완료</button>
+			<button class="imgbox-btn" onclick="applyImgUpload();">완료</button>
 		</div>
 	<c:forEach begin="1" end="3" varStatus="j">
 		<div class="flex">
@@ -106,23 +106,19 @@
 <script>
 // imgUploader.js
 function deleteSelected(){
-	var arrLength = $("input[name=img]").length;
-	for(var i=0; i<arrLength; i++){             
-		if($("input[name=img]").eq(i).val()!=''){
-			var id = 'imgChkBox' + (i+1);
-			var imginputId = 'imginput' + (i+1);
-			var imgNameId = 'imgName' + (i+1);
-			var imgViewId = 'imgView' + (i+1);
+	var selectedArr = document.querySelectorAll("input[name=img]");
+	selectedArr.forEach(e => {
+		if(e.value != ''){
+			var parent = e.parentNode;
 			
-			$("input[name=imgName]").eq(i).val('');
-			$("input[name=img]").eq(i).val('');
-			$('#'+id).prop("checked", false);
-			$('#'+imginputId).attr('name','');
-			$('#'+imginputId).val('');
-			$('#'+imgNameId).attr('name','');
-			$('#'+imgViewId).attr('src','');
+			parent.children[0].checked = false;
+			parent.children[2].setAttribute("src", "");
+			parent.children[3].setAttribute("name", "");
+			parent.children[3].value = "";
+			parent.children[4].setAttribute("name", "");
+			parent.children[4].value = "";
 		}
-	}
+	});
 }
 function imgPopUp(){
 	var url = 'imgpopup';
@@ -152,7 +148,7 @@ function selectImg(value1){
 	}
 }
 
-function selectImgTest(){
+function applyImgUpload(){
 	var selectedImgLength = $("input[name=img]").length;
 	var imgNames = "";
 	for(var i=0; i<selectedImgLength; i++){       
@@ -167,27 +163,21 @@ function selectImgTest(){
 }
 function selectAll(){
 	var toggleChk = $('#toggleChk').val();
-	var color = '#DCDCDC';
 	var name = 'img';
+	var imgs = document.querySelectorAll(".img-view");
 	
 	if(toggleChk=='1'){
 		name = '';
-		color = '#FFFFFF';
 		$('#toggleChk').val('0');
 	}else{
 		$('#toggleChk').val('1');
 	}
-	for(var i=1; i<10; i++){
-		var id = 'imgbox'+i;
-		var inputId = 'imginput'+i;
-		$('#'+id).css('background-color', color);
-		$('#'+inputId).attr('name',name);
-		if(toggleChk=='1'){
-			$('#'+inputId).val('');
-		}else{
-			$('#'+inputId).val(i);
+	
+	imgs.forEach(e => {
+		if(e.getAttribute("src")!==''){
+			selectImg(e.parentNode.children[1].innerText);
 		}
-	}
+	});
 }
 </script>
 </html>

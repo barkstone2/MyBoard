@@ -118,8 +118,8 @@ public class BoardController {
 				reUrl = "/board/list";
 				return "util.message";
 			}
-			
-			fileNo = fileService.saveFile(boardService.uploadImg(imgFile, savePath)); // Service에서 fileNo 반환 처리
+			// Service에서 fileNo 반환 처리
+			fileNo = fileService.saveFile(boardService.uploadImg(imgFile, savePath));
 		}
 		BoardDTO dto = BoardDTO.builder()
 				.title(title)
@@ -140,6 +140,11 @@ public class BoardController {
 			}
 		}else {
 			msg = "작성 실패";
+			if(!imgFile.isEmpty()) {
+				String curFilePath = fileService.getFile(fileNo).getFilePath();
+				new File(curFilePath).delete();
+				fileService.delete(fileNo);
+			}
 		}
 		
 		model.addAttribute("msg", msg);
@@ -211,7 +216,7 @@ public class BoardController {
 			@RequestParam(required = false, name = "ctg", defaultValue = "전체") String category,
 			@RequestParam(required = false, name = "ctgp", defaultValue = "1") int categoryPage,
 			@RequestParam(required = false, name = "od", defaultValue = "") String order,
-			int no, String pwd, Model model, HttpServletRequest request) {
+			int no, String pwc, Model model, HttpServletRequest request) {
 		
 		List<CategoryDTO> categoryList = categoryService.getList();
 		model.addAttribute("categoryList", categoryList);
@@ -239,8 +244,8 @@ public class BoardController {
 				model.addAttribute("reUrl", reUrl);
 				return "util.message";
 			}
-		}else if(pwd != null && !pwd.equals("")) {
-			if(dto.getPwd().equals(pwd)) {
+		}else if(pwc != null && !pwc.equals("")) {
+			if(dto.getPwd().equals(pwc)) {
 			}else {
 				String msg = "비밀번호가 일치하지 않습니다.";
 				String reUrl = "/board/view?no="+no;
@@ -316,6 +321,11 @@ public class BoardController {
 				fileService.setBoardNo(no, fileNo);
 			}
 		}else {
+			if(!imgFile.isEmpty()) {
+				String curFilePath = fileService.getFile(fileNo).getFilePath();
+				new File(curFilePath).delete();
+				fileService.delete(fileNo);
+			}
 			msg = "수정 실패";
 		}
 		
@@ -333,12 +343,12 @@ public class BoardController {
 	}
 	
 	@PostMapping("delete")
-	public String delete(int no, String pwd, Model model, HttpServletRequest request) {
+	public String delete(int no, String pwc, Model model, HttpServletRequest request) {
 		String msg = "";
 		String reUrl = "/board/list";
 		BoardDTO dto = boardService.getView(no);
 		
-		MemberDTO user = (MemberDTO)request.getAttribute("user");
+		MemberDTO user = (MemberDTO)request.getSession().getAttribute("user");
 		
 		if(dto==null) {
 			msg = "존재하지 않는 게시물입니다.";
@@ -358,7 +368,7 @@ public class BoardController {
 			}else {
 				msg = "권한이 없습니다.";
 			}
-		}else if(dto.getPwd().equals(pwd)) {
+		}else if(dto.getPwd().equals(pwc)) {
 			int fileNo = dto.getFileNo();
 			if(fileNo>0) {
 				FileDto file = fileService.getFile(fileNo);

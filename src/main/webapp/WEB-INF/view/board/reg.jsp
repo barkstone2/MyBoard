@@ -44,6 +44,9 @@
 option{
 	padding:10px;
 }
+.writer-info{
+	display:flex;
+}
 </style>
 <form style="width:900px; border: 1px solid black;" method="post" name="chugaForm" enctype="multipart/form-data">
 	<div id="formTitle">
@@ -70,22 +73,24 @@ option{
 			<input type="text" name="title" id="subject" class="longInput">
 		</div>
 	</div>
-	<div class="user-info row"></div>
-	<div class="row writer-info">
-		<div class="shotLine">
-			<div class="label">
-				작성자
+	<div class="row">
+		<div class="user-info row"></div>
+		<div class="writer-info">
+			<div class="shotLine">
+				<div class="label">
+					작성자
+				</div>
+				<div>
+					<input type="text" name="writer" id="writer" class="shortInput">
+				</div>
 			</div>
-			<div>
-				<input type="text" name="writer" id="writer" class="shortInput">
-			</div>
-		</div>
-		<div class="shotLine">
-			<div class="label">
-				비밀번호
-			</div>
-			<div>
-				<input type="text" name="pwd" id="pwd" class="shortInput">
+			<div class="shotLine">
+				<div class="label">
+					비밀번호
+				</div>
+				<div>
+					<input type="password" name="pwd" id="pwd" class="shortInput">
+				</div>
 			</div>
 		</div>
 		<div class="shotLine">
@@ -140,7 +145,9 @@ if(currentCategory != '전체'){
 //form shape
 var writerInfo = document.querySelector(".writer-info");
 var userInfo = document.querySelector(".user-info");
-var userNameDiv = "<div class='shotLine'><div class='label'>작성자</div><div>${user.nickName}</div></div>";
+var userNameDiv = "<div class='shotLine'>"
+				+"<div class='label'>작성자</div>"
+				+"<div>${user.nickName}</div></div>";
 
 // 세션 유저가 존재할 경우 작성자, 비밀번호 자동.
 // memberNo 부여
