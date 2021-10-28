@@ -41,26 +41,10 @@
 .hidden{
 	display: none;
 }
-option{
-	padding:10px;
-}
 </style>
 <form style="width:900px; border: 1px solid black;" method="post" name="chugaForm" enctype="multipart/form-data">
 	<div id="formTitle">
 		<h2>게시글 작성</h2>
-	</div>
-	<div class="row">
-		<div class="label">
-			분류
-		</div>
-		<div>
-			<select class="longInput" id="categorySelect" name="category">
-				<option>선택</option>
-			<c:forEach var="categoryName" items="${categoryList}">
-				<option value="${categoryName}">${categoryName}</option>
-			</c:forEach>
-			</select>
-		</div>
 	</div>
 	<div class="row">
 		<div class="label">
@@ -131,12 +115,6 @@ option{
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
 
-var currentCategory = '${category}';
-var categorySelect = document.querySelector('#categorySelect');
-if(currentCategory != '전체'){
-	categorySelect.value = '${category}';
-}
-
 //form shape
 const writerInfo = document.querySelector(".writer-info");
 const userInfo = document.querySelector(".user-info");
@@ -151,46 +129,15 @@ if(user!=''&&user!=null){
 	userInfo.style.display = "none";
 }
 
-function move(proc, v_page, v_no, v_ctg, v_ctgp){
-	var sop;
-	var sd;
-	if(proc=='search'){
-		proc = 'list';
-		v_page = '1';
-		sop = $('#search_option').val();
-		sd = $('#search_data').val();
-	}else if(proc == 'searchClear'){
-		proc = 'list';
-		v_page = '1';
-		sop = '';
-		sd = '';
-	}else if(proc == 'reg'){
+
+function move(v_location){
+	if(v_location=='reg'){
 		$('#content').val($("#contentDiv").html());
 		$('form').submit();
 		return;
-	}	
-	else{
-		sop = '${searchOption}';
-		sd = '${searchData}';
 	}
-	
-	var page = '${page}';
-	var no = '${no}';
-	var ctg = '${category}';
-	var ctgp = '${categoryPage}';
-	if(v_ctg != null) ctg = v_ctg;
-	if(v_ctgp != null) ctgp = v_ctgp;
-	if(v_page != null) page = v_page;
-	if(v_no != null) no = v_no;
-	
-	var queryString = "?p="+page+"&no="+no
-					+"&s_op=" + sop
-					+"&s_d=" + sd
-					+"&ctg=" + ctg
-					+"&ctgp=" + ctgp;
-	location.href = proc + queryString;
+	location.href=v_location;
 }
-
 function attachImg(){
 	var url = 'imguploader';
 	var windowName = '이미지 업로더';

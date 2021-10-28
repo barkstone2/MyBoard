@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/view/inc/inc_header.jsp" %>
 <style>
 .row{
 	display:flex;
@@ -45,19 +44,6 @@
 	<div id="formTitle">
 		<h2>게시글 수정</h2>
 		<input type="hidden" value="${dto.no}" name="no">
-	</div>
-	<div class="row">
-		<div class="label">
-			분류
-		</div>
-		<div>
-			<select class="longInput" id="categorySelect" name="category">
-				<option>선택</option>
-			<c:forEach var="categoryName" items="${categoryList}">
-				<option value="${categoryName}">${categoryName}</option>
-			</c:forEach>
-			</select>
-		</div>
 	</div>
 	<div class="row">
 		<div class="label">
@@ -132,15 +118,6 @@
 </form>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
-
-var currentCategory = '${category}';
-var categorySelect = document.querySelector('#categorySelect');
-if(currentCategory != '전체'){
-	categorySelect.value = '${category}';
-}
-
-categorySelect.value = '${dto.category}';
-
 function selectFile(){
 	$('#attachedImg').click();
 }
