@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myboard.web.board.dao.BoardDAO">
+	<select id="getView" resultType="com.myboard.web.board.entity.BoardDTO">
+		select * from board
+		where no=#{no}
+	</select>
+	<insert id="insert" parameterType="com.myboard.web.board.entity.BoardDTO">
+		insert into board (title, content, writer, pwd<if test="fileNo>0">,fileNo</if><if test="memberNo>0">,memberNo</if>)
+		values (#{title}, #{content}, #{writer}, #{pwd}<if test="fileNo>0">,#{fileNo}</if><if test="memberNo>0">,#{memberNo}</if>)
+	</insert>
+	<select id="getList" resultType="com.myboard.web.board.entity.BoardDTO">
+		select * from board
+		order by regdate desc
+	</select>
+	
+	<select id="getViewList" resultType="com.myboard.web.board.entity.BoardViewDTO">
+		select no, title, content, writer, pwd, fileNo, hit, boardView.like, regDate, memberNo, commentCount 
+		from boardView
+		<if test="searchOption != '' and searchData != ''">
+		<where>
+			<choose>
+				<when test="searchOption=='title_content'">
+					and (title like '%${searchData}%' or content like '%${searchData}%')
+				</when>
+				<when test="searchOption=='all'">
+					and (title like '%${searchData}%' or content like '%${searchData}%' or writer like '%${searchData}%')
+				</when>
+				<otherwise>
+					and ${searchOption} like '%${searchData}%'
+				</otherwise>
+			</choose>
+		</where>
+		</if>
+		order by regdate desc
+		limit #{offSet}, #{conPerPage}
+	</select>
+	
+	<update id="update"  parameterType="com.myboard.web.board.entity.BoardDTO">
+		update board set title=#{title}, 
+						content=#{content}, 
+						writer=#{writer}, 
+						pwd=#{pwd}
+					<if test="fileNo>0">
+						,fileNo=#{fileNo}
+					</if>
+		where no=#{no}
+	</update>
+	<delete id="delete">
+		delete from board 
+		where no=#{no}
+	</delete>
+	<select id="getBoardNo" resultType="int">
+		select no from board
+		where fileNo=#{fileNo}
+	</select>
+	<select id="getTotalConCount" resultType="int">
+		select count(*) from board
+	</select>
+	<update id="updateLike">
+		update board set board.like=(board.like+1) where no=#{boardNo}
+	</update>
+	<update id="updateDisLike">
+		update board set dislike=(dislike+1) where no=#{boardNo}
+	</update>
+	
+	
+</mapper>
+

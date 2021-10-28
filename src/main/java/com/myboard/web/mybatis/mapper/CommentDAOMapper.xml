@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myboard.web.board.comment.dao.CommentDAO">
+	<select id="getList" resultType="com.myboard.web.board.comment.entity.CommentDTO">
+		select * from comment
+		where boardNo=#{boardNo}
+		order by groupNo, regdate
+		limit #{offSet}, #{conPerPage}
+	</select>
+	<insert id="insert" parameterType="com.myboard.web.board.comment.entity.CommentDTO">
+		insert into comment 
+		(content, writer, pwd, groupNo, boardNo, stepNo<if test="memberNo>0">,memberNo</if>)
+		values (#{content}, #{writer}, #{pwd}, #{groupNo}, #{boardNo}, #{stepNo}<if test="memberNo>0">,#{memberNo}</if>)
+	</insert>
+	<update id="delete">
+		update comment set delChk=true
+		where no=#{no}
+	</update>
+	<select id="getMaxGroupNo" resultType="int">
+		select COALESCE(max(groupNo),0) from comment
+		where boardNo=#{boardNo};
+	</select>
+	<select id="pwdChk" resultType="String">
+		select pwd from comment
+		where no=#{no}
+	</select>
+	<select id="getTotalConCount" resultType="int">
+		select count(*) from comment
+		where boardNo=#{boardNo}
+	</select>
+	<select id="getDeletedCount" resultType="int">
+		select count(*) from comment
+		where boardNo=#{boardNo} and delChk=true
+	</select>
+</mapper>
+

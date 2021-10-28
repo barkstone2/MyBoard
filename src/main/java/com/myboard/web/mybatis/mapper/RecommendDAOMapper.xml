@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myboard.web.board.recommend.dao.RecommendDAO">
+	<select id="checkLike" resultType="int">
+		select count(*) from recommend
+		where type='like' and boardNo=#{boardNo} and memberNo=#{memberNo}
+		and date(regDate)=date(current_timestamp)
+	</select>
+	<select id="checkDisLike" resultType="int">
+		select count(*) from recommend
+		where type='dislike' and boardNo=#{boardNo} and memberNo=#{memberNo}
+		and date(regDate)=date(current_timestamp)
+	</select>
+	<insert id="insert" parameterType="com.myboard.web.board.recommend.entity.RecommendDTO">
+		insert into recommend
+		(boardNo, memberNo, type)
+		values(#{boardNo}, #{memberNo}, #{type})
+	</insert>
+</mapper>
+
